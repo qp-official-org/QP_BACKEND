@@ -1,6 +1,6 @@
 package qp.official.qp.web.dto;
 
-import jakarta.validation.constraints.NotBlank;
+import javax.validation.constraints.NotBlank;
 import lombok.Getter;
 
 public class QuestionRequestDTO {

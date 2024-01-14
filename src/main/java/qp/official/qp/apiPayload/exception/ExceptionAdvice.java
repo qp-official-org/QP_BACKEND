@@ -15,8 +15,8 @@ import qp.official.qp.apiPayload.ApiResponse;
 import qp.official.qp.apiPayload.code.ErrorReasonDTO;
 import qp.official.qp.apiPayload.code.status.ErrorStatus;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.ConstraintViolationException;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.ConstraintViolationException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;

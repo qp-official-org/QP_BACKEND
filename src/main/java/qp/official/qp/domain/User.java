@@ -1,6 +1,6 @@
 package qp.official.qp.domain;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.*;
 import qp.official.qp.domain.common.BaseEntity;
 import qp.official.qp.domain.enums.Gender;

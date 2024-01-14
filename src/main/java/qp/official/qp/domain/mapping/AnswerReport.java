@@ -1,6 +1,6 @@
 package qp.official.qp.domain.mapping;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.*;
 import qp.official.qp.domain.Answer;
 import qp.official.qp.domain.User;
