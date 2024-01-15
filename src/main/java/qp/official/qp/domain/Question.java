@@ -25,12 +25,14 @@ public class Question extends BaseEntity {
     @Column(columnDefinition = "TEXT")
     private String content;
 
-    private Long hit;
+    @Builder.Default
+    private Long hit = 0L;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
+    @Builder.Default
     private List<QuestionHashTag> questionHashTagList = new ArrayList<>();
 }
