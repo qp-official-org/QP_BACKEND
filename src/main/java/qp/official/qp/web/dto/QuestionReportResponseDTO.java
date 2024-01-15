@@ -6,19 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-public class ReportResponseDTO {
+public class QuestionReportResponseDTO {
 
-    @Builder
-    @Getter
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class AnswerReportReturnDTO{
-        Long answerId;
-        Long userId;
-        Long answerReportId;
-        String content;
-        LocalDateTime createdAt;
-    }
 
     @Builder
     @Getter
