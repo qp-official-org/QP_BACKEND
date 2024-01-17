@@ -33,7 +33,7 @@ public class QuestionConverter {
             .build();
     }
 
-    public static QuestionResponseDTO.QuestionPagingTitleReturnDTO toQuestionFindByPagingReturnDTO(){
+    public static QuestionResponseDTO.QuestionPagingTitleReturnDTO toQuestionPagingTitleReturnDTO(){
         return null;
     }
 
