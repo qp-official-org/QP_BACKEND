@@ -8,9 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import qp.official.qp.apiPayload.ApiResponse;
 import qp.official.qp.apiPayload.code.status.SuccessStatus;
-import qp.official.qp.converter.QuestionConverter;
 import qp.official.qp.converter.UserConverter;
-import qp.official.qp.web.dto.QuestionResponseDTO;
 import qp.official.qp.web.dto.UserResponseDTO;
 
 @RestController
