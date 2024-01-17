@@ -26,6 +26,7 @@ out/
 !**/src/main/**/out/
 !**/src/test/**/out/
 src/main/resources/secrets.properties
+.env
 
 ### NetBeans ###
 /nbproject/private/
