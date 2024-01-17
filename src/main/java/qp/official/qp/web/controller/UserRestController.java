@@ -17,41 +17,39 @@ import qp.official.qp.web.dto.UserResponseDTO;
 @RequestMapping("/users")
 public class UserRestController {
 
-    @PostMapping("/test")
-    public ApiResponse<UserResponseDTO.UserTestDTO> testAPI(){
-        return ApiResponse.onSuccess(SuccessStatus.Question_OK.getCode(), SuccessStatus.Question_OK.getMessage(), UserConverter.toUserTestDTO());
-    }
-
     @PostMapping("/sign_up")
-    public ApiResponse<UserResponseDTO.UserTestDTO> signUp(){
+    public ApiResponse<UserResponseDTO.JoinResultDTO> signUp(){
         return ApiResponse.onSuccess(SuccessStatus.Question_OK.getCode(), SuccessStatus.Question_OK.getMessage(), UserConverter.toUserTestDTO());
     }
 
     @PostMapping("/sign_in")
-    public ApiResponse<UserResponseDTO.UserTestDTO> signIn(){
-        return ApiResponse.onSuccess(SuccessStatus.Question_OK.getCode(), SuccessStatus.Question_OK.getMessage(), UserConverter.toUserTestDTO());
-    }
-
-    @PostMapping("/{userId}")
-    public ApiResponse<UserResponseDTO.UserTestDTO> getUserInfo(){
-        return ApiResponse.onSuccess(SuccessStatus.Question_OK.getCode(), SuccessStatus.Question_OK.getMessage(), UserConverter.toUserTestDTO());
-
-    }
-
-    @PatchMapping("/{userId}")
-    public ApiResponse<UserResponseDTO.UserTestDTO> updateUserInfo(){
-        return ApiResponse.onSuccess(SuccessStatus.Question_OK.getCode(), SuccessStatus.Question_OK.getMessage(), UserConverter.toUserTestDTO());
+    public ApiResponse<UserResponseDTO.LoginResultDTO> signIn(){
+        return ApiResponse.onSuccess(SuccessStatus.Question_OK.getCode(), SuccessStatus.Question_OK.getMessage(), UserConverter.toUserLoginDTO());
     }
 
     @PatchMapping("/sign_out")
-    public ApiResponse<UserResponseDTO.UserTestDTO> signOut(){
-        return ApiResponse.onSuccess(SuccessStatus.Question_OK.getCode(), SuccessStatus.Question_OK.getMessage(), UserConverter.toUserTestDTO());
+    public ApiResponse<UserResponseDTO.LogoutResultDTO> signOut(){
+        return ApiResponse.onSuccess(SuccessStatus.Question_OK.getCode(), SuccessStatus.Question_OK.getMessage(), UserConverter.toUserLogoutDTO());
+    }
+
+    @PostMapping("/{userId}")
+    public ApiResponse<UserResponseDTO.getUserInfoDTO> getUserInfo(){
+        return ApiResponse.onSuccess(SuccessStatus.Question_OK.getCode(), SuccessStatus.Question_OK.getMessage(), UserConverter.toUserGetInfoDTO());
+    }
+
+    @PatchMapping("/{userId}")
+    public ApiResponse<UserResponseDTO.updateUserInfoDTO> updateUserInfo(){
+        return ApiResponse.onSuccess(SuccessStatus.Question_OK.getCode(), SuccessStatus.Question_OK.getMessage(), UserConverter.toUserUpdateDTO());
+    }
+
+    @PatchMapping("/delete")
+    public ApiResponse<UserResponseDTO.deleteUserDTO> delete(){
+        return ApiResponse.onSuccess(SuccessStatus.Question_OK.getCode(), SuccessStatus.Question_OK.getMessage(), UserConverter.toUserDeleteDTO());
     }
 
     @PostMapping("/auto_sign_in")
-    public ApiResponse<UserResponseDTO.UserTestDTO> autoSignIn(){
-        return ApiResponse.onSuccess(SuccessStatus.Question_OK.getCode(), SuccessStatus.Question_OK.getMessage(), UserConverter.toUserTestDTO());
+    public ApiResponse<UserResponseDTO.LoginResultDTO> autoSignIn(){
+        return ApiResponse.onSuccess(SuccessStatus.Question_OK.getCode(), SuccessStatus.Question_OK.getMessage(), UserConverter.toUserAutoLoginDTO());
     }
-
 
 }
