@@ -1,17 +1,28 @@
 package qp.official.qp.web.dto;
 
-import javax.validation.constraints.NotBlank;
+import java.util.List;
 import lombok.Getter;
 
 public class QuestionRequestDTO {
 
-//    @Getter
-//    public static class CreateDTO{
-//        @NotBlank
-//        int user_id;
-//        @NotBlank
-//        String title;
-//        @NotBlank
-//        String content;
-//    }
+    @Getter
+    public static class QuestionPostDTO{
+        Long userId;
+        String title;
+        String content;
+        List<String> hashtag;
+    }
+
+    @Getter
+    public static class QuestionUpdateDTO{
+        Long userId;
+        String title;
+        String content;
+    }
+
+
+
+
+
+
 }
