@@ -32,7 +32,10 @@ public enum ErrorStatus implements BaseErrorCode {
     IMAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "IMAGE_5001", "찾고있는 이미지가 없습니다."),
 
     // 해시태그 관련 에러 6000
-    HASHTAG_NOT_FOUND(HttpStatus.NOT_FOUND, "HASHTAG_6001", "찾고있는 해시태그가 없습니다.");
+    HASHTAG_NOT_FOUND(HttpStatus.NOT_FOUND, "HASHTAG_6001", "찾고있는 해시태그가 없습니다."),
+    HASHTAG_BAD_REQUEST(HttpStatus.BAD_REQUEST, "HASHTAG_6001", "해시태그 요청이 비어있습니다."),
+    HASHTAG_ALREADY_EXISTS(HttpStatus.CONFLICT, "HASHTAG_6002", "이미 존재하는 해시태그입니다."),
+    HASHTAG_NOT_EXIST(HttpStatus.BAD_REQUEST, "HASHTAG_6003", "해당 해시태그가 존재하지 않습니다.");
 
     // 답변 좋아요 관련 에러 7000
 
