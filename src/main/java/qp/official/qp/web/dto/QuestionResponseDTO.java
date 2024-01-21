@@ -1,13 +1,11 @@
 package qp.official.qp.web.dto;
 
-import io.swagger.models.auth.In;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import qp.official.qp.domain.Hashtag;
 import qp.official.qp.domain.mapping.QuestionHashTag;
 
 public class QuestionResponseDTO {
@@ -15,14 +13,11 @@ public class QuestionResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class QuestionDTO{
+    public static class QuestionDTO {
         Long questionId;
-        Long userId;
-        String profileImage;
+        UserResponseDTO.getUserInfoDTO user;
         String title;
-        Integer hit;
-        Integer answerCount;
-        Integer expertCount;
+        String content;
         List<QuestionHashTag> hashtags;
     }
 
@@ -30,7 +25,7 @@ public class QuestionResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class QuestionReturnDTO{
+    public static class CreateResultDTO {
         Long questionId;
         LocalDateTime createdAt;
     }
@@ -39,7 +34,7 @@ public class QuestionResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class QuestionFindReturnDTO{
+    public static class QuestionPreviewDTO {
         Long questionId;
         String title;
         String content;
@@ -52,7 +47,7 @@ public class QuestionResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class QuestionPagingTitleReturnDTO{
+    public static class QuestionPreviewListDTO {
         List<QuestionDTO> questions;
         Integer listSize;
         Integer totalPage;
@@ -65,7 +60,7 @@ public class QuestionResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class QuestionUpdateReturnDTO{
+    public static class QuestionUpdateResultDTO {
         Long questionId;
         String title;
         String content;

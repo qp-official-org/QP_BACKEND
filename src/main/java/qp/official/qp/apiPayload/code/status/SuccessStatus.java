@@ -14,7 +14,7 @@ public enum SuccessStatus implements BaseCode {
     User_OK(HttpStatus.OK, "USER_1000", "성공입니다."),
 
     // 질문 관련 응답
-    Question_OK(HttpStatus.OK, "QUESTION_2000", "성공입니다."),
+    Question_OK(HttpStatus.OK, "2000", "성공입니다."),
 
     // 답변 관련 응답
     Answer_OK(HttpStatus.OK, "ANSWER_3000", "성공입니다."),
