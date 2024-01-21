@@ -37,7 +37,7 @@ public class UserRestController {
 
     @ApiOperation(value = "유저 정보 조회", notes = "유저 정보 조회")
     @GetMapping("/{userId}")
-    public ApiResponse<UserResponseDTO.getUserInfoDTO> getUserInfo(@PathVariable Long userId){
+    public ApiResponse<UserResponseDTO.GetUserInfoDTO> getUserInfo(@PathVariable Long userId){
         System.out.println("controller: " +  userId);
         User user = userService.getUserInfo(userId);
 
@@ -46,7 +46,7 @@ public class UserRestController {
 
     @ApiOperation(value = "유저 정보 수정", notes = "유저 정보 수정")
     @PatchMapping("/{userId}")
-    public ApiResponse<UserResponseDTO.updateUserInfoDTO> updateUserInfo(@PathVariable Long userId, @RequestBody UserRequestDTO.updateUserInfoRequestDTO requestDTO){
+    public ApiResponse<UserResponseDTO.UpdateUserInfoDTO> updateUserInfo(@PathVariable Long userId, @RequestBody UserRequestDTO.UpdateUserInfoRequestDTO requestDTO){
         User user = userService.updateUserInfo(userId, requestDTO);
         return ApiResponse.onSuccess(SuccessStatus.Question_OK.getCode(), SuccessStatus.Question_OK.getMessage(), UserConverter.toUserUpdateDTO(user));
     }

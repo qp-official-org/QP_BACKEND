@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     @Transactional
-    public User updateUserInfo(Long userId, UserRequestDTO.updateUserInfoRequestDTO requestDTO) {
+    public User updateUserInfo(Long userId, UserRequestDTO.UpdateUserInfoRequestDTO requestDTO) {
         User user = userRepository.findById(userId).orElseThrow(NullPointerException::new);
         user.updateNickname(requestDTO.getNickname());
         user.updateProfileImage(requestDTO.getProfile_image());

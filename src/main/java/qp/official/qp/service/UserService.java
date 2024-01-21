@@ -6,5 +6,5 @@ import qp.official.qp.web.dto.UserRequestDTO;
 public interface UserService {
 
     User getUserInfo(Long userId);
-    User updateUserInfo(Long userId, UserRequestDTO.updateUserInfoRequestDTO requestDTO);
+    User updateUserInfo(Long userId, UserRequestDTO.UpdateUserInfoRequestDTO requestDTO);
 }

@@ -25,16 +25,16 @@ public class UserConverter {
                 .build();
     }
 
-    public static UserResponseDTO.getUserInfoDTO toUserGetInfoDTO(User user){
-        return UserResponseDTO.getUserInfoDTO.builder()
+    public static UserResponseDTO.GetUserInfoDTO toUserGetInfoDTO(User user){
+        return UserResponseDTO.GetUserInfoDTO.builder()
                 .nickname(user.getNickname())
                 .profile_image(user.getProfileImage())
                 .point(user.getPoint())
                 .build();
     }
 
-    public static UserResponseDTO.updateUserInfoDTO toUserUpdateDTO(User user){
-        return UserResponseDTO.updateUserInfoDTO.builder()
+    public static UserResponseDTO.UpdateUserInfoDTO toUserUpdateDTO(User user){
+        return UserResponseDTO.UpdateUserInfoDTO.builder()
                 .userId(user.getUserId())
                 .build();
     }
