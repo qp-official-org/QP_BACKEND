@@ -1,11 +1,11 @@
 package qp.official.qp.web.dto;
 
-import java.util.List;
-
 import lombok.Getter;
+import qp.official.qp.validation.annotation.ExistHashTag;
 import qp.official.qp.validation.annotation.ExistUser;
 
 import javax.validation.constraints.Size;
+import java.util.List;
 
 public class QuestionRequestDTO {
 
@@ -20,7 +20,8 @@ public class QuestionRequestDTO {
 
         // size = 1, max = 10
         @Size(min = 1, max = 10)
-        List<String> hashtag;
+        @ExistHashTag
+        List<Long> hashtag;
     }
 
     @Getter

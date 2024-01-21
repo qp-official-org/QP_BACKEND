@@ -6,7 +6,10 @@ import org.springframework.web.bind.annotation.*;
 import qp.official.qp.apiPayload.ApiResponse;
 import qp.official.qp.apiPayload.code.status.SuccessStatus;
 import qp.official.qp.converter.QuestionConverter;
+import qp.official.qp.domain.Question;
 import qp.official.qp.service.QuestionService.QuestionCommandService;
+import qp.official.qp.service.QuestionService.QuestionQueryService;
+import qp.official.qp.validation.annotation.ExistQuestion;
 import qp.official.qp.web.dto.QuestionRequestDTO;
 import qp.official.qp.web.dto.QuestionResponseDTO;
 
@@ -35,7 +38,6 @@ public class QuestionController {
 
     // 특정 질문 조회
     @GetMapping("/{questionId}")
-    public ApiResponse<QuestionResponseDTO.QuestionFindReturnDTO> findQuestion(@PathVariable Long questionId){
     public ApiResponse<QuestionResponseDTO.QuestionPreviewDTO> findQuestion(
             @PathVariable Long questionId
     ) {

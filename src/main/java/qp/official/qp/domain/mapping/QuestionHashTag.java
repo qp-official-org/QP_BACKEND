@@ -1,9 +1,10 @@
 package qp.official.qp.domain.mapping;
 
-import javax.persistence.*;
 import lombok.*;
 import qp.official.qp.domain.Hashtag;
 import qp.official.qp.domain.Question;
+
+import javax.persistence.*;
 
 @Entity
 @Getter
@@ -23,5 +24,19 @@ public class QuestionHashTag {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "hashtag_id")
     private Hashtag hashtag;
+
+    public void setQuestion(Question question) {
+        this.question = question;
+        if (question.getQuestionHashTagList().contains(this))
+            return;
+        question.getQuestionHashTagList().add(this);
+    }
+
+    public void setHashtag(Hashtag hashtag) {
+        this.hashtag = hashtag;
+        if (hashtag.getQuestionHashTagList().contains(this))
+            return;
+        hashtag.getQuestionHashTagList().add(this);
+    }
 
 }
