@@ -1,10 +1,10 @@
 package qp.official.qp.domain;
 
-import javax.persistence.*;
 import lombok.*;
 import qp.official.qp.domain.common.BaseEntity;
 import qp.official.qp.domain.mapping.QuestionHashTag;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,4 +35,15 @@ public class Question extends BaseEntity {
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
     @Builder.Default
     private List<QuestionHashTag> questionHashTagList = new ArrayList<>();
+
+
+    public void setUser(User user) {
+        this.user = user;
+        List<Question> userQuestList = user.getQuestionList();
+
+        if (userQuestList.contains(this))
+            return;
+
+        userQuestList.add(this);
+    }
 }
