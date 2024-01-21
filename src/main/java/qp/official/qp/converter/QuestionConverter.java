@@ -3,27 +3,30 @@ package qp.official.qp.converter;
 import qp.official.qp.domain.Question;
 import qp.official.qp.web.dto.QuestionRequestDTO;
 import qp.official.qp.web.dto.QuestionResponseDTO;
-import qp.official.qp.web.dto.QuestionResponseDTO.QuestionUpdateReturnDTO;
+import qp.official.qp.web.dto.QuestionResponseDTO.QuestionUpdateResultDTO;
 
 public class QuestionConverter {
 
-    public static Question toQuestion(QuestionRequestDTO.QuestionPostDTO request){
+    public static Question toQuestion(QuestionRequestDTO.CreateDTO request){
+        return Question.builder()
+            .title(request.getTitle())
+            .content(request.getContent())
+            .build();
+    }
+
+    public static Question toUpdateQuestion(QuestionRequestDTO.UpdateDTO request){
         return null;
     }
 
-    public static Question toUpdateQuestion(QuestionRequestDTO.QuestionUpdateDTO request){
-        return null;
-    }
-
-    public static QuestionResponseDTO.QuestionReturnDTO toQuestionReturnDTO(Question question){
-        return QuestionResponseDTO.QuestionReturnDTO.builder()
+    public static QuestionResponseDTO.CreateResultDTO toCreateResultDTO(Question question){
+        return QuestionResponseDTO.CreateResultDTO.builder()
             .questionId(question.getQuestionId())
             .createdAt(question.getCreatedAt())
             .build();
     }
 
-    public static QuestionResponseDTO.QuestionFindReturnDTO toQuestionFindReturnDTO(Question question){
-        return QuestionResponseDTO.QuestionFindReturnDTO.builder()
+    public static QuestionResponseDTO.QuestionPreviewDTO toQuestionPreviewDTO(Question question){
+        return QuestionResponseDTO.QuestionPreviewDTO.builder()
             .questionId(question.getQuestionId())
             .title(question.getTitle())
             .content(question.getContent())
@@ -33,12 +36,12 @@ public class QuestionConverter {
             .build();
     }
 
-    public static QuestionResponseDTO.QuestionPagingTitleReturnDTO toQuestionPagingTitleReturnDTO(){
+    public static QuestionResponseDTO.QuestionPreviewListDTO toQuestionPagingTitleReturnDTO(){
         return null;
     }
 
-    public static QuestionResponseDTO.QuestionUpdateReturnDTO toQuestionUpdateReturnDTO(Question question){
-        return QuestionUpdateReturnDTO.builder()
+    public static QuestionUpdateResultDTO toQuestionUpdateReturnDTO(Question question){
+        return QuestionUpdateResultDTO.builder()
             .questionId(question.getQuestionId())
             .title(question.getTitle())
             .content(question.getContent())
