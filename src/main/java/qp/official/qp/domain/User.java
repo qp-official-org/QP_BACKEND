@@ -59,4 +59,11 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<AnswerLikes> answerLikesList = new ArrayList<>();
+
+    public void updateNickname(String nickname){
+        this.nickname = nickname;
+    }
+    public void updateProfileImage(String profileImage){
+        this.profileImage = profileImage;
+    }
 }
