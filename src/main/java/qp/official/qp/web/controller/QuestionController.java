@@ -24,7 +24,7 @@ public class QuestionController {
     private final QuestionQueryService questionQueryService;
 
     // 질문 작성
-    @PostMapping("/")
+    @PostMapping
     public ApiResponse<QuestionResponseDTO.CreateResultDTO> createQuestion(
             @RequestBody @Valid QuestionRequestDTO.CreateDTO request
     ) {
@@ -52,13 +52,13 @@ public class QuestionController {
     }
 
     // 질문 페이징 조회
-    @GetMapping(path = "/", params = {"page, size"})
+    @GetMapping(params = {"page, size"})
     public ApiResponse<QuestionResponseDTO.QuestionPreviewListDTO> findQuestionByPaging(@RequestParam Integer page, @RequestParam Integer size) {
         return null;
     }
 
     // 질문 검색 조회
-    @GetMapping(path = "/", params = {"title", "page", "size"})
+    @GetMapping(params = {"title", "page", "size"})
     public ApiResponse<QuestionResponseDTO.QuestionPreviewListDTO> findQuestionByTitle(
             @RequestParam String title,
             @RequestParam Integer page,
