@@ -30,7 +30,7 @@ public class ExistHashTagValidator implements ConstraintValidator<ExistHashTag, 
             boolean isExist = hashtagRepository.findById(hashtagId).isPresent();
 
             // 존재하지 않으면 false
-            if (isExist) {
+            if (!isExist) {
                 isValid = false;
 
                 context.disableDefaultConstraintViolation();
