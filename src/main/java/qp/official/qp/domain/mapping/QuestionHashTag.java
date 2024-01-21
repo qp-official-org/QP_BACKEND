@@ -30,16 +30,22 @@ public class QuestionHashTag {
     private Hashtag hashtag;
 
     public void setQuestion(Question question) {
+        // 기존에 이미 등록되어 있던 관계를 제거
+        if (this.question != null) {
+            this.question.getQuestionHashTagList().remove(this);
+        }
+
         this.question = question;
-        if (question.getQuestionHashTagList().contains(this))
-            return;
         question.getQuestionHashTagList().add(this);
     }
 
     public void setHashtag(Hashtag hashtag) {
+        // 기존에 이미 등록되어 있던 관계를 제거
+        if (this.hashtag != null) {
+            this.hashtag.getQuestionHashTagList().remove(this);
+        }
+
         this.hashtag = hashtag;
-        if (hashtag.getQuestionHashTagList().contains(this))
-            return;
         hashtag.getQuestionHashTagList().add(this);
     }
 

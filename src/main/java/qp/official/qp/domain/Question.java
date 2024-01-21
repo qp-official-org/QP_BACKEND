@@ -42,12 +42,12 @@ public class Question extends BaseEntity {
 
 
     public void setUser(User user) {
+        // 기존에 이미 등록되어 있던 관계를 제거
+        if (this.user != null) {
+            this.user.getQuestionList().remove(this);
+        }
+
         this.user = user;
-        List<Question> userQuestList = user.getQuestionList();
-
-        if (userQuestList.contains(this))
-            return;
-
-        userQuestList.add(this);
+        user.getQuestionList().add(this);
     }
 }
