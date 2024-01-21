@@ -40,7 +40,7 @@ public class UserRequestDTO {
      * 유저 정보 조회
      */
     @Getter
-    public static class getUserInfoRequestDTO {
+    public static class GetUserInfoRequestDTO {
         private Long userId;
     }
 
@@ -48,12 +48,9 @@ public class UserRequestDTO {
      * 유저 정보 수정
      */
     @Getter
-    public static class UserInfoRequestDTO {
-        private String name;
+    public static class UpdateUserInfoRequestDTO {
         private String nickname;
         private String profile_image;
-        private String email;
-        private Gender gender;
     }
 
     /**
@@ -71,7 +68,6 @@ public class UserRequestDTO {
     public static class AutoLoginRequestDTO {
         private String email;
     }
-
 
 
 }
