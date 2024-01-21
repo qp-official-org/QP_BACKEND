@@ -19,7 +19,7 @@ public class QuestionRequestDTO {
         String content;
 
         // size = 1, max = 10
-        @Size(min = 1, max = 10)
+        @Size(min = 0, max = 10)
         @ExistHashTag
         List<Long> hashtag;
     }

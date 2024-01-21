@@ -13,18 +13,6 @@ public class QuestionResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class QuestionDTO {
-        Long questionId;
-        UserResponseDTO.getUserInfoDTO user;
-        String title;
-        String content;
-        List<QuestionHashTag> hashtags;
-    }
-
-    @Builder
-    @Getter
-    @NoArgsConstructor
-    @AllArgsConstructor
     public static class CreateResultDTO {
         Long questionId;
         LocalDateTime createdAt;
@@ -38,9 +26,9 @@ public class QuestionResponseDTO {
         Long questionId;
         String title;
         String content;
-        List<QuestionHashTag> hashtags;
+        List<HashtagResponseDTO.HastTagPreviewDTO> hashtags;
         LocalDateTime createdAt;
-        LocalDateTime updatedAt;
+        LocalDateTime modifiedAt;
     }
 
     @Builder
@@ -48,7 +36,7 @@ public class QuestionResponseDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class QuestionPreviewListDTO {
-        List<QuestionDTO> questions;
+        List<QuestionPreviewDTO> questions;
         Integer listSize;
         Integer totalPage;
         Long totalElements;

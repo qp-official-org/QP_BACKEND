@@ -21,6 +21,7 @@ import javax.validation.Valid;
 @RequestMapping("/questions")
 public class QuestionController {
     private final QuestionCommandService questionCommandService;
+    private final QuestionQueryService questionQueryService;
 
     // 질문 작성
     @PostMapping("/")
@@ -39,9 +40,15 @@ public class QuestionController {
     // 특정 질문 조회
     @GetMapping("/{questionId}")
     public ApiResponse<QuestionResponseDTO.QuestionPreviewDTO> findQuestion(
-            @PathVariable Long questionId
+            @PathVariable @ExistQuestion Long questionId
     ) {
-        return null;
+        return ApiResponse.onSuccess(
+                SuccessStatus.Question_OK.getCode(),
+                SuccessStatus.Question_OK.getMessage(),
+                QuestionConverter.toQuestionPreviewDTO(
+                        questionQueryService.findById(questionId)
+                )
+        );
     }
 
     // 질문 페이징 조회

@@ -17,7 +17,12 @@ public class HashtagResponseDTO {
         String hashtag;
     }
 
-
-
-
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class HastTagPreviewDTO{
+        Long hashtagId;
+        String hashtag;
+    }
 }

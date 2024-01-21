@@ -32,13 +32,13 @@ public class QuestionCommandServiceImpl implements QuestionCommandService {
         // QuestionHashTag 저장
         request.getHashtag().forEach(hashtagId -> {
             // FindById Hashtag
-            Hashtag hashtag = hashtagRepository.findById(hashtagId).get();
+            Hashtag findHashTag = hashtagRepository.findById(hashtagId).get();
 
             // QuestionHashTag 생성
             QuestionHashTag newQuestionHashTag = QuestionHashTag.builder().build();
             // 연관관계 설정
             newQuestionHashTag.setQuestion(newQuestion);
-            newQuestionHashTag.setHashtag(hashtag);
+            newQuestionHashTag.setHashtag(findHashTag);
 
             // Save QuestionHashTag
             questionHashTagRepository.save(newQuestionHashTag);
