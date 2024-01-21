@@ -1,14 +1,15 @@
 package qp.official.qp.web.controller;
 
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import qp.official.qp.apiPayload.ApiResponse;
 import qp.official.qp.apiPayload.code.status.SuccessStatus;
 import qp.official.qp.converter.UserConverter;
+import qp.official.qp.domain.User;
+import qp.official.qp.service.UserService;
+import qp.official.qp.web.dto.UserRequestDTO;
 import qp.official.qp.web.dto.UserResponseDTO;
 
 @RestController
@@ -16,6 +17,8 @@ import qp.official.qp.web.dto.UserResponseDTO;
 @Validated
 @RequestMapping("/users")
 public class UserRestController {
+
+    private final UserService userService;
 
     @PostMapping("/sign_up")
     public ApiResponse<UserResponseDTO.JoinResultDTO> signUp(){
@@ -32,14 +35,20 @@ public class UserRestController {
         return ApiResponse.onSuccess(SuccessStatus.Question_OK.getCode(), SuccessStatus.Question_OK.getMessage(), UserConverter.toUserLogoutDTO());
     }
 
-    @PostMapping("/{userId}")
-    public ApiResponse<UserResponseDTO.getUserInfoDTO> getUserInfo(){
-        return ApiResponse.onSuccess(SuccessStatus.Question_OK.getCode(), SuccessStatus.Question_OK.getMessage(), UserConverter.toUserGetInfoDTO());
+    @ApiOperation(value = "유저 정보 조회", notes = "유저 정보 조회")
+    @GetMapping("/{userId}")
+    public ApiResponse<UserResponseDTO.getUserInfoDTO> getUserInfo(@PathVariable Long userId){
+        System.out.println("controller: " +  userId);
+        User user = userService.getUserInfo(userId);
+
+        return ApiResponse.onSuccess(SuccessStatus.Question_OK.getCode(), SuccessStatus.Question_OK.getMessage(), UserConverter.toUserGetInfoDTO(user));
     }
 
+    @ApiOperation(value = "유저 정보 수정", notes = "유저 정보 수정")
     @PatchMapping("/{userId}")
-    public ApiResponse<UserResponseDTO.updateUserInfoDTO> updateUserInfo(){
-        return ApiResponse.onSuccess(SuccessStatus.Question_OK.getCode(), SuccessStatus.Question_OK.getMessage(), UserConverter.toUserUpdateDTO());
+    public ApiResponse<UserResponseDTO.updateUserInfoDTO> updateUserInfo(@PathVariable Long userId, @RequestBody UserRequestDTO.updateUserInfoRequestDTO requestDTO){
+        User user = userService.updateUserInfo(userId, requestDTO);
+        return ApiResponse.onSuccess(SuccessStatus.Question_OK.getCode(), SuccessStatus.Question_OK.getMessage(), UserConverter.toUserUpdateDTO(user));
     }
 
     @PatchMapping("/delete")

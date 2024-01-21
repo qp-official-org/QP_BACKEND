@@ -53,10 +53,8 @@ public class UserResponseDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class getUserInfoDTO {
-        String name;
         String nickname;
         String profile_image;
-        String email;
         Long point;
     }
 

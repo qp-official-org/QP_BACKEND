@@ -1,4 +1,10 @@
 package qp.official.qp.service;
 
-public interface UserNicknameService {
+import qp.official.qp.domain.User;
+import qp.official.qp.web.dto.UserRequestDTO;
+
+public interface UserService {
+
+    User getUserInfo(Long userId);
+    User updateUserInfo(Long userId, UserRequestDTO.updateUserInfoRequestDTO requestDTO);
 }
