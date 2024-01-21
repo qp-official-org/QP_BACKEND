@@ -32,7 +32,6 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public User updateUserInfo(Long userId, UserRequestDTO.updateUserInfoRequestDTO requestDTO) {
-        // 유저 정보 가져와야 함 (현재는 임시로 1번 유저)
         User user = userRepository.findById(userId).orElseThrow(NullPointerException::new);
         user.updateNickname(requestDTO.getNickname());
         user.updateProfileImage(requestDTO.getProfile_image());
