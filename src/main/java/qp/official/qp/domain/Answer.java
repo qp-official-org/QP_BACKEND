@@ -44,4 +44,10 @@ public class Answer extends BaseEntity {
 
     @OneToMany(mappedBy = "answer", cascade = CascadeType.ALL)
     private List<AnswerLikes> answerLikesList = new ArrayList<>();
+
+    // user와 양방향 매핑하기
+    public void setUser(User user){
+        this.user = user;
+    }
+
 }
