@@ -27,8 +27,8 @@ public class User extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
-    @Column(nullable = false, length = 20)
-    private String name;
+//    @Column(nullable = false, length = 20)
+//    private String name;
 
     @Column(nullable = false, length = 20)
     private String nickname;
@@ -54,6 +54,12 @@ public class User extends BaseEntity {
     private UserStatus status;
 
     private LocalDateTime lastLogin;
+
+    @Setter
+    private String refreshToken;
+
+    @Setter
+    private LocalDateTime refreshTokenExpiresAt;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Question> questionList = new ArrayList<>();
