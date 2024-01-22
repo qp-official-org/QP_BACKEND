@@ -1,16 +1,20 @@
 package qp.official.qp.domain;
 
-import javax.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import qp.official.qp.domain.common.BaseEntity;
 import qp.official.qp.domain.mapping.QuestionHashTag;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Getter
 @Builder
+@DynamicUpdate
+@DynamicInsert
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Question extends BaseEntity {
@@ -35,4 +39,15 @@ public class Question extends BaseEntity {
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
     @Builder.Default
     private List<QuestionHashTag> questionHashTagList = new ArrayList<>();
+
+
+    public void setUser(User user) {
+        // 기존에 이미 등록되어 있던 관계를 제거
+        if (this.user != null) {
+            this.user.getQuestionList().remove(this);
+        }
+
+        this.user = user;
+        user.getQuestionList().add(this);
+    }
 }

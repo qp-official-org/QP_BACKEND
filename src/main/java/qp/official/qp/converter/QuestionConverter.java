@@ -1,52 +1,67 @@
 package qp.official.qp.converter;
 
+import qp.official.qp.domain.Hashtag;
 import qp.official.qp.domain.Question;
+import qp.official.qp.web.dto.HashtagResponseDTO;
 import qp.official.qp.web.dto.QuestionRequestDTO;
 import qp.official.qp.web.dto.QuestionResponseDTO;
-import qp.official.qp.web.dto.QuestionResponseDTO.QuestionUpdateReturnDTO;
+import qp.official.qp.web.dto.QuestionResponseDTO.QuestionUpdateResultDTO;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class QuestionConverter {
 
-    public static Question toQuestion(QuestionRequestDTO.QuestionPostDTO request){
+    public static Question toQuestion(QuestionRequestDTO.CreateDTO request) {
+        return Question.builder()
+                .title(request.getTitle())
+                .content(request.getContent())
+                .build();
+    }
+
+    public static Question toUpdateQuestion(QuestionRequestDTO.UpdateDTO request) {
         return null;
     }
 
-    public static Question toUpdateQuestion(QuestionRequestDTO.QuestionUpdateDTO request){
+    public static QuestionResponseDTO.CreateResultDTO toCreateResultDTO(Question question) {
+        return QuestionResponseDTO.CreateResultDTO.builder()
+                .questionId(question.getQuestionId())
+                .createdAt(question.getCreatedAt())
+                .build();
+    }
+
+    public static QuestionResponseDTO.QuestionPreviewDTO toQuestionPreviewDTO(Question question) {
+
+        // QuestionHashTag -> Hashtag -> HashtagPreviewDTO 변환
+        List<HashtagResponseDTO.HastTagPreviewDTO> hashTagList
+                = question.getQuestionHashTagList().stream()
+                .map(questionHashTag -> {
+                    Hashtag hashtag = questionHashTag.getHashtag();
+                    return HashtagConverter.toHashtagPreviewDTO(hashtag);
+                }).collect(Collectors.toList());
+
+        return QuestionResponseDTO.QuestionPreviewDTO.builder()
+                .questionId(question.getQuestionId())
+                .title(question.getTitle())
+                .content(question.getContent())
+                .hashtags(hashTagList)
+                .createdAt(question.getCreatedAt())
+                .modifiedAt(question.getUpdatedAt())
+                .build();
+    }
+
+    public static QuestionResponseDTO.QuestionPreviewListDTO toQuestionPagingTitleReturnDTO() {
         return null;
     }
 
-    public static QuestionResponseDTO.QuestionReturnDTO toQuestionReturnDTO(Question question){
-        return QuestionResponseDTO.QuestionReturnDTO.builder()
-            .questionId(question.getQuestionId())
-            .createdAt(question.getCreatedAt())
-            .build();
+    public static QuestionUpdateResultDTO toQuestionUpdateReturnDTO(Question question) {
+        return QuestionUpdateResultDTO.builder()
+                .questionId(question.getQuestionId())
+                .title(question.getTitle())
+                .content(question.getContent())
+                .updatedAt(question.getUpdatedAt())
+                .build();
     }
-
-    public static QuestionResponseDTO.QuestionFindReturnDTO toQuestionFindReturnDTO(Question question){
-        return QuestionResponseDTO.QuestionFindReturnDTO.builder()
-            .questionId(question.getQuestionId())
-            .title(question.getTitle())
-            .content(question.getContent())
-            .hashtags(question.getQuestionHashTagList())
-            .createdAt(question.getCreatedAt())
-            .updatedAt(question.getUpdatedAt())
-            .build();
-    }
-
-    public static QuestionResponseDTO.QuestionPagingTitleReturnDTO toQuestionPagingTitleReturnDTO(){
-        return null;
-    }
-
-    public static QuestionResponseDTO.QuestionUpdateReturnDTO toQuestionUpdateReturnDTO(Question question){
-        return QuestionUpdateReturnDTO.builder()
-            .questionId(question.getQuestionId())
-            .title(question.getTitle())
-            .content(question.getContent())
-            .updatedAt(question.getUpdatedAt())
-            .build();
-    }
-
-
 
 
 }

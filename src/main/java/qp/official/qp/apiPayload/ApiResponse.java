@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import qp.official.qp.apiPayload.code.BaseCode;
+import qp.official.qp.apiPayload.code.status.SuccessStatus;
 
 @Getter
 @AllArgsConstructor
