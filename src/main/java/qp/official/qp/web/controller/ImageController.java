@@ -11,9 +11,7 @@ import qp.official.qp.web.dto.ImageResponseDTO;
 @RequestMapping("/images")
 public class ImageController {
     @PostMapping
-    public ApiResponse<ImageResponseDTO.CreateResultDTO> uploadImage(
-        @RequestParam MultipartFile image
-    ) {
+    public ApiResponse<ImageResponseDTO.CreateResultDTO> uploadImage(@RequestParam MultipartFile image) {
         return null;
     }
 
