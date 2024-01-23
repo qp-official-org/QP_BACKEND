@@ -4,7 +4,7 @@ import java.io.IOException;
 import org.springframework.web.multipart.MultipartFile;
 import qp.official.qp.domain.Image;
 
-public interface ImageService {
+public interface ImageCommandService {
 
     public String upload(MultipartFile multipartFile) throws IOException;
 

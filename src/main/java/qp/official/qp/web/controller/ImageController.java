@@ -8,11 +8,10 @@ import org.springframework.web.multipart.MultipartFile;
 import qp.official.qp.apiPayload.ApiResponse;
 import qp.official.qp.apiPayload.code.status.SuccessStatus;
 import qp.official.qp.domain.Image;
-import qp.official.qp.service.ImageService.ImageService;
+import qp.official.qp.service.ImageService.ImageCommandService;
 import qp.official.qp.web.dto.ImageRequestDTO;
 import qp.official.qp.web.dto.ImageResponseDTO;
 import qp.official.qp.web.dto.ImageResponseDTO.CreateResultDTO;
-import qp.official.qp.web.dto.ImageResponseDTO.CreateResultDTO.CreateResultDTOBuilder;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,11 +19,11 @@ import qp.official.qp.web.dto.ImageResponseDTO.CreateResultDTO.CreateResultDTOBu
 @Slf4j
 public class ImageController {
 
-    private final ImageService imageService;
+    private final ImageCommandService imageCommandService;
 
     @PostMapping("/")
     public ApiResponse<ImageResponseDTO.CreateResultDTO> uploadImage(@RequestParam MultipartFile image) throws IOException {
-        Image savedImage = imageService.saveImage(image);
+        Image savedImage = imageCommandService.saveImage(image);
         CreateResultDTO result = ImageResponseDTO.CreateResultDTO.builder().url(savedImage.getUrl()).build();
         return ApiResponse.onSuccess(SuccessStatus.Image_OK.getCode(), SuccessStatus.Image_OK.getMessage(), result);
     }
@@ -32,7 +31,7 @@ public class ImageController {
     @DeleteMapping("/")
     public ApiResponse<?> deleteImage(@RequestBody ImageRequestDTO.ImageDTO request) throws IOException {
         String url = request.getUrl();
-        imageService.deleteImage(url);
+        imageCommandService.deleteImage(url);
         return ApiResponse.onSuccess(SuccessStatus.Image_OK.getCode(), SuccessStatus.Image_OK.getMessage(), null);
     }
 }

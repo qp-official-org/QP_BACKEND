@@ -11,7 +11,6 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,9 +23,10 @@ import qp.official.qp.repository.ImageRepository;
 @RequiredArgsConstructor
 @Component
 @Transactional(readOnly = true)
-public class ImageServiceImpl implements ImageService {
+public class ImageCommandServiceImpl implements ImageCommandService {
 
     private final ImageRepository imageRepository;
+    private final ImageQueryService imageQueryService;
     private final AmazonS3Client amazonS3Client;
 
     @Value("${cloud.aws.s3.bucket}")
@@ -56,7 +56,7 @@ public class ImageServiceImpl implements ImageService {
     @Transactional
     public void deleteImage(String url) throws IOException {
         try {
-            Image image = imageRepository.findByUrl(url);
+            Image image = imageQueryService.getImageByUrl(url);
             imageRepository.deleteById(image.getImageId());
             amazonS3Client.deleteObject(bucket, "qp/" + image.getFileName());
         }catch (SdkClientException e){
