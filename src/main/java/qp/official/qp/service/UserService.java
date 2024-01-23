@@ -7,4 +7,5 @@ public interface UserService {
 
     User getUserInfo(Long userId);
     User updateUserInfo(Long userId, UserRequestDTO.UpdateUserInfoRequestDTO requestDTO);
+    User createTestUser();
 }
