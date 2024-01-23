@@ -8,6 +8,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @EnableJpaAuditing
 public class QpBackendApplication {
 
+    static {
+        System.setProperty("com.amazonaws.sdk.disableEc2Metadata", "true");
+    }
+
     public static void main(String[] args) {
         SpringApplication.run(QpBackendApplication.class, args);
     }
