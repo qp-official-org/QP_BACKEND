@@ -9,6 +9,7 @@ import qp.official.qp.apiPayload.ApiResponse;
 import qp.official.qp.apiPayload.code.status.SuccessStatus;
 import qp.official.qp.domain.Image;
 import qp.official.qp.service.ImageService.ImageService;
+import qp.official.qp.web.dto.ImageRequestDTO;
 import qp.official.qp.web.dto.ImageResponseDTO;
 import qp.official.qp.web.dto.ImageResponseDTO.CreateResultDTO;
 import qp.official.qp.web.dto.ImageResponseDTO.CreateResultDTO.CreateResultDTOBuilder;
@@ -28,8 +29,10 @@ public class ImageController {
         return ApiResponse.onSuccess(SuccessStatus.Image_OK.getCode(), SuccessStatus.Image_OK.getMessage(), result);
     }
 
-    @DeleteMapping
-    public ApiResponse<?> deleteImage() {
-        return null;
+    @DeleteMapping("/")
+    public ApiResponse<?> deleteImage(@RequestBody ImageRequestDTO.ImageDTO request) throws IOException {
+        String url = request.getUrl();
+        imageService.deleteImage(url);
+        return ApiResponse.onSuccess(SuccessStatus.Image_OK.getCode(), SuccessStatus.Image_OK.getMessage(), null);
     }
 }

@@ -1,5 +1,6 @@
 package qp.official.qp.service.ImageService;
 
+import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
@@ -45,10 +46,22 @@ public class ImageServiceImpl implements ImageService {
     public Image saveImage(MultipartFile multipartFile) throws IOException {
         if (!multipartFile.isEmpty()){
             String storedFileName = upload(multipartFile);
-            Image image = Image.builder().url(storedFileName).build();
+            Image image = Image.builder().url(storedFileName).fileName(multipartFile.getOriginalFilename()).build();
             return imageRepository.save(image);
         }
         return null;
+    }
+
+    @Override
+    @Transactional
+    public void deleteImage(String url) throws IOException {
+        try {
+            Image image = imageRepository.findByUrl(url);
+            imageRepository.deleteById(image.getImageId());
+            amazonS3Client.deleteObject(bucket, "qp/" + image.getFileName());
+        }catch (SdkClientException e){
+            throw new IOException("이미지 삭제 중 오류가 발생 했습니다.", e);
+        }
     }
 
     private String putImage(File file, String fileName){

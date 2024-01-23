@@ -10,6 +10,10 @@ public interface ImageService {
 
     public Image saveImage(MultipartFile multipartFile) throws IOException;
 
+    public void deleteImage(String url) throws IOException;
+
+
+
 
 
 
