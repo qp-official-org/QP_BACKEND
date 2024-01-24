@@ -18,9 +18,26 @@ spring:
           auto: update
         default_batch_fetch_size: 1000
 
+cloud:
+  aws:
+    s3:
+      bucket: ${BUCKET_NAME}
+    credentials:
+      access_key: ${ACCESS_KEY}
+      secret_key: ${SECRET_KEY}
+    region:
+      static: ap-northeast-2
+      auto: false
+    stack:
+      auto: false
+
 # Logging
 logging:
   level:
+    com:
+      amazonaws:
+        util:
+          EC2MetadataUtils: ERROR
     org.springframework.web: DEBUG
     org.hibernate.sql: DEBUG
     org.hibernate.type: TRACE
