@@ -1,14 +1,15 @@
 package qp.official.qp.converter;
 
+import org.springframework.data.domain.Page;
 import qp.official.qp.domain.Hashtag;
 import qp.official.qp.domain.Question;
-import qp.official.qp.web.dto.HashtagResponseDTO;
 import qp.official.qp.web.dto.QuestionRequestDTO;
 import qp.official.qp.web.dto.QuestionResponseDTO;
 import qp.official.qp.web.dto.QuestionResponseDTO.QuestionUpdateResultDTO;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class QuestionConverter {
 
@@ -19,7 +20,7 @@ public class QuestionConverter {
                 .build();
     }
 
-    public static Question toUpdateQuestion(QuestionRequestDTO.UpdateDTO request) {
+    public static Question toQuestion(QuestionRequestDTO.UpdateDTO request) {
         return null;
     }
 
@@ -30,28 +31,59 @@ public class QuestionConverter {
                 .build();
     }
 
-    public static QuestionResponseDTO.QuestionPreviewDTO toQuestionPreviewDTO(Question question) {
+    public static QuestionResponseDTO.QuestionDTO toQuestionDTO(Question question) {
 
-        // QuestionHashTag -> Hashtag -> HashtagPreviewDTO 변환
-        List<HashtagResponseDTO.HastTagPreviewDTO> hashTagList
-                = question.getQuestionHashTagList().stream()
-                .map(questionHashTag -> {
-                    Hashtag hashtag = questionHashTag.getHashtag();
-                    return HashtagConverter.toHashtagPreviewDTO(hashtag);
-                }).collect(Collectors.toList());
+        // Get Hashtags
+        List<Hashtag> hashtagList = QuestionHashtagConverter.toHashtagList(
+                question.getQuestionHashTagList()
+        );
 
-        return QuestionResponseDTO.QuestionPreviewDTO.builder()
+        return QuestionResponseDTO.QuestionDTO.builder()
                 .questionId(question.getQuestionId())
                 .title(question.getTitle())
                 .content(question.getContent())
-                .hashtags(hashTagList)
+                .hashtags(HashtagConverter.toHashtagResultDTOList(hashtagList))
                 .createdAt(question.getCreatedAt())
-                .modifiedAt(question.getUpdatedAt())
+                .updatedAt(question.getUpdatedAt())
                 .build();
     }
 
-    public static QuestionResponseDTO.QuestionPreviewListDTO toQuestionPagingTitleReturnDTO() {
-        return null;
+    public static QuestionResponseDTO.QuestionPreviewDTO toQuestionPreviewDTO(Question question, int expertCount) {
+
+        // Get Hashtags
+        List<Hashtag> hashtagList = QuestionHashtagConverter.toHashtagList(
+                question.getQuestionHashTagList()
+        );
+
+        return QuestionResponseDTO.QuestionPreviewDTO.builder()
+                .user(UserConverter.toUserPreviewWithQuestionDTO(question.getUser()))
+                .questionId(question.getQuestionId())
+                .title(question.getTitle())
+                .hit(question.getHit())
+                .answerCount(question.getAnswers().size())
+                .expertCount(expertCount)
+                .createdAt(question.getCreatedAt())
+                .updatedAt(question.getUpdatedAt())
+                .hashtags(HashtagConverter.toHashtagResultDTOList(hashtagList))
+                .build();
+    }
+
+    public static QuestionResponseDTO.QuestionPreviewListDTO toQuestionPreviewDTOList(
+            Page<Question> questions, List<Integer> expertCountList
+    ) {
+
+        List<QuestionResponseDTO.QuestionPreviewDTO> questionPreviewDTOList = IntStream.range(0, expertCountList.size())
+                .mapToObj(i -> toQuestionPreviewDTO(questions.getContent().get(i), expertCountList.get(i)))
+                .collect(Collectors.toList());
+
+        return QuestionResponseDTO.QuestionPreviewListDTO.builder()
+                .questions(questionPreviewDTOList)
+                .listSize(questions.getContent().size())
+                .totalPage(questions.getTotalPages())
+                .totalElements(questions.getTotalElements())
+                .isFirst(questions.isFirst())
+                .isLast(questions.isLast())
+                .build();
     }
 
     public static QuestionUpdateResultDTO toQuestionUpdateReturnDTO(Question question) {
@@ -62,6 +94,4 @@ public class QuestionConverter {
                 .updatedAt(question.getUpdatedAt())
                 .build();
     }
-
-
 }

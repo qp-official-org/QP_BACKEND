@@ -1,6 +1,7 @@
 package qp.official.qp.web.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import qp.official.qp.apiPayload.ApiResponse;
@@ -14,6 +15,9 @@ import qp.official.qp.web.dto.QuestionRequestDTO;
 import qp.official.qp.web.dto.QuestionResponseDTO;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -39,31 +43,36 @@ public class QuestionController {
 
     // 특정 질문 조회
     @GetMapping("/{questionId}")
-    public ApiResponse<QuestionResponseDTO.QuestionPreviewDTO> findQuestion(
+    public ApiResponse<QuestionResponseDTO.QuestionDTO> findQuestion(
             @PathVariable @ExistQuestion Long questionId
     ) {
         return ApiResponse.onSuccess(
                 SuccessStatus.Question_OK.getCode(),
                 SuccessStatus.Question_OK.getMessage(),
-                QuestionConverter.toQuestionPreviewDTO(
+                QuestionConverter.toQuestionDTO(
                         questionQueryService.findById(questionId)
                 )
         );
     }
 
-    // 질문 페이징 조회
-    @GetMapping(params = {"page, size"})
-    public ApiResponse<QuestionResponseDTO.QuestionPreviewListDTO> findQuestionByPaging(@RequestParam Integer page, @RequestParam Integer size) {
-        return null;
-    }
+    // 전체 질문 페이징 조회
+    @GetMapping
+    public ApiResponse<QuestionResponseDTO.QuestionPreviewListDTO> findQuestionByPaging(
+            @RequestParam @Min(0) Integer page,
+            @RequestParam @Min(1) @Max(10) Integer size
+    ) {
+        Page<Question> questions = questionQueryService.findAll(page, size);
 
-    // 질문 검색 조회
-    @GetMapping(params = {"title", "page", "size"})
-    public ApiResponse<QuestionResponseDTO.QuestionPreviewListDTO> findQuestionByTitle(
-            @RequestParam String title,
-            @RequestParam Integer page,
-            @RequestParam Integer size) {
-        return null;
+        List<Integer> expertCounts = questionQueryService.findExpertCountByQuestion(questions);
+
+        return ApiResponse.onSuccess(
+                SuccessStatus.Question_OK.getCode(),
+                SuccessStatus.Question_OK.getMessage(),
+                QuestionConverter.toQuestionPreviewDTOList(
+                        questions,
+                        expertCounts
+                )
+        );
     }
 
     // 질문 삭제
