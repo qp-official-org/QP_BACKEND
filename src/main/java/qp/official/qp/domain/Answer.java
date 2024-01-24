@@ -51,7 +51,8 @@ public class Answer extends BaseEntity {
     private List<AnswerLikes> answerLikesList = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_id") @JsonIgnore
+    @JoinColumn(name = "parent_id")
+    @JsonIgnore
     private Answer parent;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "parent", cascade = CascadeType.ALL)
