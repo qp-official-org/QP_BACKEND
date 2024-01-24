@@ -1,12 +1,12 @@
 package qp.official.qp.web.dto;
 
-import java.time.LocalDateTime;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import qp.official.qp.domain.mapping.QuestionHashTag;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 public class QuestionResponseDTO {
     @Builder
@@ -22,14 +22,42 @@ public class QuestionResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class QuestionPreviewDTO {
+    public static class QuestionDTO {
         Long questionId;
         String title;
         String content;
-        List<HashtagResponseDTO.HastTagPreviewDTO> hashtags;
+        List<HashtagResponseDTO.HashtagReturnDTO> hashtags;
         LocalDateTime createdAt;
-        LocalDateTime modifiedAt;
+        LocalDateTime updatedAt;
     }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class QuestionUpdateResultDTO {
+        Long questionId;
+        String title;
+        String content;
+        LocalDateTime updatedAt;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class QuestionPreviewDTO {
+        UserResponseDTO.UserPreviewInQuestionDTO user;
+        Long questionId;
+        String title;
+        Long hit;
+        Integer answerCount;
+        Integer expertCount;
+        LocalDateTime createdAt;
+        LocalDateTime updatedAt;
+        List<HashtagResponseDTO.HashtagReturnDTO> hashtags;
+    }
+
 
     @Builder
     @Getter
@@ -42,16 +70,5 @@ public class QuestionResponseDTO {
         Long totalElements;
         boolean isFirst;
         boolean isLast;
-    }
-
-    @Builder
-    @Getter
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class QuestionUpdateResultDTO {
-        Long questionId;
-        String title;
-        String content;
-        LocalDateTime updatedAt;
     }
 }
