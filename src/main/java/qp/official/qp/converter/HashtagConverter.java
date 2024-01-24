@@ -4,6 +4,9 @@ import qp.official.qp.domain.Hashtag;
 import qp.official.qp.web.dto.HashtagRequestDTO;
 import qp.official.qp.web.dto.HashtagResponseDTO;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class HashtagConverter {
 
     public static HashtagResponseDTO.HashtagReturnDTO toHashtagResultDTO(Hashtag hashtag) {
@@ -20,12 +23,10 @@ public class HashtagConverter {
                 .build();
     }
 
-    // 다른곳에서 사용하는 HashtagPreviewDTO
-    public static HashtagResponseDTO.HastTagPreviewDTO toHashtagPreviewDTO(Hashtag hashtag) {
-        return HashtagResponseDTO.HastTagPreviewDTO.builder()
-                .hashtagId(hashtag.getHashtagId())
-                .hashtag(hashtag.getHashtag())
-                .build();
+    public static List<HashtagResponseDTO.HashtagReturnDTO> toHashtagResultDTOList(List<Hashtag> hashtags) {
+        return hashtags.stream()
+                .map(HashtagConverter::toHashtagResultDTO)
+                .collect(Collectors.toList());
     }
 
 }

@@ -1,6 +1,7 @@
 package qp.official.qp.web.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import qp.official.qp.apiPayload.ApiResponse;
@@ -14,6 +15,9 @@ import qp.official.qp.web.dto.QuestionRequestDTO;
 import qp.official.qp.web.dto.QuestionResponseDTO;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor

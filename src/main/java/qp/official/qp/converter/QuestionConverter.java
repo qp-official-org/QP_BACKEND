@@ -1,14 +1,15 @@
 package qp.official.qp.converter;
 
+import org.springframework.data.domain.Page;
 import qp.official.qp.domain.Hashtag;
 import qp.official.qp.domain.Question;
-import qp.official.qp.web.dto.HashtagResponseDTO;
 import qp.official.qp.web.dto.QuestionRequestDTO;
 import qp.official.qp.web.dto.QuestionResponseDTO;
 import qp.official.qp.web.dto.QuestionResponseDTO.QuestionUpdateResultDTO;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class QuestionConverter {
 
@@ -30,23 +31,20 @@ public class QuestionConverter {
                 .build();
     }
 
-    public static QuestionResponseDTO.QuestionPreviewDTO toQuestionPreviewDTO(Question question) {
+    public static QuestionResponseDTO.QuestionDTO toQuestionDTO(Question question) {
 
-        // QuestionHashTag -> Hashtag -> HashtagPreviewDTO 변환
-        List<HashtagResponseDTO.HastTagPreviewDTO> hashTagList
-                = question.getQuestionHashTagList().stream()
-                .map(questionHashTag -> {
-                    Hashtag hashtag = questionHashTag.getHashtag();
-                    return HashtagConverter.toHashtagPreviewDTO(hashtag);
-                }).collect(Collectors.toList());
+        // Get Hashtags
+        List<Hashtag> hashtagList = QuestionHashtagConverter.toHashtagList(
+                question.getQuestionHashTagList()
+        );
 
-        return QuestionResponseDTO.QuestionPreviewDTO.builder()
+        return QuestionResponseDTO.QuestionDTO.builder()
                 .questionId(question.getQuestionId())
                 .title(question.getTitle())
                 .content(question.getContent())
-                .hashtags(hashTagList)
+                .hashtags(HashtagConverter.toHashtagResultDTOList(hashtagList))
                 .createdAt(question.getCreatedAt())
-                .modifiedAt(question.getUpdatedAt())
+                .updatedAt(question.getUpdatedAt())
                 .build();
     }
 
