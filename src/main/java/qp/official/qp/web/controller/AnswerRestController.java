@@ -6,7 +6,8 @@ import org.springframework.web.bind.annotation.*;
 import qp.official.qp.apiPayload.ApiResponse;
 import qp.official.qp.apiPayload.code.status.SuccessStatus;
 import qp.official.qp.converter.AnswerConverter;
-import qp.official.qp.service.AnswerCommandService;
+import qp.official.qp.service.AnswerService.AnswerCommandService;
+import qp.official.qp.service.AnswerService.AnswerQueryService;
 import qp.official.qp.web.dto.AnswerRequestDTO;
 import qp.official.qp.web.dto.AnswerResponseDTO;
 
@@ -19,11 +20,12 @@ import javax.validation.Valid;
 public class AnswerRestController {
 
     private final AnswerCommandService answerCommandService;
+    private final AnswerQueryService answerQueryService;
 
     // 답변 작성
     @PostMapping
-    public ApiResponse<AnswerResponseDTO.CreateResultDTO> createAnswer(
-            @RequestBody @Valid AnswerRequestDTO.CreateDTO request
+    public ApiResponse<AnswerResponseDTO.AnswerCreateResultDTO> createAnswer(
+            @RequestBody @Valid AnswerRequestDTO.AnswerCreateDTO request
     ){
         return ApiResponse.onSuccess(
                 SuccessStatus.Answer_OK.getCode(),
@@ -35,11 +37,18 @@ public class AnswerRestController {
     }
 
     // 특정 질문의 부모 답변 페이징 조회
-    @GetMapping(path = "/questions/{questionId}", params = {"page, size"})
+    @GetMapping(path = "/questions/{questionId}", params = {"page"})
     public ApiResponse<AnswerResponseDTO.ParentAnswerPreviewListDTO> findParentAnswerByPaging(
-            @PathVariable Long questionId
+            @PathVariable Long questionId,
+            @RequestParam Integer page
     ){
-        return null;
+        return ApiResponse.onSuccess(
+                SuccessStatus.Answer_OK.getCode(),
+                SuccessStatus.Answer_OK.getMessage(),
+                AnswerConverter.parentAnswerPreviewListDTO(
+                        answerQueryService.getAnswerList(questionId, page)
+                )
+        );
     }
 
     // 부모 답변의 자식 답변 페이징 조회
@@ -60,8 +69,8 @@ public class AnswerRestController {
 
     // 답변 수정
     @PatchMapping("/{answerId}")
-    public ApiResponse<AnswerResponseDTO.UpdateResultDTO> updateAnswer(
-            @RequestBody AnswerRequestDTO.UpdateDTO request,
+    public ApiResponse<AnswerResponseDTO.AnswerUpdateResultDTO> updateAnswer(
+            @RequestBody AnswerRequestDTO.AnswerUpdateDTO request,
             @PathVariable Long answerId
     ){
         return null;

@@ -6,8 +6,9 @@ import javax.validation.constraints.NotBlank;
 
 public class AnswerRequestDTO {
     @Getter
-    public static class CreateDTO {
+    public static class AnswerCreateDTO {
         Long userId;
+        Long questionId;
         String title;
         @NotBlank
         String content;
@@ -16,7 +17,7 @@ public class AnswerRequestDTO {
     }
 
     @Getter
-    public static class UpdateDTO {
+    public static class AnswerUpdateDTO {
         Long userId;
         String title;
         @NotBlank

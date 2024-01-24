@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import qp.official.qp.domain.Answer;
 import qp.official.qp.domain.enums.Category;
 
 import java.time.LocalDateTime;
@@ -16,7 +15,7 @@ public class AnswerResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class CreateResultDTO {
+    public static class AnswerCreateResultDTO {
         Long answerId;
         LocalDateTime createdAt;
     }
@@ -75,7 +74,7 @@ public class AnswerResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class UpdateResultDTO {
+    public static class AnswerUpdateResultDTO {
         Long answerId;
         String title;
         String content;
