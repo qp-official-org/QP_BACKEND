@@ -9,29 +9,19 @@ import qp.official.qp.web.dto.AnswerResponseDTO;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import qp.official.qp.web.dto.AnswerResponseDTO.ChildAnswerPreviewDTO;
+import qp.official.qp.web.dto.AnswerResponseDTO.ChildAnswerPreviewListDTO;
+import springfox.documentation.swagger2.mappers.ModelMapper;
 
 public class AnswerConverter {
 
     // 클라이언트의 요청 데이터를 JPA에서 처리하기 위한 DTO to Entity
 
     public static Answer toAnswer(AnswerRequestDTO.CreateDTO request){
-
-        Category category = null;
-
-        switch (request.getCategory()) {
-            case 1:
-                category = Category.PARENT;
-                break;
-            case 2:
-                category = Category.CHILD;
-                break;
-        }
-
         return Answer.builder()
-                // userId 처리는 어떻게?
                 .title(request.getTitle())
                 .content(request.getContent())
-                .category(category)
+                .category(request.getCategory())
                 .answerGroup(request.getAnswerGroup())
                 .build();
     }
@@ -78,17 +68,24 @@ public class AnswerConverter {
         return null;
     }
 
-    public static AnswerResponseDTO.ChildAnswerPreviewListDTO childAnswerPreviewListDTO(Page<Answer> childAnswerList){
-        List<AnswerResponseDTO.ChildAnswerPreviewDTO> childAnswerPreviewDTOList = childAnswerList.stream()
-            .map(AnswerConverter::childAnswerPreviewDTO).collect(Collectors.toList());
+    public static AnswerResponseDTO.ChildAnswerPreviewListDTO childAnswerPreviewListDTO(Page<Answer> childAnswerList) {
+        List<ChildAnswerPreviewDTO> childAnswerDTOList = childAnswerList.getContent().stream()
+            .map(answer -> new ChildAnswerPreviewDTO(
+                answer.getAnswerId(),
+                answer.getTitle(),
+                answer.getContent(),
+                answer.getCategory(),
+                answer.getAnswerGroup()
+            ))
+            .collect(Collectors.toList());
 
-        return AnswerResponseDTO.ChildAnswerPreviewListDTO.builder()
-            .childAnswerList(childAnswerPreviewDTOList)
-            .listSize(childAnswerPreviewDTOList.size())
+        return ChildAnswerPreviewListDTO.builder()
+            .childAnswerList(childAnswerDTOList)
+            .listSize(childAnswerDTOList.size())
             .totalPage(childAnswerList.getTotalPages())
             .totalElements(childAnswerList.getTotalElements())
-            .isLast(childAnswerList.isLast())
             .isFirst(childAnswerList.isFirst())
+            .isLast(childAnswerList.isLast())
             .build();
     }
 

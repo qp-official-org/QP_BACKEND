@@ -33,17 +33,16 @@ public class AnswerRestController {
     public ApiResponse<AnswerResponseDTO.CreateResultDTO> createAnswer(
             @RequestBody AnswerRequestDTO.CreateDTO request
     ){
+        Answer answer = answerCommandService.createAnswer(request);
         return ApiResponse.onSuccess(
                 SuccessStatus.Answer_OK.getCode(),
                 SuccessStatus.Answer_OK.getMessage(),
-                AnswerConverter.toCreateResultDTO(
-                        answerCommandService.createAnswer(request)
-                )
+                AnswerConverter.toCreateResultDTO(answer)
         );
     }
 
     // 특정 질문의 부모 답변 페이징 조회
-    @GetMapping(path = "/questions/{questionId}", params = {"page, size"})
+    @GetMapping(path = "/questions/{questionId}")
     public ApiResponse<AnswerResponseDTO.ParentAnswerPreviewListDTO> findParentAnswerByPaging(
         @PathVariable @ExistQuestion Long questionId,
         @RequestParam @Min(0) Integer page,
@@ -58,7 +57,7 @@ public class AnswerRestController {
     }
 
     // 부모 답변의 자식 답변 페이징 조회
-    @GetMapping(path = "/{parentAnswerId}", params = {"page, size"})
+    @GetMapping("/{parentAnswerId}")
     public ApiResponse<AnswerResponseDTO.ChildAnswerPreviewListDTO> findChildAnswerByPaging(
         @PathVariable @ExistAnswer Long parentAnswerId,
         @RequestParam @Min(0) Integer page,

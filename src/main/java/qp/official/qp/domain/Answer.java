@@ -59,6 +59,15 @@ public class Answer extends BaseEntity {
     private List<Answer> children;
 
 
+    public void setParent(Answer parent){
+        this.parent = parent;
+    }
+    public void setChildren(Answer children){
+        this.children.add(children);
+    }
+
+    public void setQuestion(Question question){this.question = question;}
+
 
     // user와 양방향 매핑하기
     public void setUser(User user){

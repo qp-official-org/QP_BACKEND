@@ -3,6 +3,7 @@ package qp.official.qp.web.dto;
 import lombok.Getter;
 
 import javax.validation.constraints.NotBlank;
+import qp.official.qp.domain.enums.Category;
 
 public class AnswerRequestDTO {
     @Getter
@@ -11,7 +12,7 @@ public class AnswerRequestDTO {
         String title;
         @NotBlank
         String content;
-        Integer category;
+        Category category;
         Long answerGroup;
     }
 

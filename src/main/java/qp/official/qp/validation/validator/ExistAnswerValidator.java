@@ -12,7 +12,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class ExistAnswerValidator implements ConstraintValidator<ExistAnswer, List<Long>> {
+public class ExistAnswerValidator implements ConstraintValidator<ExistAnswer, Long> {
 
     private final AnswerRepository answerRepository;
     @Override
@@ -21,21 +21,15 @@ public class ExistAnswerValidator implements ConstraintValidator<ExistAnswer, Li
     }
 
     @Override
-    public boolean isValid(List<Long> answerList, ConstraintValidatorContext context) {
+    public boolean isValid(Long answerId, ConstraintValidatorContext context) {
 
         boolean isValid = true;
 
-        for(Long answerId : answerList) {
-            boolean isExist = answerRepository.findById(answerId).isPresent();
-
-            if (!isExist) {
-                isValid = false;
-
-                context.disableDefaultConstraintViolation();
-                context.buildConstraintViolationWithTemplate(ErrorStatus.HASHTAG_NOT_FOUND.toString()).addConstraintViolation();
-
-                break;
-            }
+        boolean isExist = answerRepository.findById(answerId).isPresent();
+        if (!isExist) {
+            isValid = false;
+            context.disableDefaultConstraintViolation();
+            context.buildConstraintViolationWithTemplate(ErrorStatus.ANSWER_NOT_FOUND.toString()).addConstraintViolation();
         }
 
         return isValid;
