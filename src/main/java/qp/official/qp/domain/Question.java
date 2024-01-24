@@ -44,6 +44,10 @@ public class Question extends BaseEntity {
     @Builder.Default
     private List<Answer> answers = new ArrayList<>();
 
+    public Question addHit() {
+        this.hit++;
+        return this;
+    }
 
     public void setUser(User user) {
         // 기존에 이미 등록되어 있던 관계를 제거

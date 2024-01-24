@@ -23,7 +23,8 @@ public class QuestionQueryServiceImpl implements QuestionQueryService {
 
     @Override
     public Question findById(Long questionId) {
-        return questionRepository.findById(questionId).get();
+        Question question = questionRepository.findById(questionId).get();
+        return questionRepository.save(question.addHit());
     }
 
     @Override
