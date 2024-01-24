@@ -1,5 +1,7 @@
 package qp.official.qp.converter;
 
+import java.util.stream.Collectors;
+import org.springframework.data.domain.Page;
 import qp.official.qp.domain.Answer;
 import qp.official.qp.domain.enums.Category;
 import qp.official.qp.web.dto.AnswerRequestDTO;
@@ -56,16 +58,38 @@ public class AnswerConverter {
         return null;
     }
 
-    public static AnswerResponseDTO.ParentAnswerPreviewListDTO parentAnswerPreviewListDTO(List<Answer> parentAnswerList){
-        return null;
+    public static AnswerResponseDTO.ParentAnswerPreviewListDTO parentAnswerPreviewListDTO(
+        Page<Answer> parentAnswerList){
+
+        List<AnswerResponseDTO.ParentAnswerPreviewDTO> parentAnswerPreviewDTOList = parentAnswerList.stream()
+            .map(AnswerConverter::parentAnswerPreviewDTO).collect(Collectors.toList());
+
+        return AnswerResponseDTO.ParentAnswerPreviewListDTO.builder()
+            .parentAnswerList(parentAnswerPreviewDTOList)
+            .listSize(parentAnswerPreviewDTOList.size())
+            .totalPage(parentAnswerList.getTotalPages())
+            .totalElements(parentAnswerList.getTotalElements())
+            .isLast(parentAnswerList.isLast())
+            .isFirst(parentAnswerList.isFirst())
+            .build();
     }
 
     public static AnswerResponseDTO.ChildAnswerPreviewDTO childAnswerPreviewDTO(Answer answer){
         return null;
     }
 
-    public static AnswerResponseDTO.ChildAnswerPreviewListDTO childAnswerPreviewListDTO(List<Answer> childAnswerList){
-        return null;
+    public static AnswerResponseDTO.ChildAnswerPreviewListDTO childAnswerPreviewListDTO(Page<Answer> childAnswerList){
+        List<AnswerResponseDTO.ChildAnswerPreviewDTO> childAnswerPreviewDTOList = childAnswerList.stream()
+            .map(AnswerConverter::childAnswerPreviewDTO).collect(Collectors.toList());
+
+        return AnswerResponseDTO.ChildAnswerPreviewListDTO.builder()
+            .childAnswerList(childAnswerPreviewDTOList)
+            .listSize(childAnswerPreviewDTOList.size())
+            .totalPage(childAnswerList.getTotalPages())
+            .totalElements(childAnswerList.getTotalElements())
+            .isLast(childAnswerList.isLast())
+            .isFirst(childAnswerList.isFirst())
+            .build();
     }
 
 }

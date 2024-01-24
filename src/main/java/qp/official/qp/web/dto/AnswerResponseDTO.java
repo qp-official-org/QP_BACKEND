@@ -82,6 +82,21 @@ public class AnswerResponseDTO {
         LocalDateTime updatedAt;
     }
 
-
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class GetAnswerResultDTO{
+        Long answerId;
+        String title;
+        String content;
+        String category;
+        Long userId;
+        Long question_id;
+        boolean isParent;
+        List<GetAnswerResultDTO> children;
+        LocalDateTime createdAt;
+        LocalDateTime updatedAt;
+    }
 
 }
