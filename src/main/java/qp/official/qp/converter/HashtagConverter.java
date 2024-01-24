@@ -16,7 +16,6 @@ public class HashtagConverter {
                 .build();
     }
 
-
     public static Hashtag toHashtag(HashtagRequestDTO.HashtagDTO request) {
         return Hashtag.builder()
                 .hashtag(request.getHashtag())
@@ -28,5 +27,4 @@ public class HashtagConverter {
                 .map(HashtagConverter::toHashtagResultDTO)
                 .collect(Collectors.toList());
     }
-
 }
