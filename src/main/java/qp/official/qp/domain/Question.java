@@ -40,6 +40,10 @@ public class Question extends BaseEntity {
     @Builder.Default
     private List<QuestionHashTag> questionHashTagList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
+    @Builder.Default
+    private List<Answer> answers = new ArrayList<>();
+
 
     public void setUser(User user) {
         // 기존에 이미 등록되어 있던 관계를 제거
