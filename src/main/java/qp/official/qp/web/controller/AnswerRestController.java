@@ -29,20 +29,21 @@ public class AnswerRestController {
     private final AnswerQueryService answerQueryService;
 
     // 답변 작성
-    @PostMapping
+    @PostMapping("/questions/{questionId}")
     public ApiResponse<AnswerResponseDTO.CreateResultDTO> createAnswer(
-            @RequestBody AnswerRequestDTO.CreateDTO request
+        @RequestBody @Valid AnswerRequestDTO.CreateDTO request,
+        @PathVariable @ExistQuestion Long questionId
     ){
-        Answer answer = answerCommandService.createAnswer(request);
+        Answer answer = answerCommandService.createAnswer(request, questionId);
         return ApiResponse.onSuccess(
-                SuccessStatus.Answer_OK.getCode(),
-                SuccessStatus.Answer_OK.getMessage(),
-                AnswerConverter.toCreateResultDTO(answer)
+            SuccessStatus.Answer_OK.getCode(),
+            SuccessStatus.Answer_OK.getMessage(),
+            AnswerConverter.toCreateResultDTO(answer)
         );
     }
 
     // 특정 질문의 부모 답변 페이징 조회
-    @GetMapping(path = "/questions/{questionId}")
+    @GetMapping("/questions/{questionId}")
     public ApiResponse<AnswerResponseDTO.ParentAnswerPreviewListDTO> findParentAnswerByPaging(
         @PathVariable @ExistQuestion Long questionId,
         @RequestParam @Min(0) Integer page,
