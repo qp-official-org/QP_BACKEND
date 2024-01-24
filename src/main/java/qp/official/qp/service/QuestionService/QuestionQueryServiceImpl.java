@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional
 public class QuestionQueryServiceImpl implements QuestionQueryService {
     private final QuestionRepository questionRepository;
     private final AnswerRepository answerRepository;
