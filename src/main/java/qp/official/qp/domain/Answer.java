@@ -54,7 +54,7 @@ public class Answer extends BaseEntity {
         this.user = user;
     }
 
-    // user와 양방향 매핑하기
+    // Question와 양방향 매핑하기
     public void setQuestion(Question question){
         this.question = question;
     }
