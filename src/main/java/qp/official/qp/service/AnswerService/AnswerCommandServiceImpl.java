@@ -6,11 +6,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import qp.official.qp.converter.AnswerConverter;
+import qp.official.qp.converter.AnswerLikesConverter;
 import qp.official.qp.domain.Answer;
 import qp.official.qp.domain.Question;
 import qp.official.qp.domain.User;
 import qp.official.qp.domain.enums.Category;
 import qp.official.qp.domain.mapping.AnswerLikes;
+import qp.official.qp.repository.AnswerLikesRepository;
 import qp.official.qp.repository.AnswerRepository;
 import qp.official.qp.repository.QuestionRepository;
 import qp.official.qp.repository.UserRepository;
@@ -27,6 +29,7 @@ public class AnswerCommandServiceImpl implements AnswerCommandService {
     private final AnswerRepository answerRepository;
     private final QuestionRepository questionRepository;
     private final UserRepository userRepository;
+    private final AnswerLikesRepository answerLikesRepository;
 
     @Override
     public Answer createAnswer(AnswerCreateDTO request, Long questionId) {
@@ -45,5 +48,13 @@ public class AnswerCommandServiceImpl implements AnswerCommandService {
         answer.setUser(user);
         answer.setQuestion(question);
         return answerRepository.save(answer);
+    }
+
+    @Override
+    public AnswerLikes addLikeToAnswer(AnswerLikeCreateDTO request) {
+        User user = userRepository.findById(request.getUserId()).get();
+        Answer answer = answerRepository.findById(request.getAnswerId()).get();
+        AnswerLikes answerLikes = AnswerLikesConverter.toAnswerLike(answer, user);
+        return answerLikesRepository.save(answerLikes);
     }
 }
