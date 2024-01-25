@@ -8,9 +8,11 @@ import org.springframework.transaction.annotation.Transactional;
 import qp.official.qp.converter.AnswerConverter;
 import qp.official.qp.domain.Answer;
 import qp.official.qp.domain.Question;
+import qp.official.qp.domain.User;
 import qp.official.qp.domain.enums.Category;
 import qp.official.qp.repository.AnswerRepository;
 import qp.official.qp.repository.QuestionRepository;
+import qp.official.qp.repository.UserRepository;
 import qp.official.qp.service.AnswerService.AnswerCommandService;
 import qp.official.qp.web.dto.AnswerRequestDTO.AnswerCreateDTO;
 
@@ -22,7 +24,7 @@ public class AnswerCommandServiceImpl implements AnswerCommandService {
 
     private final AnswerRepository answerRepository;
     private final QuestionRepository questionRepository;
-
+    private final UserRepository userRepository;
 
     @Override
     public Answer createAnswer(AnswerCreateDTO request, Long questionId) {
@@ -37,7 +39,8 @@ public class AnswerCommandServiceImpl implements AnswerCommandService {
             answer.setParent(parent);
             parent.setChildren(answer);
         }
-
+        User user = userRepository.findById(request.getUserId()).get();
+        answer.setUser(user);
         answer.setQuestion(question);
         return answerRepository.save(answer);
     }
