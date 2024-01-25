@@ -1,4 +1,4 @@
-package qp.official.qp.service;
+package qp.official.qp.service.AnswerService;
 
 import org.springframework.data.domain.Page;
 import qp.official.qp.domain.Answer;
