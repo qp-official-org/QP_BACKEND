@@ -10,6 +10,7 @@ import qp.official.qp.converter.AnswerLikesConverter;
 import qp.official.qp.domain.Answer;
 import qp.official.qp.domain.Question;
 import qp.official.qp.domain.User;
+import qp.official.qp.domain.enums.AnswerLikeStatus;
 import qp.official.qp.domain.enums.Category;
 import qp.official.qp.domain.mapping.AnswerLikes;
 import qp.official.qp.repository.AnswerLikesRepository;
@@ -49,22 +50,20 @@ public class AnswerCommandServiceImpl implements AnswerCommandService {
     }
 
     @Override
-    public AnswerLikes addLikeToAnswer(Long userId, Long answerId) {
-        AnswerLikes answerLikes = makeAnswerLikes(userId, answerId);
-        return answerLikesRepository.save(answerLikes);
-    }
-
-    @Override
-    public void deleteLikeToAnswer(Long userId, Long answerId) {
-        AnswerLikes answerLikes = makeAnswerLikes(userId, answerId);
-        answerLikesRepository.delete(answerLikes);
-    }
-
-
-    private AnswerLikes makeAnswerLikes(Long userId, Long answerId){
+    public AnswerLikeStatus addAndDeleteLikeToAnswer(Long userId, Long answerId) {
         User user = userRepository.findById(userId).get();
         Answer answer = answerRepository.findById(answerId).get();
-        return AnswerLikesConverter.toAnswerLike(answer, user);
+        if (isAlreadyExistAnswerLike(answer, user)) {
+            answerLikesRepository.deleteByAnswerAndUser(answer, user);
+            return AnswerLikeStatus.DELETED;
+        }
+        AnswerLikes answerLikes = AnswerLikesConverter.toAnswerLike(answer, user);
+        answerLikesRepository.save(answerLikes);
+        return AnswerLikeStatus.ADDED;
+    }
+
+    private boolean isAlreadyExistAnswerLike(Answer answer, User user){
+        return answerLikesRepository.existsByAnswerAndUser(answer, user);
     }
 
 }
