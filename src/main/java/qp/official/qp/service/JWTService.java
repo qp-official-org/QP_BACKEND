@@ -2,6 +2,7 @@ package qp.official.qp.service;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -15,33 +16,14 @@ import java.util.UUID;
 
 @Service
 public class JWTService {
-//    public static String JWT_SECRET;
-//
-//    @Value("${external.jwt.secret}")
-//    public void setKey(String key) {
-//        JWT_SECRET = key;
-//    }
-
-
-
-
-//    @Value("${jwt.secret}")
-//    @Getter
-//    private String secretKey;
-
-//    public String getSecretKey() {
-//        return secretKey;
-//    }
 
     private final String secretKey;
-    private SecretKey key;
-    public JWTService(@Value("{JWT_SECRET}") String secretKey) {
-        this.secretKey = secretKey;
-//        this.key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
-    }
+    private final SecretKey key;
 
-    public String getSecretKey() {
-        return secretKey;
+    @Autowired
+    public JWTService(@Value("${JWT_SECRET}") String secretKey) {
+        this.secretKey = secretKey;
+        key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
     }
 
     public static final int REFRESH_TOKEN_EXPIRED_TIME = 60 * 60 * 24 * 14; // 14 days
