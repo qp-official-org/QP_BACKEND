@@ -10,6 +10,7 @@ import qp.official.qp.domain.Answer;
 import qp.official.qp.domain.Question;
 import qp.official.qp.domain.User;
 import qp.official.qp.domain.enums.Category;
+import qp.official.qp.domain.mapping.AnswerLikes;
 import qp.official.qp.repository.AnswerRepository;
 import qp.official.qp.repository.QuestionRepository;
 import qp.official.qp.repository.UserRepository;
