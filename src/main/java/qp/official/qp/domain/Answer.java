@@ -68,10 +68,12 @@ public class Answer extends BaseEntity {
 
     public void setQuestion(Question question){this.question = question;}
 
-
     // user와 양방향 매핑하기
     public void setUser(User user){
         this.user = user;
     }
+
+    public void addAnswerLike(AnswerLikes answerLikes){this.answerLikesList.add(answerLikes);}
+    public void deleteAnswerLike(AnswerLikes answerLikes){this.answerLikesList.remove(answerLikes);}
 
 }

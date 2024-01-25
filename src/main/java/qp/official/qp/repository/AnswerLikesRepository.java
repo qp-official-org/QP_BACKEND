@@ -12,5 +12,4 @@ public interface AnswerLikesRepository extends JpaRepository<AnswerLikes, Long> 
     boolean existsByAnswerAndUser(Answer answer, User user);
 
     void deleteByAnswerAndUser(Answer answer, User user);
-
 }

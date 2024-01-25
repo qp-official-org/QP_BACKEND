@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import qp.official.qp.web.dto.AnswerResponseDTO.ChildAnswerPreviewDTO;
 import qp.official.qp.web.dto.AnswerResponseDTO.ChildAnswerPreviewListDTO;
+import qp.official.qp.web.dto.AnswerResponseDTO.ParentAnswerPreviewDTO;
 import springfox.documentation.swagger2.mappers.ModelMapper;
 
 public class AnswerConverter {
@@ -51,8 +52,17 @@ public class AnswerConverter {
     public static AnswerResponseDTO.ParentAnswerPreviewListDTO parentAnswerPreviewListDTO(
         Page<Answer> parentAnswerList){
 
-        List<AnswerResponseDTO.ParentAnswerPreviewDTO> parentAnswerPreviewDTOList = parentAnswerList.stream()
-            .map(AnswerConverter::parentAnswerPreviewDTO).collect(Collectors.toList());
+        List<AnswerResponseDTO.ParentAnswerPreviewDTO> parentAnswerPreviewDTOList = parentAnswerList.getContent().stream()
+            .map(answer -> new ParentAnswerPreviewDTO(
+                answer.getAnswerId(),
+                answer.getUser().getUserId(),
+                answer.getTitle(),
+                answer.getContent(),
+                answer.getCategory(),
+                answer.getAnswerGroup(),
+                answer.getAnswerLikesList().size()
+            ))
+            .collect(Collectors.toList());
 
         return AnswerResponseDTO.ParentAnswerPreviewListDTO.builder()
             .parentAnswerList(parentAnswerPreviewDTOList)
@@ -76,7 +86,8 @@ public class AnswerConverter {
                 answer.getTitle(),
                 answer.getContent(),
                 answer.getCategory(),
-                answer.getAnswerGroup()
+                answer.getAnswerGroup(),
+                answer.getAnswerLikesList().size()
             ))
             .collect(Collectors.toList());
 

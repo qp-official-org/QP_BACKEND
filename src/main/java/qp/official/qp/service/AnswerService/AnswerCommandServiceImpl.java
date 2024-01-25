@@ -51,17 +51,28 @@ public class AnswerCommandServiceImpl implements AnswerCommandService {
 
     @Override
     public AnswerLikeStatus addAndDeleteLikeToAnswer(Long userId, Long answerId) {
+
         User user = userRepository.findById(userId).get();
         Answer answer = answerRepository.findById(answerId).get();
+        AnswerLikes answerLikes = AnswerLikesConverter.toAnswerLike(answer, user);
+
         if (isAlreadyExistAnswerLike(answer, user)) {
             answerLikesRepository.deleteByAnswerAndUser(answer, user);
             return AnswerLikeStatus.DELETED;
         }
-        AnswerLikes answerLikes = AnswerLikesConverter.toAnswerLike(answer, user);
         answerLikesRepository.save(answerLikes);
         return AnswerLikeStatus.ADDED;
     }
 
+    private void deleteAnswerLike(Answer answer, User user, AnswerLikes answerLikes) {
+        answerLikesRepository.deleteByAnswerAndUser(answer, user);
+        answer.deleteAnswerLike(answerLikes);
+    }
+
+    private void addAnswerLike(Answer answer, AnswerLikes answerLikes) {
+        answer.addAnswerLike(answerLikes);
+        answerLikesRepository.save(answerLikes);
+    }
     private boolean isAlreadyExistAnswerLike(Answer answer, User user){
         return answerLikesRepository.existsByAnswerAndUser(answer, user);
     }
