@@ -3,7 +3,9 @@ package qp.official.qp.service.QuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import qp.official.qp.converter.AnswerConverter;
 import qp.official.qp.converter.QuestionConverter;
+import qp.official.qp.domain.Answer;
 import qp.official.qp.domain.Hashtag;
 import qp.official.qp.domain.Question;
 import qp.official.qp.domain.User;
@@ -52,5 +54,20 @@ public class QuestionCommandServiceImpl implements QuestionCommandService {
 
         // Question 저장
         return questionRepository.save(newQuestion);
+    }
+
+    @Override
+    public Question updateQuestion(Long questionId, QuestionRequestDTO.UpdateDTO request){
+        // FindById Question
+        Question updateQuestion = questionRepository.findById(questionId).get();
+        updateQuestion.update(request);
+
+        return updateQuestion;
+    }
+
+    @Override
+    public void deleteQuestion(Long questionId){
+        Question deleteQuestion = questionRepository.findById(questionId).get();
+        questionRepository.delete(deleteQuestion);
     }
 }
