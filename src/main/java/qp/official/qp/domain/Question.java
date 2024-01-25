@@ -5,6 +5,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import qp.official.qp.domain.common.BaseEntity;
 import qp.official.qp.domain.mapping.QuestionHashTag;
+import qp.official.qp.web.dto.QuestionRequestDTO;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -55,8 +56,8 @@ public class Question extends BaseEntity {
         user.getQuestionList().add(this);
     }
 
-    public void update(String title, String content){
-        this.title = title;
-        this.content = content;
+    public void update(QuestionRequestDTO.UpdateDTO request){
+        this.title = request.getTitle();
+        this.content = request.getContent();
     }
 }

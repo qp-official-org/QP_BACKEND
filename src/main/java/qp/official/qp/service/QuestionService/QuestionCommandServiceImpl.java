@@ -60,13 +60,14 @@ public class QuestionCommandServiceImpl implements QuestionCommandService {
     public Question updateQuestion(Long questionId, QuestionRequestDTO.UpdateDTO request){
         // FindById Question
         Question updateQuestion = questionRepository.findById(questionId).get();
-        updateQuestion.update(request.getTitle(), request.getContent());
+        updateQuestion.update(request);
 
         return updateQuestion;
     }
 
     @Override
     public void deleteQuestion(Long questionId){
-        questionRepository.deleteById(questionId);
+        Question deleteQuestion = questionRepository.findById(questionId).get();
+        questionRepository.delete(deleteQuestion);
     }
 }
