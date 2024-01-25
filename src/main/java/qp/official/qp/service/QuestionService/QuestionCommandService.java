@@ -5,4 +5,8 @@ import qp.official.qp.web.dto.QuestionRequestDTO;
 
 public interface QuestionCommandService {
     Question createQuestion(QuestionRequestDTO.CreateDTO request);
+
+    Question updateQuestion(Long questionId, QuestionRequestDTO.UpdateDTO request);
+
+    void deleteQuestion(Long questionId);
 }

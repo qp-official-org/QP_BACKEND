@@ -21,7 +21,10 @@ public class QuestionConverter {
     }
 
     public static Question toQuestion(QuestionRequestDTO.UpdateDTO request) {
-        return null;
+        return Question.builder()
+                .title(request.getTitle())
+                .content(request.getContent())
+                .build();
     }
 
     public static QuestionResponseDTO.CreateResultDTO toCreateResultDTO(Question question) {

@@ -54,4 +54,9 @@ public class Question extends BaseEntity {
         this.user = user;
         user.getQuestionList().add(this);
     }
+
+    public void update(String title, String content){
+        this.title = title;
+        this.content = content;
+    }
 }

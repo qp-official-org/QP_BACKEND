@@ -1,11 +1,13 @@
 package qp.official.qp.web.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import qp.official.qp.apiPayload.ApiResponse;
 import qp.official.qp.apiPayload.code.status.SuccessStatus;
+import qp.official.qp.converter.AnswerConverter;
 import qp.official.qp.converter.QuestionConverter;
 import qp.official.qp.domain.Question;
 import qp.official.qp.service.QuestionService.QuestionCommandService;
@@ -77,17 +79,31 @@ public class QuestionController {
 
     // 질문 삭제
     @DeleteMapping("/{questionId}")
-    public ApiResponse<QuestionResponseDTO.CreateResultDTO> deleteQuestion(@PathVariable Long questionId) {
-        return null;
+    @Operation(summary = "질문 삭제 API",description = "특정 질문을 삭제하는 API입니다. path variable로 questionId를 주세요")
+    public ApiResponse<?> deleteQuestion(
+            @ExistQuestion @PathVariable Long questionId) {
+        questionCommandService.deleteQuestion(questionId);
+        return ApiResponse.onSuccess(
+                SuccessStatus.Question_OK.getCode(),
+                SuccessStatus.Question_OK.getMessage(),
+                null
+        );
     }
 
 
     // 질문 수정
     @PatchMapping("/{questionId}")
+    @Operation(summary = "질문 수정 API",description = "특정 질문을 수정하는 API입니다. path variable로 questionId와 Reauest Body로 수정할 title과 content를 주세요")
     public ApiResponse<QuestionResponseDTO.QuestionUpdateResultDTO> updateQuestion(
-            @RequestBody QuestionRequestDTO.UpdateDTO request,
-            @PathVariable Long questionId) {
-        return null;
+            @RequestBody @Valid QuestionRequestDTO.UpdateDTO request,
+            @ExistQuestion @PathVariable Long questionId) {
+        return ApiResponse.onSuccess(
+                SuccessStatus.Question_OK.getCode(),
+                SuccessStatus.Question_OK.getMessage(),
+                QuestionConverter.toQuestionUpdateReturnDTO(
+                        questionCommandService.updateQuestion(questionId, request)
+                )
+        );
     }
 
 }
