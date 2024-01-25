@@ -14,6 +14,7 @@ import qp.official.qp.repository.AnswerRepository;
 import qp.official.qp.repository.QuestionRepository;
 import qp.official.qp.repository.UserRepository;
 import qp.official.qp.service.AnswerService.AnswerCommandService;
+import qp.official.qp.web.dto.AnswerLikeRequestDTO.AnswerLikeCreateDTO;
 import qp.official.qp.web.dto.AnswerRequestDTO.AnswerCreateDTO;
 
 @Service
