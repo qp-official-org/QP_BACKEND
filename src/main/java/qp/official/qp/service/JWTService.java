@@ -33,9 +33,16 @@ public class JWTService {
 //        return secretKey;
 //    }
 
-    @Value("${JWT_SECRET}")
-    private String secretKey;
-    private SecretKey key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
+    private final String secretKey;
+    private SecretKey key;
+    public JWTService(@Value("{JWT_SECRET}") String secretKey) {
+        this.secretKey = secretKey;
+//        this.key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
+    }
+
+    public String getSecretKey() {
+        return secretKey;
+    }
 
     public static final int REFRESH_TOKEN_EXPIRED_TIME = 60 * 60 * 24 * 14; // 14 days
 

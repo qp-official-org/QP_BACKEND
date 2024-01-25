@@ -25,3 +25,5 @@ logging:
     org.hibernate.sql: DEBUG
     org.hibernate.type: TRACE
     org.hibernate.type.descriptor.sql: trace
+
+JWT_SECRET: ${SECRET}
