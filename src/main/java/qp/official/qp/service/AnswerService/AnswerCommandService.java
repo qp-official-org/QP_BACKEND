@@ -9,4 +9,6 @@ public interface AnswerCommandService {
     public Answer createAnswer(AnswerRequestDTO.AnswerCreateDTO request, Long questionId);
 
     public AnswerLikes addLikeToAnswer(Long userId, Long answerId);
+
+    public void deleteLikeToAnswer(Long userId, Long answerId);
 }

@@ -50,9 +50,21 @@ public class AnswerCommandServiceImpl implements AnswerCommandService {
 
     @Override
     public AnswerLikes addLikeToAnswer(Long userId, Long answerId) {
-        User user = userRepository.findById(userId).get();
-        Answer answer = answerRepository.findById(answerId).get();
-        AnswerLikes answerLikes = AnswerLikesConverter.toAnswerLike(answer, user);
+        AnswerLikes answerLikes = makeAnswerLikes(userId, answerId);
         return answerLikesRepository.save(answerLikes);
     }
+
+    @Override
+    public void deleteLikeToAnswer(Long userId, Long answerId) {
+        AnswerLikes answerLikes = makeAnswerLikes(userId, answerId);
+        answerLikesRepository.delete(answerLikes);
+    }
+
+
+    private AnswerLikes makeAnswerLikes(Long userId, Long answerId){
+        User user = userRepository.findById(userId).get();
+        Answer answer = answerRepository.findById(answerId).get();
+        return AnswerLikesConverter.toAnswerLike(answer, user);
+    }
+
 }

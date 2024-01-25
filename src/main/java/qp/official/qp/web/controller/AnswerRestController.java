@@ -99,7 +99,7 @@ public class AnswerRestController {
     ){
         AnswerLikes answerLike = answerCommandService.addLikeToAnswer(userId, answerId);
 
-        return null;
+        return ApiResponse.onSuccess(SuccessStatus.AnswerLike_OK.getCode(), SuccessStatus.AnswerLike_OK.getMessage(), null);
     }
 
 }
