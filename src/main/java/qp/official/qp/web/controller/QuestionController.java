@@ -20,6 +20,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -57,13 +58,16 @@ public class QuestionController {
         );
     }
 
-    // 전체 질문 페이징 조회
+    // 전체 질문 페이징 조회 (검색 가능)
     @GetMapping
     public ApiResponse<QuestionResponseDTO.QuestionPreviewListDTO> findQuestionByPaging(
             @RequestParam @Min(0) Integer page,
-            @RequestParam @Min(1) @Max(10) Integer size
+            @RequestParam @Min(1) @Max(10) Integer size,
+            // Search
+            @RequestParam(required = false) Optional<String> search
+
     ) {
-        Page<Question> questions = questionQueryService.findAll(page, size);
+        Page<Question> questions = questionQueryService.findAllBySearch(page, size, search);
 
         List<Integer> expertCounts = questionQueryService.findExpertCountByQuestion(questions);
 

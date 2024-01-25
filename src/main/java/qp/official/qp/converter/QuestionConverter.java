@@ -19,7 +19,6 @@ public class QuestionConverter {
                 .content(request.getContent())
                 .build();
     }
-
     public static QuestionResponseDTO.CreateResultDTO toCreateResultDTO(Question question) {
         return QuestionResponseDTO.CreateResultDTO.builder()
                 .questionId(question.getQuestionId())
