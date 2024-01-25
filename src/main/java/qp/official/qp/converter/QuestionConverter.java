@@ -20,13 +20,6 @@ public class QuestionConverter {
                 .build();
     }
 
-    public static Question toQuestion(QuestionRequestDTO.UpdateDTO request) {
-        return Question.builder()
-                .title(request.getTitle())
-                .content(request.getContent())
-                .build();
-    }
-
     public static QuestionResponseDTO.CreateResultDTO toCreateResultDTO(Question question) {
         return QuestionResponseDTO.CreateResultDTO.builder()
                 .questionId(question.getQuestionId())
