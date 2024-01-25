@@ -16,8 +16,6 @@ import qp.official.qp.repository.AnswerLikesRepository;
 import qp.official.qp.repository.AnswerRepository;
 import qp.official.qp.repository.QuestionRepository;
 import qp.official.qp.repository.UserRepository;
-import qp.official.qp.service.AnswerService.AnswerCommandService;
-import qp.official.qp.web.dto.AnswerLikeRequestDTO.AnswerLikeCreateDTO;
 import qp.official.qp.web.dto.AnswerRequestDTO.AnswerCreateDTO;
 
 @Service
@@ -51,9 +49,9 @@ public class AnswerCommandServiceImpl implements AnswerCommandService {
     }
 
     @Override
-    public AnswerLikes addLikeToAnswer(AnswerLikeCreateDTO request) {
-        User user = userRepository.findById(request.getUserId()).get();
-        Answer answer = answerRepository.findById(request.getAnswerId()).get();
+    public AnswerLikes addLikeToAnswer(Long userId, Long answerId) {
+        User user = userRepository.findById(userId).get();
+        Answer answer = answerRepository.findById(answerId).get();
         AnswerLikes answerLikes = AnswerLikesConverter.toAnswerLike(answer, user);
         return answerLikesRepository.save(answerLikes);
     }

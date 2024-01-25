@@ -6,11 +6,4 @@ import qp.official.qp.validation.annotation.ExistUser;
 
 public class AnswerLikeRequestDTO {
 
-    @Getter
-    public static class AnswerLikeCreateDTO{
-        @ExistUser
-        Long userId;
-        @ExistAnswer
-        Long answerId;
-    }
 }

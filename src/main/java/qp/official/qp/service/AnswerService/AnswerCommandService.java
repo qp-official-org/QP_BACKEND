@@ -8,5 +8,5 @@ import qp.official.qp.web.dto.AnswerRequestDTO;
 public interface AnswerCommandService {
     public Answer createAnswer(AnswerRequestDTO.AnswerCreateDTO request, Long questionId);
 
-    public AnswerLikes addLikeToAnswer(AnswerLikeRequestDTO.AnswerLikeCreateDTO request);
+    public AnswerLikes addLikeToAnswer(Long userId, Long answerId);
 }
