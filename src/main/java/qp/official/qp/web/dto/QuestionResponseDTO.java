@@ -5,13 +5,70 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 public class QuestionResponseDTO {
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class CreateResultDTO {
+        Long questionId;
+        LocalDateTime createdAt;
+    }
 
     @Builder
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class QuestionTestDTO{
-        String testString;
+    public static class QuestionDTO {
+        Long questionId;
+        String title;
+        String content;
+        List<HashtagResponseDTO.HashtagReturnDTO> hashtags;
+        LocalDateTime createdAt;
+        LocalDateTime updatedAt;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class QuestionUpdateResultDTO {
+        Long questionId;
+        String title;
+        String content;
+        LocalDateTime updatedAt;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class QuestionPreviewDTO {
+        UserResponseDTO.UserPreviewInQuestionDTO user;
+        Long questionId;
+        String title;
+        Long hit;
+        Integer answerCount;
+        Integer expertCount;
+        LocalDateTime createdAt;
+        LocalDateTime updatedAt;
+        List<HashtagResponseDTO.HashtagReturnDTO> hashtags;
+    }
+
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class QuestionPreviewListDTO {
+        List<QuestionPreviewDTO> questions;
+        Integer listSize;
+        Integer totalPage;
+        Long totalElements;
+        boolean isFirst;
+        boolean isLast;
     }
 }

@@ -7,14 +7,18 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import qp.official.qp.apiPayload.ApiResponse;
+import qp.official.qp.apiPayload.code.status.ErrorStatus;
 import qp.official.qp.apiPayload.code.status.SuccessStatus;
 import qp.official.qp.converter.HashtagConverter;
+import qp.official.qp.domain.Hashtag;
+import qp.official.qp.service.HashtagService.HashtagCommandService;
+import qp.official.qp.service.HashtagService.HashtagQueryService;
 import qp.official.qp.web.dto.HashtagRequestDTO;
 import qp.official.qp.web.dto.HashtagResponseDTO;
-import qp.official.qp.web.dto.HashtagResponseDTO.HashtagReturnDTO;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,23 +26,30 @@ import qp.official.qp.web.dto.HashtagResponseDTO.HashtagReturnDTO;
 @RequestMapping("/hashtag")
 public class HashtagController {
 
+    private final HashtagQueryService hashtagQueryService;
+    private final HashtagCommandService hashtagCommandService;
+
+
     @PostMapping("/")
-    public ApiResponse<HashtagResponseDTO.HashtagReturnDTO> generate(HashtagRequestDTO.HashtagDTO request){
-        return null;
+    public ApiResponse<HashtagResponseDTO.HashtagReturnDTO> generate(@RequestBody HashtagRequestDTO.HashtagDTO request){
+        Hashtag hashtag = hashtagQueryService.saveHashtag(request);
+        return ApiResponse.onSuccess(SuccessStatus.Hashtag_OK.getCode(), SuccessStatus.Hashtag_OK.getMessage(), HashtagConverter.toHashtagResultDTO(hashtag));
     }
 
     @GetMapping("/")
-    public ApiResponse<HashtagResponseDTO.HashtagReturnDTO> findHashtag(HashtagRequestDTO.HashtagDTO request){
-        return null;
+    public ApiResponse<HashtagResponseDTO.HashtagReturnDTO> findHashtag(@RequestBody HashtagRequestDTO.HashtagDTO request){
+        Hashtag hashtag = hashtagCommandService.findHashtag(request);
+        return ApiResponse.onSuccess(SuccessStatus.Hashtag_OK.getCode(), SuccessStatus.Hashtag_OK.getMessage(), HashtagConverter.toHashtagResultDTO(hashtag));
     }
 
     @DeleteMapping("/{hashtagId}")
-    public ApiResponse<HashtagResponseDTO.HashtagReturnDTO> deleteHashtag(HashtagRequestDTO.HashtagDTO request, @PathVariable Long hashtagId)
-    {
-        return null;
+    public ApiResponse<HashtagResponseDTO.HashtagReturnDTO> deleteHashtag(@PathVariable Long hashtagId){
+        try {
+            Hashtag hashtag = hashtagQueryService.deleteHashtag(hashtagId);
+            return ApiResponse.onSuccess(SuccessStatus.Hashtag_OK.getCode(), SuccessStatus.Hashtag_OK.getMessage(), HashtagConverter.toHashtagResultDTO(hashtag));
+        } catch (Exception e) {
+            return ApiResponse.onFailure(ErrorStatus.HASHTAG_NOT_EXIST.getCode(), ErrorStatus.HASHTAG_NOT_EXIST.getMessage(), null);
+        }
     }
-
-
-
 
 }

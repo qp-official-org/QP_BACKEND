@@ -16,8 +16,4 @@ public class HashtagResponseDTO {
         Long hashtagId;
         String hashtag;
     }
-
-
-
-
 }
