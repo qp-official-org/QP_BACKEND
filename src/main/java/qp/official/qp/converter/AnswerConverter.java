@@ -17,7 +17,7 @@ public class AnswerConverter {
 
     // 클라이언트의 요청 데이터를 JPA에서 처리하기 위한 DTO to Entity
 
-    public static Answer toAnswer(AnswerRequestDTO.CreateDTO request){
+    public static Answer toAnswer(AnswerRequestDTO.AnswerCreateDTO request){
         return Answer.builder()
                 .title(request.getTitle())
                 .content(request.getContent())

@@ -12,7 +12,7 @@ import qp.official.qp.domain.enums.Category;
 import qp.official.qp.repository.AnswerRepository;
 import qp.official.qp.repository.QuestionRepository;
 import qp.official.qp.service.AnswerService.AnswerCommandService;
-import qp.official.qp.web.dto.AnswerRequestDTO.CreateDTO;
+import qp.official.qp.web.dto.AnswerRequestDTO.AnswerCreateDTO;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +25,7 @@ public class AnswerCommandServiceImpl implements AnswerCommandService {
 
 
     @Override
-    public Answer createAnswer(CreateDTO request, Long questionId) {
+    public Answer createAnswer(AnswerCreateDTO request, Long questionId) {
         Answer answer = AnswerConverter.toAnswer(request);
         Question question = questionRepository.findById(questionId)
             .orElseThrow(() -> new NoSuchElementException("해당하는 질문이 존재하지 않습니다."));

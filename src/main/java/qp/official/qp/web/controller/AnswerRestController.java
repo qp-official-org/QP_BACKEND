@@ -31,7 +31,7 @@ public class AnswerRestController {
     // 답변 작성
     @PostMapping("/questions/{questionId}")
     public ApiResponse<AnswerResponseDTO.CreateResultDTO> createAnswer(
-        @RequestBody @Valid AnswerRequestDTO.CreateDTO request,
+        @RequestBody @Valid AnswerRequestDTO.AnswerCreateDTO request,
         @PathVariable @ExistQuestion Long questionId
     ){
         Answer answer = answerCommandService.createAnswer(request, questionId);
