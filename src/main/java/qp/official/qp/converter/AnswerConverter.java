@@ -72,6 +72,7 @@ public class AnswerConverter {
         List<ChildAnswerPreviewDTO> childAnswerDTOList = childAnswerList.getContent().stream()
             .map(answer -> new ChildAnswerPreviewDTO(
                 answer.getAnswerId(),
+                answer.getUser().getUserId(),
                 answer.getTitle(),
                 answer.getContent(),
                 answer.getCategory(),
