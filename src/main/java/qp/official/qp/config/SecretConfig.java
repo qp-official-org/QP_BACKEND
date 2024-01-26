@@ -17,6 +17,7 @@ public class SecretConfig {
 
     @Bean
     public JWTService jwtService() {
-        return new JWTService(secretKey);
+       return new JWTService(secretKey);
+
     }
 }
