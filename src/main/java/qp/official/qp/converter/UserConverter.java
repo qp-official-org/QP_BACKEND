@@ -2,7 +2,6 @@ package qp.official.qp.converter;
 
 import qp.official.qp.domain.User;
 import qp.official.qp.domain.enums.UserStatus;
-import qp.official.qp.web.dto.UserRequestDTO;
 import qp.official.qp.web.dto.UserResponseDTO;
 
 public class UserConverter {
@@ -56,6 +55,14 @@ public class UserConverter {
     public static UserResponseDTO.LoginResultDTO toUserAutoLoginDTO() {
         return UserResponseDTO.LoginResultDTO.builder()
                 .userId(1L)
+                .build();
+    }
+
+    public static UserResponseDTO.UserPreviewInQuestionDTO toUserPreviewWithQuestionDTO(User user) {
+        return UserResponseDTO.UserPreviewInQuestionDTO.builder()
+                .userId(user.getUserId())
+                .ROLE(user.getRole())
+                .profileImage(user.getProfileImage())
                 .build();
     }
 }

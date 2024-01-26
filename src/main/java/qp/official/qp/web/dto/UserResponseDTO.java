@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import net.bytebuddy.asm.Advice;
+import qp.official.qp.domain.enums.Role;
 import qp.official.qp.domain.enums.UserStatus;
 
 import java.time.LocalDateTime;
@@ -94,7 +94,13 @@ public class UserResponseDTO {
         Long userId;
     }
 
-
-
-
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class UserPreviewInQuestionDTO {
+        Long userId;
+        String profileImage;
+        Role ROLE;
+    }
 }
