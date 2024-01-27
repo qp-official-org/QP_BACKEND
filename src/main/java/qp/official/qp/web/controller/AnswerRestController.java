@@ -2,6 +2,8 @@ package qp.official.qp.web.controller;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.validation.annotation.Validated;
@@ -79,19 +81,32 @@ public class AnswerRestController {
 
     // 답변 삭제
     @DeleteMapping("/{answerId}")
+    @Operation(summary = "답변 삭제 API",description = "특정 답변 또는 대댓글을 삭제하는 API입니다. path variable로 answerId를 주세요")
     public ApiResponse<?> deleteAnswer(
-            @PathVariable Long answerId
+            @ExistAnswer @PathVariable Long answerId
     ){
-        return null;
+        answerCommandService.deleteAnswer(answerId);
+        return ApiResponse.onSuccess(
+                SuccessStatus.Answer_OK.getCode(),
+                SuccessStatus.Answer_OK.getMessage(),
+                null
+        );
     }
 
     // 답변 수정
     @PatchMapping("/{answerId}")
+    @Operation(summary = "답변 수정 API",description = "특정 답변 또는 대댓글을 수정하는 API입니다. path variable로 answerId와 Reauest Body로 수정할 title과 content를 주세요")
     public ApiResponse<AnswerResponseDTO.UpdateResultDTO> updateAnswer(
-            @RequestBody AnswerRequestDTO.UpdateDTO request,
-            @PathVariable Long answerId
+            @RequestBody @Valid AnswerRequestDTO.AnswerUpdateDTO request,
+            @ExistAnswer @PathVariable Long answerId
     ){
-        return null;
+        return ApiResponse.onSuccess(
+                SuccessStatus.Answer_OK.getCode(),
+                SuccessStatus.Answer_OK.getMessage(),
+                AnswerConverter.toUpdateResultDTO(
+                        answerCommandService.updateQuestion(answerId, request)
+                )
+        );
     }
 
     // 답변 좋아요

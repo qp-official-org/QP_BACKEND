@@ -9,6 +9,12 @@ import qp.official.qp.web.dto.AnswerRequestDTO;
 public interface AnswerCommandService {
     public Answer createAnswer(AnswerRequestDTO.AnswerCreateDTO request, Long questionId);
 
+
     public AnswerLikeStatus addAndDeleteLikeToAnswer(Long userId, Long answerId);
+
+
+    void deleteAnswer(Long answerId);
+
+    Answer updateQuestion(Long answerId, AnswerRequestDTO.AnswerUpdateDTO request);
 
 }
