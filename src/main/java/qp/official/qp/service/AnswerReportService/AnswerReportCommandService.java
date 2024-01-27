@@ -4,7 +4,5 @@ import qp.official.qp.domain.mapping.AnswerReport;
 import qp.official.qp.web.dto.AnswerReportRequestDTO;
 
 public interface AnswerReportCommandService {
-
-    AnswerReport saveAnswerReport(AnswerReportRequestDTO.AnswerReportDTO request, Long answerId);
-
+    AnswerReport createAnswerReport(AnswerReportRequestDTO.AnswerReportDTO request, Long answerId);
 }

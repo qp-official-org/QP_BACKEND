@@ -32,4 +32,11 @@ public class AnswerReport extends BaseEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void setAnswer(Answer answer) {
+        this.answer = answer;
+    }
 }
