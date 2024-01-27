@@ -26,6 +26,8 @@ public class QuestionRequestDTO {
 
     @Getter
     public static class UpdateDTO {
+        @ExistUser
+        Long userId;
         @Size(min = 1, max = 50)
         String title;
         @Size(min = 1, max = 1500)

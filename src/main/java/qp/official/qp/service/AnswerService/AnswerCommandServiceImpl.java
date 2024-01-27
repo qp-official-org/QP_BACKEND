@@ -13,7 +13,7 @@ import qp.official.qp.domain.enums.Category;
 import qp.official.qp.repository.AnswerRepository;
 import qp.official.qp.repository.QuestionRepository;
 import qp.official.qp.repository.UserRepository;
-import qp.official.qp.service.AnswerService.AnswerCommandService;
+import qp.official.qp.web.dto.AnswerRequestDTO;
 import qp.official.qp.web.dto.AnswerRequestDTO.AnswerCreateDTO;
 
 @Service
@@ -43,5 +43,19 @@ public class AnswerCommandServiceImpl implements AnswerCommandService {
         answer.setUser(user);
         answer.setQuestion(question);
         return answerRepository.save(answer);
+    }
+
+    @Override
+    public void deleteAnswer(Long answerId){
+        Answer deleteAnswer = answerRepository.findById(answerId).get();
+        answerRepository.delete(deleteAnswer);
+    }
+
+    @Override
+    public Answer updateQuestion(Long answerId, AnswerRequestDTO.AnswerUpdateDTO request){
+        Answer updateAnswer = answerRepository.findById(answerId).get();
+        updateAnswer.update(request);
+
+        return updateAnswer;
     }
 }
