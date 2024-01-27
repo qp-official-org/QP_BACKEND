@@ -12,7 +12,4 @@ public class AnswerReportRequestDTO {
         String content;
     }
 
-
-
-
 }
