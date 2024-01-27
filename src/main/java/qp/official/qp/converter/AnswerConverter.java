@@ -27,15 +27,6 @@ public class AnswerConverter {
                 .build();
     }
 
-    public static Answer toAnswer(AnswerRequestDTO.UpdateDTO request){
-        return Answer.builder()
-                // userId 처리는 어떻게?
-                .title(request.getTitle())
-                .content(request.getContent())
-                .build();
-    }
-
-
     // 응답을 위한 Entity to DTO
 
     public static AnswerResponseDTO.CreateResultDTO toCreateResultDTO(Answer answer){
@@ -110,6 +101,15 @@ public class AnswerConverter {
             ))
             .collect(Collectors.toList());
         return childAnswerDTOList;
+    }
+
+    public static AnswerResponseDTO.UpdateResultDTO toUpdateResultDTO(Answer answer) {
+        return AnswerResponseDTO.UpdateResultDTO.builder()
+                .answerId(answer.getAnswerId())
+                .title(answer.getTitle())
+                .content(answer.getContent())
+                .updatedAt(answer.getUpdatedAt())
+                .build();
     }
 
 }
