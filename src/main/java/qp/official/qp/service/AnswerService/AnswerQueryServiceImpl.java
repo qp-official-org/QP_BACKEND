@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import qp.official.qp.domain.Answer;
 import qp.official.qp.domain.Question;
 import qp.official.qp.domain.enums.Category;
+import qp.official.qp.repository.AnswerLikesRepository;
 import qp.official.qp.repository.AnswerRepository;
 import qp.official.qp.repository.QuestionRepository;
 
