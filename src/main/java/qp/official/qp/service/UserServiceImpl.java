@@ -1,6 +1,18 @@
 package qp.official.qp.service;
 
+import com.fasterxml.jackson.core.JsonParser;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Service;
 import qp.official.qp.domain.User;
 import qp.official.qp.domain.enums.Gender;
@@ -15,6 +27,7 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -82,5 +95,16 @@ public class UserServiceImpl implements UserService {
 //        System.out.println("JwtUtil.generateJwt(user):: " + jwtService.createJWT(user.getUserId()));
 //        tokenMap.put("access_token", jwtService.createJWT(user.getUserId()));
         return tokenMap;
+    }
+
+    @Override
+    public String getTokenByAuthorizeCode(String code) throws IOException {
+        return null;
+    }
+
+
+    @Override
+    public String getUserInfoByToken(String accessToken) {
+        return null;
     }
 }
