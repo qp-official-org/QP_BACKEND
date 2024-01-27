@@ -2,7 +2,9 @@ package qp.official.qp.web.controller;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.Operation;
+import java.io.IOException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import qp.official.qp.apiPayload.ApiResponse;
@@ -17,12 +19,18 @@ import qp.official.qp.web.dto.UserResponseDTO;
 @RequiredArgsConstructor
 @Validated
 @RequestMapping("/users")
+@Slf4j
 public class UserRestController {
 
     private final UserService userService;
 
+    @GetMapping("/sign_up")
+    public void getKakaoCode(@RequestParam String code) throws IOException {
+        userService.getTokenByAuthorizeCode(code);
+    }
+
     @PostMapping("/sign_up")
-    public ApiResponse<UserResponseDTO.JoinResultDTO> signUp() {
+    public ApiResponse<UserResponseDTO.JoinResultDTO> signUp(@RequestParam String code) {
         return ApiResponse.onSuccess(SuccessStatus.Question_OK.getCode(), SuccessStatus.Question_OK.getMessage(), UserConverter.toUserTestDTO());
     }
 
