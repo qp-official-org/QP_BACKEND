@@ -10,12 +10,15 @@ import qp.official.qp.web.dto.UserRequestDTO;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final JWTService jwtService;
 
     /**
      * userId를 통한 유저 정보 조회
@@ -58,5 +61,26 @@ public class UserServiceImpl implements UserService {
                 .build();
 
         return userRepository.save(newUser);
+    }
+
+
+    // refresh 토큰 재발급
+    // refresh 토큰으로 유저 조회 -> 이메일로 해야 하나?
+    @Override
+    @Transactional
+    public Map<String, String> refresh(String refreshToken) {
+//        User user = userRepository.findByRefreshToken(refreshToken).orElseThrow(() -> new RuntimeException("해당하는 회원이 없습니다."));
+//        if (user.getRefreshTokenExpiresAt().isBefore(LocalDateTime.now())) {
+//            throw new RuntimeException("토큰이 만료되었습니다.");
+//        }
+        Map<String, String> tokenMap = new HashMap<>();
+//        Date nextWeek = Date.from(LocalDateTime.now().plusWeeks(1).atZone(ZoneId.of("Asia/Seoul")).toInstant());
+//        if (user.getRefreshTokenExpiresAt().isBefore(LocalDateTime.ofInstant(nextWeek.toInstant(), ZoneId.of("Asia/Seoul")))) {
+//            user.setRefreshToken(JWTService.generateRefreshToken());
+//            user.setRefreshTokenExpiresAt(LocalDateTime.now().plusWeeks(JWTService.REFRESH_TOKEN_EXPIRED_TIME));
+//        }
+//        System.out.println("JwtUtil.generateJwt(user):: " + jwtService.createJWT(user.getUserId()));
+//        tokenMap.put("access_token", jwtService.createJWT(user.getUserId()));
+        return tokenMap;
     }
 }
