@@ -7,11 +7,7 @@ public class AnswerReportRequestDTO {
     @Getter
     public static class AnswerReportDTO{
         Long userId;
-        Long answerId;
         String content;
     }
-
-
-
 
 }

@@ -1,4 +1,5 @@
-FROM openjdk:11-jdk-slim
+# java 11 alpine
+FROM openjdk:11-jre-slim
 
 COPY /build/libs/*.jar app.jar
 

@@ -74,13 +74,11 @@ public class AnswerConverter {
             .build();
     }
 
-    public static AnswerResponseDTO.ChildAnswerPreviewDTO childAnswerPreviewDTO(Answer answer){
-        return null;
-    }
-
-    public static AnswerResponseDTO.ChildAnswerPreviewListDTO childAnswerPreviewListDTO(Page<Answer> childAnswerList) {
-        List<ChildAnswerPreviewDTO> childAnswerDTOList = childAnswerList.getContent().stream()
-            .map(answer -> new ChildAnswerPreviewDTO(
+    private static List<ParentAnswerPreviewDTO> getParentAnswerPreviewDTOS(
+        Page<Answer> parentAnswerList) {
+        List<ParentAnswerPreviewDTO> parentAnswerPreviewDTOList = parentAnswerList.getContent()
+            .stream()
+            .map(answer -> new ParentAnswerPreviewDTO(
                 answer.getAnswerId(),
                 answer.getUser().getUserId(),
                 answer.getTitle(),
@@ -91,6 +89,14 @@ public class AnswerConverter {
             ))
             .collect(Collectors.toList());
 
+    public static AnswerResponseDTO.ChildAnswerPreviewDTO childAnswerPreviewDTO(Answer answer){
+        return null;
+    }
+
+    public static AnswerResponseDTO.ChildAnswerPreviewListDTO childAnswerPreviewListDTO(Page<Answer> childAnswerList) {
+        List<ChildAnswerPreviewDTO> childAnswerDTOList = getChildAnswerPreviewDTOS(
+            childAnswerList);
+
         return ChildAnswerPreviewListDTO.builder()
             .childAnswerList(childAnswerDTOList)
             .listSize(childAnswerDTOList.size())
@@ -99,6 +105,21 @@ public class AnswerConverter {
             .isFirst(childAnswerList.isFirst())
             .isLast(childAnswerList.isLast())
             .build();
+    }
+
+    private static List<ChildAnswerPreviewDTO> getChildAnswerPreviewDTOS(
+        Page<Answer> childAnswerList) {
+        List<ChildAnswerPreviewDTO> childAnswerDTOList = childAnswerList.getContent().stream()
+            .map(answer -> new ChildAnswerPreviewDTO(
+                answer.getAnswerId(),
+                answer.getUser().getUserId(),
+                answer.getTitle(),
+                answer.getContent(),
+                answer.getCategory(),
+                answer.getAnswerGroup()
+            ))
+            .collect(Collectors.toList());
+        return childAnswerDTOList;
     }
 
 }
