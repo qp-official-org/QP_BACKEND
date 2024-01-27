@@ -3,7 +3,12 @@ package qp.official.qp.service.ImageService;
 import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
+import com.amazonaws.services.s3.model.ListObjectsV2Request;
+import com.amazonaws.services.s3.model.ListObjectsV2Result;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.S3Object;
+import com.amazonaws.services.s3.model.S3ObjectSummary;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -22,7 +27,7 @@ import qp.official.qp.repository.ImageRepository;
 @Slf4j
 @RequiredArgsConstructor
 @Component
-@Transactional(readOnly = true)
+@Transactional
 public class ImageCommandServiceImpl implements ImageCommandService {
 
     private final ImageRepository imageRepository;
@@ -42,7 +47,6 @@ public class ImageCommandServiceImpl implements ImageCommandService {
     }
 
     @Override
-    @Transactional
     public Image saveImage(MultipartFile multipartFile) throws IOException {
         if (!multipartFile.isEmpty()){
             String storedFileName = upload(multipartFile);
@@ -52,8 +56,8 @@ public class ImageCommandServiceImpl implements ImageCommandService {
         return null;
     }
 
+    //  qp 폴더 내 위치 하고 해당 url을 가진 이미지를 삭제함
     @Override
-    @Transactional
     public void deleteImage(String url) throws IOException {
         try {
             Image image = imageQueryService.getImageByUrl(url);
@@ -63,6 +67,23 @@ public class ImageCommandServiceImpl implements ImageCommandService {
             throw new IOException("이미지 삭제 중 오류가 발생 했습니다.", e);
         }
     }
+
+    // qp 폴더 내 모든 이미지를 삭제함 (qp 폴더는 삭제 되지 조건 추가 함)
+    @Override
+    public void deleteAllImages() throws IOException {
+        try {
+            ListObjectsV2Result result = amazonS3Client.listObjectsV2(bucket);
+            for (S3ObjectSummary s3Object : result.getObjectSummaries()){
+                if (s3Object.getKey().equals("qp/")){
+                    amazonS3Client.deleteObject(bucket, s3Object.getKey());
+                }
+            }
+             imageRepository.deleteAll();
+        }catch (SdkClientException e){
+            throw new IOException("이미지 삭제 중 오류가 발생 했습니다.", e);
+        }
+    }
+
 
     private String putImage(File file, String fileName){
         amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, file)
