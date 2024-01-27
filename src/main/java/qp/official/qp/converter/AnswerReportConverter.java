@@ -6,8 +6,8 @@ import qp.official.qp.web.dto.AnswerReportResponseDTO;
 
 public class AnswerReportConverter {
 
-    public static AnswerReportResponseDTO.AnswerReportReturnDTO toAnswerReportTestDTO(AnswerReport answerReport){
-        return AnswerReportResponseDTO.AnswerReportReturnDTO.builder()
+    public static AnswerReportResponseDTO.AnswerReportResultDTO toAnswerReportResultDTO(AnswerReport answerReport){
+        return AnswerReportResponseDTO.AnswerReportResultDTO.builder()
             .answerId(answerReport.getAnswer().getAnswerId())
             .userId(answerReport.getUser().getUserId())
             .answerReportId(answerReport.getAnswerReportId())
@@ -18,7 +18,9 @@ public class AnswerReportConverter {
 
 
     public static AnswerReport toAnswerReport(AnswerReportRequestDTO.AnswerReportDTO request){
-        return null;
+        return AnswerReport.builder()
+                .content(request.getContent())
+                .build();
     }
 
 

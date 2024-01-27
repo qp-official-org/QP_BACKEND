@@ -12,7 +12,7 @@ public class AnswerReportResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class AnswerReportReturnDTO{
+    public static class AnswerReportResultDTO {
         Long answerId;
         Long userId;
         Long answerReportId;
