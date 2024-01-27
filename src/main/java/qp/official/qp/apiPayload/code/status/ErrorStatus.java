@@ -28,6 +28,7 @@ public enum ErrorStatus implements BaseErrorCode {
 
     // 신고 관련 에러 4000
     ANSWERREPORT_NOT_FOUND(HttpStatus.NOT_FOUND, "ANSWER_4001", "찾고있는 답변신고가 없습니다."),
+    QUESTIONREPORT_NOT_FOUND(HttpStatus.NOT_FOUND, "QUESTION_4002", "찾고있는 질문신고가 없습니다."),
 
     // 이미지 관련 에러 5000
     IMAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "IMAGE_5001", "찾고있는 이미지가 없습니다."),
