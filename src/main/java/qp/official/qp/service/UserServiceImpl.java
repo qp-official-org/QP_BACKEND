@@ -1,6 +1,5 @@
 package qp.official.qp.service;
 
-import com.fasterxml.jackson.core.JsonParser;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -154,7 +153,47 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public String getUserInfoByToken(String accessToken) {
-        return null;
+    public HashMap<String, Object> getUserInfoByToken(String accessToken) throws IOException {
+        HashMap<String, Object> userInfo = new HashMap<>();
+        String redirectUrl = "https://kapi.kakao.com/v2/user/me";
+
+        try {
+            URL url = new URL(redirectUrl);
+
+            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setRequestProperty("Authorization", "Bearer " + accessToken);
+            urlConnection.setRequestMethod("GET");
+
+            int responseCode = urlConnection.getResponseCode();
+            log.info("responseCode : {}", responseCode);
+
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+            String line = "";
+            String res = "";
+            while((line=bufferedReader.readLine())!=null)
+            {
+                res+=line;
+            }
+
+            System.out.println("res = " + res);
+
+            JSONParser jsonParser = new JSONParser();
+            JSONObject jsonObject = (JSONObject) jsonParser.parse(res);
+            JSONObject kakao_account = (JSONObject) jsonObject.get("kakao_account");
+            JSONObject properties = (JSONObject) jsonObject.get("properties");
+
+            String id = jsonObject.get("id").toString();
+            String nickname = properties.get("nickname").toString();
+
+            userInfo.put("id", id);
+            userInfo.put("nickname", nickname);
+            userInfo.put("accessToken", accessToken);
+
+            bufferedReader.close();
+
+        }catch (IOException | ParseException e){
+            e.printStackTrace();
+        }
+        return userInfo;
     }
 }

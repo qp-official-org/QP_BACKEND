@@ -3,8 +3,10 @@ package qp.official.qp.web.controller;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.Operation;
 import java.io.IOException;
+import java.util.HashMap;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import qp.official.qp.apiPayload.ApiResponse;
@@ -25,8 +27,9 @@ public class UserRestController {
     private final UserService userService;
 
     @GetMapping("/sign_up")
-    public void getKakaoCode(@RequestParam String code) throws IOException {
-        userService.getTokenByAuthorizeCode(code);
+    public HashMap<String, Object> getKakaoCode(@RequestParam String code) throws IOException {
+        String token = userService.getTokenByAuthorizeCode(code);
+        return userService.getUserInfoByToken(token);
     }
 
     @PostMapping("/sign_up")

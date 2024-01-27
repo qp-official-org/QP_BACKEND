@@ -1,6 +1,8 @@
 package qp.official.qp.service;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Objects;
 import qp.official.qp.domain.User;
 import qp.official.qp.web.dto.UserRequestDTO;
 
@@ -16,7 +18,7 @@ public interface UserService {
 
     String getTokenByAuthorizeCode(String code) throws IOException;
 
-    String getUserInfoByToken(String accessToken);
+    HashMap<String, Object> getUserInfoByToken(String accessToken) throws IOException;
 
 
 }
