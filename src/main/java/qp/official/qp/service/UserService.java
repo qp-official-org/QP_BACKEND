@@ -18,5 +18,5 @@ public interface UserService {
 
     Map<String, String> refresh(String refreshToken);
 
-    UserResponseDTO.UserSignUpResultDTO singUp(String code) throws IOException;
+    UserResponseDTO.UserSignUpResultDTO signUp(String code) throws IOException;
 }

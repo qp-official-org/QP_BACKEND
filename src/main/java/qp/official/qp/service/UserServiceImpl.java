@@ -103,7 +103,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserResponseDTO.UserSignUpResultDTO singUp(String code) throws IOException {
+    public UserResponseDTO.UserSignUpResultDTO signUp(String code) throws IOException {
         String token = getTokenByAuthorizeCode(code);
         HashMap<String, Object> userInfo = getUserInfoByToken(token);
 
