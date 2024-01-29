@@ -12,7 +12,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 import qp.official.qp.apiPayload.code.BaseErrorCode;
 import qp.official.qp.apiPayload.code.status.ErrorStatus;
 import qp.official.qp.apiPayload.exception.handler.UserHandler;
@@ -36,6 +38,9 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final JWTService jwtService;
+
+    @Value("${kakao.redirect.client_id}")
+    private String clientId;
 
     /**
      * userId를 통한 유저 정보 조회
@@ -102,6 +107,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public String toKakaoLogin() {
+       return "https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=" + clientId + "&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fusers%2Fsign_up";
+    }
+
+
+    @Override
     @Transactional
     public UserResponseDTO.UserSignUpResultDTO signUp(String code) throws IOException {
         String token = getTokenByAuthorizeCode(code);
@@ -127,6 +138,11 @@ public class UserServiceImpl implements UserService {
             .refreshToken(refreshToken)
             .httpStatus(userInfo.get("responseCode").toString())
             .build();
+    }
+
+    @Override
+    public void reset() {
+        userRepository.deleteAll();
     }
 
     private String getTokenByAuthorizeCode(String code) throws IOException {

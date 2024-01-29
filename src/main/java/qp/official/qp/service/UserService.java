@@ -18,5 +18,9 @@ public interface UserService {
 
     Map<String, String> refresh(String refreshToken);
 
+    String toKakaoLogin();
+
     UserResponseDTO.UserSignUpResultDTO signUp(String code) throws IOException;
+
+    void reset();
 }

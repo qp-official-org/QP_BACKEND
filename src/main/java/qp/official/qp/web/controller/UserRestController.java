@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.Operation;
 import java.io.IOException;
 import java.util.HashMap;
+import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -29,11 +30,6 @@ public class UserRestController {
     @GetMapping("/sign_up")
     public ApiResponse<UserResponseDTO.UserSignUpResultDTO> getKakaoCode(@RequestParam String code) throws IOException {
         return ApiResponse.onSuccess(SuccessStatus.User_OK.getCode(), SuccessStatus.User_OK.getMessage(), userService.signUp(code));
-    }
-
-    @PostMapping("/sign_up")
-    public ApiResponse<UserResponseDTO.JoinResultDTO> signUp(@RequestParam String code) {
-        return ApiResponse.onSuccess(SuccessStatus.Question_OK.getCode(), SuccessStatus.Question_OK.getMessage(), UserConverter.toUserTestDTO());
     }
 
     @PostMapping("/sign_in")
@@ -82,6 +78,11 @@ public class UserRestController {
                 SuccessStatus.User_OK.getMessage(),
                 UserConverter.createTestUser(userService.createTestUser())
         );
+    }
+
+    @RequestMapping("/reset")
+    public void reset(){
+        userService.reset();
     }
 
 }
