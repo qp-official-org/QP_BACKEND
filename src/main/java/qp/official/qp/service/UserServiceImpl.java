@@ -151,7 +151,7 @@ public class UserServiceImpl implements UserService {
             bufferedWriter.flush();
 
             int responseCode = urlConnection.getResponseCode();
-            log.info("responseCode : {}", responseCode);
+            //log.info("responseCode : {}", responseCode);
 
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
             String line = "";
@@ -159,15 +159,15 @@ public class UserServiceImpl implements UserService {
             while ((line = bufferedReader.readLine()) != null) {
                 result += line;
             }
-            log.info("result : {}",  result);
+            //log.info("result : {}",  result);
 
             JSONParser jsonParser = new JSONParser();
             JSONObject jsonObject = (JSONObject) jsonParser.parse(result);
 
             String accessToken = jsonObject.get("access_token").toString();
             String refreshToken = jsonObject.get("refresh_token").toString();
-            log.info("accessToken : {}", accessToken);
-            log.info("refreshToken : {}", refreshToken);
+            //log.info("accessToken : {}", accessToken);
+            //log.info("refreshToken : {}", refreshToken);
 
             token = accessToken;
             bufferedReader.close();
@@ -196,7 +196,7 @@ public class UserServiceImpl implements UserService {
             urlConnection.setRequestMethod("GET");
 
             int responseCode = urlConnection.getResponseCode();
-            log.info("responseCode : {}", responseCode);
+            //log.info("responseCode : {}", responseCode);
 
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
             String line = "";
@@ -206,7 +206,7 @@ public class UserServiceImpl implements UserService {
                 res+=line;
             }
 
-            System.out.println("res = " + res);
+            //System.out.println("res = " + res);
 
             JSONParser jsonParser = new JSONParser();
             JSONObject jsonObject = (JSONObject) jsonParser.parse(res);
