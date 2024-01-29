@@ -179,15 +179,24 @@ public class UserServiceImpl implements UserService {
 
             JSONParser jsonParser = new JSONParser();
             JSONObject jsonObject = (JSONObject) jsonParser.parse(res);
+
             JSONObject kakao_account = (JSONObject) jsonObject.get("kakao_account");
             JSONObject properties = (JSONObject) jsonObject.get("properties");
+            JSONObject profile = (JSONObject) kakao_account.get("profile");
+
 
             String id = jsonObject.get("id").toString();
             String nickname = properties.get("nickname").toString();
+            String email = kakao_account.get("email").toString();
+            String profileImageUrl = profile.get("profile_image_url").toString();
+
+
 
             userInfo.put("id", id);
             userInfo.put("nickname", nickname);
             userInfo.put("accessToken", accessToken);
+            userInfo.put("email", email);
+            userInfo.put("profileImageUrl", profileImageUrl);
 
             bufferedReader.close();
 
