@@ -5,10 +5,20 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+
 public class UserAuthDTO {
-    private Long id;
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class UserSignUpDTO{
+        String name;
+        String nickname;
+        String email;
+        String profileImage;
+    }
+
+
+
 }

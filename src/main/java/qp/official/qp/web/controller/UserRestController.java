@@ -27,9 +27,9 @@ public class UserRestController {
     private final UserService userService;
 
     @GetMapping("/sign_up")
-    public HashMap<String, Object> getKakaoCode(@RequestParam String code) throws IOException {
-        String token = userService.getTokenByAuthorizeCode(code);
-        return userService.getUserInfoByToken(token);
+    public ApiResponse<UserResponseDTO.UserSignUpResultDTO> getKakaoCode(@RequestParam String code) throws IOException {
+
+        return ApiResponse.onSuccess(SuccessStatus.User_OK.getCode(), SuccessStatus.User_OK.getMessage(), userService.singUp(code));
     }
 
     @PostMapping("/sign_up")
