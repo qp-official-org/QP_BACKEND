@@ -13,16 +13,21 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Service;
+import qp.official.qp.apiPayload.code.BaseErrorCode;
+import qp.official.qp.apiPayload.code.status.ErrorStatus;
+import qp.official.qp.apiPayload.exception.handler.UserHandler;
 import qp.official.qp.domain.User;
 import qp.official.qp.domain.enums.Gender;
 import qp.official.qp.domain.enums.Role;
 import qp.official.qp.repository.UserRepository;
+import qp.official.qp.web.dto.UserAuthDTO;
 import qp.official.qp.web.dto.UserRequestDTO;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import qp.official.qp.web.dto.UserResponseDTO;
 
 @Service
 @RequiredArgsConstructor
@@ -97,7 +102,34 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String getTokenByAuthorizeCode(String code) throws IOException {
+    @Transactional
+    public UserResponseDTO.UserSignUpResultDTO singUp(String code) throws IOException {
+        String token = getTokenByAuthorizeCode(code);
+        HashMap<String, Object> userInfo = getUserInfoByToken(token);
+
+        if (userRepository.existsByEmail(userInfo.get("email").toString())){
+            throw new UserHandler(ErrorStatus.USER_ALREADY_EXISTS);
+        }
+
+        User newUser = userRepository.save(User.builder()
+            .name(userInfo.get("nickname").toString()) // 사용자의 name을 가져올 수 없어서 우선은 nickname 으로 설정 했습니다.
+            .nickname(userInfo.get("nickname").toString())
+            .email(userInfo.get("email").toString())
+            .profileImage(userInfo.get("profileImageUrl").toString())
+            .build());
+
+        String jwtToken = jwtService.generateJWT(newUser.getUserId());
+        String refreshToken = jwtService.generateRefreshToken(newUser.getUserId());
+        newUser.setRefreshToken(refreshToken);
+
+        return UserResponseDTO.UserSignUpResultDTO.builder()
+            .accessToken(jwtToken)
+            .refreshToken(refreshToken)
+            .httpStatus(userInfo.get("responseCode").toString())
+            .build();
+    }
+
+    private String getTokenByAuthorizeCode(String code) throws IOException {
         String host = "https://kauth.kakao.com/oauth/token"; // 리다이렉트 보낼 URL
         URL url = new URL(host);
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
@@ -152,8 +184,7 @@ public class UserServiceImpl implements UserService {
     }
 
 
-    @Override
-    public HashMap<String, Object> getUserInfoByToken(String accessToken) throws IOException {
+    private HashMap<String, Object> getUserInfoByToken(String accessToken) throws IOException {
         HashMap<String, Object> userInfo = new HashMap<>();
         String redirectUrl = "https://kapi.kakao.com/v2/user/me";
 
@@ -184,14 +215,13 @@ public class UserServiceImpl implements UserService {
             JSONObject properties = (JSONObject) jsonObject.get("properties");
             JSONObject profile = (JSONObject) kakao_account.get("profile");
 
-
             String id = jsonObject.get("id").toString();
             String nickname = properties.get("nickname").toString();
             String email = kakao_account.get("email").toString();
             String profileImageUrl = profile.get("profile_image_url").toString();
 
 
-
+            userInfo.put("responseCode", responseCode);
             userInfo.put("id", id);
             userInfo.put("nickname", nickname);
             userInfo.put("accessToken", accessToken);

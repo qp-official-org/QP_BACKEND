@@ -23,6 +23,16 @@ public class UserResponseDTO {
         LocalDateTime createdAt;
     }
 
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class UserSignUpResultDTO{
+        String httpStatus;
+        String accessToken;
+        String refreshToken;
+    }
+
     /**
      * 로그인
      */

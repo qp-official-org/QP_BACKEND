@@ -4,9 +4,11 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Objects;
 import qp.official.qp.domain.User;
+import qp.official.qp.web.dto.UserAuthDTO;
 import qp.official.qp.web.dto.UserRequestDTO;
 
 import java.util.Map;
+import qp.official.qp.web.dto.UserResponseDTO;
 
 public interface UserService {
 
@@ -16,9 +18,5 @@ public interface UserService {
 
     Map<String, String> refresh(String refreshToken);
 
-    String getTokenByAuthorizeCode(String code) throws IOException;
-
-    HashMap<String, Object> getUserInfoByToken(String accessToken) throws IOException;
-
-
+    UserResponseDTO.UserSignUpResultDTO singUp(String code) throws IOException;
 }
