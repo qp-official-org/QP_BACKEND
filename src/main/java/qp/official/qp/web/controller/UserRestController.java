@@ -79,10 +79,4 @@ public class UserRestController {
                 UserConverter.createTestUser(userService.createTestUser())
         );
     }
-
-    @RequestMapping("/reset")
-    public void reset(){
-        userService.reset();
-    }
-
 }

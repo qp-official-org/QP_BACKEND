@@ -140,10 +140,6 @@ public class UserServiceImpl implements UserService {
             .build();
     }
 
-    @Override
-    public void reset() {
-        userRepository.deleteAll();
-    }
 
     private String getTokenByAuthorizeCode(String code) throws IOException {
         String host = "https://kauth.kakao.com/oauth/token"; // 리다이렉트 보낼 URL

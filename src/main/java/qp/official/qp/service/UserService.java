@@ -22,5 +22,4 @@ public interface UserService {
 
     UserResponseDTO.UserSignUpResultDTO signUp(String code) throws IOException;
 
-    void reset();
 }
