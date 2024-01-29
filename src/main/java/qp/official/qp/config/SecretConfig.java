@@ -12,12 +12,4 @@ import qp.official.qp.service.JWTService;
         @PropertySource(value = "classpath:secrets.properties", ignoreResourceNotFound = true),
 })
 public class SecretConfig {
-    @Value("${JWT_SECRET}")
-    private String secretKey;
-
-    @Bean
-    public JWTService jwtService() {
-       return new JWTService(secretKey);
-
-    }
 }
