@@ -36,14 +36,21 @@ public class AnswerConverter {
                 .build();
     }
 
-    public static AnswerResponseDTO.ParentAnswerPreviewDTO parentAnswerPreviewDTO(Answer answer){
-        return null;
-    }
 
     public static AnswerResponseDTO.ParentAnswerPreviewListDTO parentAnswerPreviewListDTO(
         Page<Answer> parentAnswerList){
 
-        List<AnswerResponseDTO.ParentAnswerPreviewDTO> parentAnswerPreviewDTOList = getParentAnswerPreviewDTOS(parentAnswerList);
+        List<AnswerResponseDTO.ParentAnswerPreviewDTO> parentAnswerPreviewDTOList = parentAnswerList.getContent().stream()
+            .map(answer -> new ParentAnswerPreviewDTO(
+                answer.getAnswerId(),
+                answer.getUser().getUserId(),
+                answer.getTitle(),
+                answer.getContent(),
+                answer.getCategory(),
+                answer.getAnswerGroup(),
+                answer.getAnswerLikesList().size()
+            ))
+            .collect(Collectors.toList());
 
         return AnswerResponseDTO.ParentAnswerPreviewListDTO.builder()
             .parentAnswerList(parentAnswerPreviewDTOList)
@@ -65,18 +72,15 @@ public class AnswerConverter {
                 answer.getTitle(),
                 answer.getContent(),
                 answer.getCategory(),
-                answer.getAnswerGroup()
-            )).collect(Collectors.toList());
+                answer.getAnswerGroup(),
+                answer.getAnswerLikesList().size()
+            ))
+            .collect(Collectors.toList());
         return parentAnswerPreviewDTOList;
     }
 
-    public static AnswerResponseDTO.ChildAnswerPreviewDTO childAnswerPreviewDTO(Answer answer){
-        return null;
-    }
-
     public static AnswerResponseDTO.ChildAnswerPreviewListDTO childAnswerPreviewListDTO(Page<Answer> childAnswerList) {
-        List<ChildAnswerPreviewDTO> childAnswerDTOList = getChildAnswerPreviewDTOS(
-            childAnswerList);
+        List<ChildAnswerPreviewDTO> childAnswerDTOList = getChildAnswerPreviewDTOS(childAnswerList);
 
         return ChildAnswerPreviewListDTO.builder()
             .childAnswerList(childAnswerDTOList)
@@ -88,8 +92,7 @@ public class AnswerConverter {
             .build();
     }
 
-    private static List<ChildAnswerPreviewDTO> getChildAnswerPreviewDTOS(
-        Page<Answer> childAnswerList) {
+    private static List<ChildAnswerPreviewDTO> getChildAnswerPreviewDTOS(Page<Answer> childAnswerList) {
         List<ChildAnswerPreviewDTO> childAnswerDTOList = childAnswerList.getContent().stream()
             .map(answer -> new ChildAnswerPreviewDTO(
                 answer.getAnswerId(),
@@ -97,11 +100,13 @@ public class AnswerConverter {
                 answer.getTitle(),
                 answer.getContent(),
                 answer.getCategory(),
-                answer.getAnswerGroup()
+                answer.getAnswerGroup(),
+                answer.getAnswerLikesList().size()
             ))
             .collect(Collectors.toList());
         return childAnswerDTOList;
     }
+
 
     public static AnswerResponseDTO.UpdateResultDTO toUpdateResultDTO(Answer answer) {
         return AnswerResponseDTO.UpdateResultDTO.builder()

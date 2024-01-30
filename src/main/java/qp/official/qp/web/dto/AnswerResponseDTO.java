@@ -1,5 +1,6 @@
 package qp.official.qp.web.dto;
 
+import io.swagger.models.auth.In;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -45,6 +46,7 @@ public class AnswerResponseDTO {
         String content;
         Category category;
         Long answerGroup;
+        Integer likeCount;
     }
 
     @Builder
@@ -71,6 +73,7 @@ public class AnswerResponseDTO {
         String content;
         Category category;
         Long answerGroup;
+        Integer likeCount;
     }
 
     @Builder
@@ -81,6 +84,7 @@ public class AnswerResponseDTO {
         Long answerId;
         String title;
         String content;
+        Long likeCount;
         LocalDateTime updatedAt;
     }
 
@@ -95,6 +99,7 @@ public class AnswerResponseDTO {
         String category;
         Long userId;
         Long question_id;
+        Long likeCount;
         boolean isParent;
         List<GetAnswerResultDTO> children;
         LocalDateTime createdAt;

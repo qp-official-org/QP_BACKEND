@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public User getUserInfo(Long userId) {
-        return userRepository.findById(userId).orElseThrow(NullPointerException::new);
+        return userRepository.findById(userId).get();
     }
 
     /**
@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public User updateUserInfo(Long userId, UserRequestDTO.UpdateUserInfoRequestDTO requestDTO) {
-        User user = userRepository.findById(userId).orElseThrow(NullPointerException::new);
+        User user = userRepository.findById(userId).get();
         user.updateNickname(requestDTO.getNickname());
         user.updateProfileImage(requestDTO.getProfile_image());
         return user;

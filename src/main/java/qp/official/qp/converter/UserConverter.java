@@ -33,8 +33,11 @@ public class UserConverter {
 
     public static UserResponseDTO.GetUserInfoDTO toUserGetInfoDTO(User user) {
         return UserResponseDTO.GetUserInfoDTO.builder()
+                .name(user.getName())
                 .nickname(user.getNickname())
                 .profile_image(user.getProfileImage())
+                .email(user.getEmail())
+                .gender(user.getGender())
                 .point(user.getPoint())
                 .build();
     }
@@ -42,6 +45,9 @@ public class UserConverter {
     public static UserResponseDTO.UpdateUserInfoDTO toUserUpdateDTO(User user) {
         return UserResponseDTO.UpdateUserInfoDTO.builder()
                 .userId(user.getUserId())
+                .nickname(user.getNickname())
+                .profile_image(user.getProfileImage())
+                .updatedAt(user.getUpdatedAt())
                 .build();
     }
 

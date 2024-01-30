@@ -13,12 +13,4 @@ import qp.official.qp.service.TokenService.TokenServiceImpl;
         @PropertySource(value = "classpath:secrets.properties", ignoreResourceNotFound = true),
 })
 public class SecretConfig {
-    @Value("${JWT_SECRET}")
-    private String secretKey;
-
-    @Bean
-    public TokenService tokenService() {
-       return new TokenServiceImpl(secretKey) {};
-
-    }
 }

@@ -22,6 +22,11 @@ jobs:
       - name: build with gradle
         run: |
           echo "${{ secrets.ENV }}" > src/main/resources/secrets.properties
+          
+          source EnvBash.sh
+          
+          rm src/main/resources/secrets.properties
+          
           ./gradlew build
 
       - name: Docker Login

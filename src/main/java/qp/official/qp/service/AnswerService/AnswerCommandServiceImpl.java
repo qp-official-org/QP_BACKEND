@@ -6,14 +6,21 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import qp.official.qp.converter.AnswerConverter;
+import qp.official.qp.converter.AnswerLikesConverter;
 import qp.official.qp.domain.Answer;
 import qp.official.qp.domain.Question;
 import qp.official.qp.domain.User;
+import qp.official.qp.domain.enums.AnswerLikeStatus;
 import qp.official.qp.domain.enums.Category;
+import qp.official.qp.domain.mapping.AnswerLikes;
+import qp.official.qp.repository.AnswerLikesRepository;
 import qp.official.qp.repository.AnswerRepository;
 import qp.official.qp.repository.QuestionRepository;
 import qp.official.qp.repository.UserRepository;
+
+
 import qp.official.qp.web.dto.AnswerRequestDTO;
+
 import qp.official.qp.web.dto.AnswerRequestDTO.AnswerCreateDTO;
 
 @Service
@@ -25,6 +32,7 @@ public class AnswerCommandServiceImpl implements AnswerCommandService {
     private final AnswerRepository answerRepository;
     private final QuestionRepository questionRepository;
     private final UserRepository userRepository;
+    private final AnswerLikesRepository answerLikesRepository;
 
     @Override
     public Answer createAnswer(AnswerCreateDTO request, Long questionId) {
@@ -46,6 +54,33 @@ public class AnswerCommandServiceImpl implements AnswerCommandService {
     }
 
     @Override
+    public AnswerLikeStatus addAndDeleteLikeToAnswer(Long userId, Long answerId) {
+
+        User user = userRepository.findById(userId).get();
+        Answer answer = answerRepository.findById(answerId).get();
+        AnswerLikes answerLikes = AnswerLikesConverter.toAnswerLike(answer, user);
+
+        if (isAlreadyExistAnswerLike(answer, user)) {
+            answerLikesRepository.deleteByAnswerAndUser(answer, user);
+            return AnswerLikeStatus.DELETED;
+        }
+        answerLikesRepository.save(answerLikes);
+        return AnswerLikeStatus.ADDED;
+    }
+
+    private void deleteAnswerLike(Answer answer, User user, AnswerLikes answerLikes) {
+        answerLikesRepository.deleteByAnswerAndUser(answer, user);
+        answer.deleteAnswerLike(answerLikes);
+    }
+
+    private void addAnswerLike(Answer answer, AnswerLikes answerLikes) {
+        answer.addAnswerLike(answerLikes);
+        answerLikesRepository.save(answerLikes);
+    }
+    private boolean isAlreadyExistAnswerLike(Answer answer, User user){
+        return answerLikesRepository.existsByAnswerAndUser(answer, user);
+    }
+
     public void deleteAnswer(Long answerId){
         Answer deleteAnswer = answerRepository.findById(answerId).get();
         answerRepository.delete(deleteAnswer);
