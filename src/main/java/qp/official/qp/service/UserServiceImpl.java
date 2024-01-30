@@ -18,7 +18,6 @@ import java.util.Map;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final JWTService jwtService;
 
     /**
      * userId를 통한 유저 정보 조회
