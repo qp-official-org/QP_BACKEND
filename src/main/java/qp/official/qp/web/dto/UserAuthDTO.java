@@ -23,6 +23,7 @@ public class UserAuthDTO {
     public static class KaKaoUserInfoDTO {
         Long id;
         String connected_at;
+        KaKaoPropertiesDTO properties;
         KaKaoAccountDTO kakao_account;
     }
 
@@ -36,5 +37,15 @@ public class UserAuthDTO {
         Boolean is_email_valid;
         Boolean is_email_verified;
         String email;
+    }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class KaKaoPropertiesDTO{
+        String nickname;
+        String profile_image;
+        String thumbnail_image;
     }
 }

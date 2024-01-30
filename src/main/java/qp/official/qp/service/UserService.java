@@ -15,9 +15,6 @@ public interface UserService {
     User createTestUser();
 
     Map<String, String> refresh(String refreshToken);
-
-    String toKakaoLogin();
-
-    UserResponseDTO.UserSignUpResultDTO signUp(String accessToken) throws IOException, ParseException;
+    UserResponseDTO.UserSignUpResultDTO signUp(String code) throws IOException, ParseException;
 
 }

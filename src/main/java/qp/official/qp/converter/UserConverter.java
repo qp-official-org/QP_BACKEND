@@ -33,7 +33,6 @@ public class UserConverter {
 
     public static UserResponseDTO.GetUserInfoDTO toUserGetInfoDTO(User user) {
         return UserResponseDTO.GetUserInfoDTO.builder()
-                .name(user.getName())
                 .nickname(user.getNickname())
                 .profile_image(user.getProfileImage())
                 .email(user.getEmail())

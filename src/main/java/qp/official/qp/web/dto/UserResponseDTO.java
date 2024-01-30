@@ -29,7 +29,6 @@ public class UserResponseDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class UserSignUpResultDTO{
-        String httpStatus;
         String accessToken;
         String refreshToken;
     }

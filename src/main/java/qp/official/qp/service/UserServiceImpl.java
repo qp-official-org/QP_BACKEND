@@ -1,28 +1,22 @@
 package qp.official.qp.service;
 
+import com.google.gson.Gson;
+import org.springframework.beans.factory.annotation.Value;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-import qp.official.qp.apiPayload.code.BaseErrorCode;
 import qp.official.qp.apiPayload.code.status.ErrorStatus;
 import qp.official.qp.apiPayload.exception.handler.UserHandler;
 import qp.official.qp.domain.User;
 import qp.official.qp.domain.enums.Gender;
 import qp.official.qp.domain.enums.Role;
 import qp.official.qp.repository.UserRepository;
-import qp.official.qp.web.dto.UserAuthDTO;
+import qp.official.qp.web.dto.UserAuthDTO.KaKaoUserInfoDTO;
 import qp.official.qp.web.dto.UserRequestDTO;
 
 import javax.transaction.Transactional;
@@ -38,9 +32,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final JWTService jwtService;
-
-    @Value("${kakao.redirect.client_id}")
-    private String clientId;
+    private final Gson gson;
 
     /**
      * userId를 통한 유저 정보 조회
@@ -72,7 +64,6 @@ public class UserServiceImpl implements UserService {
     public User createTestUser() {
 
         User newUser = User.builder()
-                .name("Test_Name")
                 .email("Test_Email")
                 .point(0L)
                 .lastLogin(LocalDateTime.now())
@@ -107,26 +98,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String toKakaoLogin() {
-       return "https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=" + clientId + "&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fusers%2Fsign_up";
-    }
-
-
-    @Override
     @Transactional
-    public UserResponseDTO.UserSignUpResultDTO signUp(String code) throws IOException {
-        String token = getTokenByAuthorizeCode(code);
-        HashMap<String, Object> userInfo = getUserInfoByToken(token);
+    public UserResponseDTO.UserSignUpResultDTO signUp(String accessToken) throws IOException {
+        KaKaoUserInfoDTO userInfo = getUserInfoByToken(accessToken);
 
-        if (userRepository.existsByEmail(userInfo.get("email").toString())){
+        if (userRepository.existsByEmail(userInfo.getKakao_account().getEmail())){
             throw new UserHandler(ErrorStatus.USER_ALREADY_EXISTS);
         }
 
         User newUser = userRepository.save(User.builder()
-            .name(userInfo.get("nickname").toString()) // 사용자의 name을 가져올 수 없어서 우선은 nickname 으로 설정 했습니다.
-            .nickname(userInfo.get("nickname").toString())
-            .email(userInfo.get("email").toString())
-            .profileImage(userInfo.get("profileImageUrl").toString())
+            .email(userInfo.getKakao_account().getEmail())
+            .nickname(userInfo.getProperties().getNickname())
             .build());
 
         String jwtToken = jwtService.generateJWT(newUser.getUserId());
@@ -136,115 +118,31 @@ public class UserServiceImpl implements UserService {
         return UserResponseDTO.UserSignUpResultDTO.builder()
             .accessToken(jwtToken)
             .refreshToken(refreshToken)
-            .httpStatus(userInfo.get("responseCode").toString())
             .build();
     }
 
 
-    private String getTokenByAuthorizeCode(String code) throws IOException {
-        String host = "https://kauth.kakao.com/oauth/token"; // 리다이렉트 보낼 URL
-        URL url = new URL(host);
-        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-        String token = "";
-        try {
+    private KaKaoUserInfoDTO getUserInfoByToken(String accessToken) throws IOException {
 
-            urlConnection.setRequestProperty("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
-            urlConnection.setRequestMethod("POST"); // POST 메소드로 보냄
-            urlConnection.setDoOutput(true); // 기록 보여주기
-
-            BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(urlConnection.getOutputStream()));
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("grant_type=authorization_code");
-            stringBuilder.append("&client_id=5f7c349cebbbf1716e105b687b6428b7");
-            stringBuilder.append("&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fusers%2Fsign_up");
-            stringBuilder.append("&code=" + code);
-
-            bufferedWriter.write(stringBuilder.toString());
-            bufferedWriter.flush();
-
-            int responseCode = urlConnection.getResponseCode();
-            //log.info("responseCode : {}", responseCode);
-
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-            String line = "";
-            String result = "";
-            while ((line = bufferedReader.readLine()) != null) {
-                result += line;
-            }
-            //log.info("result : {}",  result);
-
-            JSONParser jsonParser = new JSONParser();
-            JSONObject jsonObject = (JSONObject) jsonParser.parse(result);
-
-            String accessToken = jsonObject.get("access_token").toString();
-            String refreshToken = jsonObject.get("refresh_token").toString();
-            //log.info("accessToken : {}", accessToken);
-            //log.info("refreshToken : {}", refreshToken);
-
-            token = accessToken;
-            bufferedReader.close();
-            bufferedWriter.close();
-
-        }catch (IOException e){
-            e.printStackTrace();
-
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        return token;
-    }
-
-
-    private HashMap<String, Object> getUserInfoByToken(String accessToken) throws IOException {
-        HashMap<String, Object> userInfo = new HashMap<>();
         String redirectUrl = "https://kapi.kakao.com/v2/user/me";
 
-        try {
-            URL url = new URL(redirectUrl);
+        URL url = new URL(redirectUrl);
 
-            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setRequestProperty("Authorization", "Bearer " + accessToken);
-            urlConnection.setRequestMethod("GET");
-
-            int responseCode = urlConnection.getResponseCode();
-            //log.info("responseCode : {}", responseCode);
-
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-            String line = "";
-            String res = "";
-            while((line=bufferedReader.readLine())!=null)
-            {
-                res+=line;
-            }
-
-            //System.out.println("res = " + res);
-
-            JSONParser jsonParser = new JSONParser();
-            JSONObject jsonObject = (JSONObject) jsonParser.parse(res);
-
-            JSONObject kakao_account = (JSONObject) jsonObject.get("kakao_account");
-            JSONObject properties = (JSONObject) jsonObject.get("properties");
-            JSONObject profile = (JSONObject) kakao_account.get("profile");
-
-            String id = jsonObject.get("id").toString();
-            String nickname = properties.get("nickname").toString();
-            String email = kakao_account.get("email").toString();
-            String profileImageUrl = profile.get("profile_image_url").toString();
+        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+        urlConnection.setRequestProperty("Authorization", "Bearer " + accessToken);
+        urlConnection.setRequestMethod("GET");
 
 
-            userInfo.put("responseCode", responseCode);
-            userInfo.put("id", id);
-            userInfo.put("nickname", nickname);
-            userInfo.put("accessToken", accessToken);
-            userInfo.put("email", email);
-            userInfo.put("profileImageUrl", profileImageUrl);
-
-            bufferedReader.close();
-
-        }catch (IOException | ParseException e){
-            e.printStackTrace();
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+        String line = "";
+        StringBuilder res = new StringBuilder();
+        while ((line = bufferedReader.readLine()) != null) {
+            res.append(line);
         }
-        return userInfo;
+
+        return gson.fromJson(res.toString(), KaKaoUserInfoDTO.class);
     }
+
+
+
 }

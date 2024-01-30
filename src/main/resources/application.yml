@@ -44,7 +44,3 @@ logging:
     org.hibernate.type.descriptor.sql: trace
 
 JWT_SECRET: ${SECRET}
-
-kakao:
-  redirect:
-    client_id: ${CLIENT_ID}
