@@ -5,7 +5,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import qp.official.qp.domain.User;
 import qp.official.qp.service.TokenService.TokenService;
-import qp.official.qp.service.UserService;
+import qp.official.qp.service.UserService.UserService;
+
 import java.util.Map;
 
 @RestController

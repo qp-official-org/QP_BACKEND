@@ -40,29 +40,20 @@ dependencies {
     // test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
-    // aws s3
-    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
-
     // jwt
     implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
     implementation 'io.jsonwebtoken:jjwt-impl:0.11.2'
     implementation 'io.jsonwebtoken:jjwt-jackson:0.11.2'
+
+    // oauth2
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 
 }
 
 tasks.named('bootBuildImage') {
     builder = 'paketobuildpacks/builder-jammy-base:latest'
 }
-test {
-    testLogging {
-        // test jvm의 standard out and standard error을 console에 출력한다.
-        showStandardStreams = true
-        showCauses = true
-        showExceptions = true
-        showStackTraces = true
-        exceptionFormat = 'full'
-    }
-}
+
 tasks.named('test') {
     useJUnitPlatform()
 }

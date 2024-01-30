@@ -9,7 +9,7 @@ import qp.official.qp.apiPayload.ApiResponse;
 import qp.official.qp.apiPayload.code.status.SuccessStatus;
 import qp.official.qp.converter.UserConverter;
 import qp.official.qp.domain.User;
-import qp.official.qp.service.UserService;
+import qp.official.qp.service.UserService.UserService;
 import qp.official.qp.validation.annotation.ExistUser;
 import qp.official.qp.web.dto.UserRequestDTO;
 import qp.official.qp.web.dto.UserResponseDTO;

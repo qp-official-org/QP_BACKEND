@@ -123,7 +123,7 @@ public class TokenServiceImpl implements TokenService{
 
     // get Refresh Token
     public String getRefreshToken(Long userId) {
-        User user = userRepository.findByUserId(userId);
+        User user = userRepository.findById(userId).get();
         String refreshToken = user.getRefreshToken();
         return refreshToken;
     }
