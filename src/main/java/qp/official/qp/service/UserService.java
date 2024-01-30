@@ -1,14 +1,12 @@
 package qp.official.qp.service;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Objects;
+import org.json.simple.parser.ParseException;
 import qp.official.qp.domain.User;
-import qp.official.qp.web.dto.UserAuthDTO;
 import qp.official.qp.web.dto.UserRequestDTO;
-
-import java.util.Map;
 import qp.official.qp.web.dto.UserResponseDTO;
+
+import java.io.IOException;
+import java.util.Map;
 
 public interface UserService {
 
@@ -20,6 +18,6 @@ public interface UserService {
 
     String toKakaoLogin();
 
-    UserResponseDTO.UserSignUpResultDTO signUp(String code) throws IOException;
+    UserResponseDTO.UserSignUpResultDTO signUp(String accessToken) throws IOException, ParseException;
 
 }
