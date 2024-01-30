@@ -5,7 +5,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
-import qp.official.qp.service.JWTService;
+import qp.official.qp.service.TokenService.TokenService;
+import qp.official.qp.service.TokenService.TokenServiceImpl;
 
 @Configuration
 @PropertySources({
@@ -16,8 +17,8 @@ public class SecretConfig {
     private String secretKey;
 
     @Bean
-    public JWTService jwtService() {
-       return new JWTService(secretKey);
+    public TokenService tokenService() {
+       return new TokenServiceImpl(secretKey) {};
 
     }
 }
