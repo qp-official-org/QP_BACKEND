@@ -103,7 +103,11 @@ public class UserServiceImpl implements UserService {
         KaKaoUserInfoDTO userInfo = getUserInfoByToken(accessToken);
 
         if (userRepository.existsByEmail(userInfo.getKakao_account().getEmail())){
-            throw new UserHandler(ErrorStatus.USER_ALREADY_EXISTS);
+            User user = userRepository.findByEmail(userInfo.getKakao_account().getEmail());
+            return UserResponseDTO.UserSignUpResultDTO.builder()
+                .accessToken(accessToken)
+                .refreshToken(user.getRefreshToken())
+                .build();
         }
 
         User newUser = userRepository.save(User.builder()
@@ -142,7 +146,4 @@ public class UserServiceImpl implements UserService {
 
         return gson.fromJson(res.toString(), KaKaoUserInfoDTO.class);
     }
-
-
-
 }
