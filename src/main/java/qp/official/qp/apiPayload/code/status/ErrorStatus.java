@@ -37,9 +37,13 @@ public enum ErrorStatus implements BaseErrorCode {
     HASHTAG_BAD_REQUEST(HttpStatus.BAD_REQUEST, "HASHTAG_6001", "해시태그 요청이 비어있습니다."),
     HASHTAG_NOT_FOUND(HttpStatus.NOT_FOUND, "HASHTAG_6001", "찾고있는 해시태그가 없습니다."),
     HASHTAG_ALREADY_EXISTS(HttpStatus.CONFLICT, "HASHTAG_6002", "이미 존재하는 해시태그입니다."),
-    HASHTAG_NOT_EXIST(HttpStatus.BAD_REQUEST, "HASHTAG_6003", "해당 해시태그가 존재하지 않습니다.");
+    HASHTAG_NOT_EXIST(HttpStatus.BAD_REQUEST, "HASHTAG_6003", "해당 해시태그가 존재하지 않습니다."),
 
     // 답변 좋아요 관련 에러 7000
+
+    // 토큰 관련 에러 8000
+    TOKEN_EXPIRED(HttpStatus.BAD_REQUEST, "TOKEN_8001","토큰이 만료되었습니다."),
+    TOKEN_NOT_MATCH(HttpStatus.BAD_REQUEST, "TOKEN_8002", "로그인한 사용자와 토큰의 사용자가 일치하지 않습니다.");
 
     private final HttpStatus httpStatus;
     private final String code;
