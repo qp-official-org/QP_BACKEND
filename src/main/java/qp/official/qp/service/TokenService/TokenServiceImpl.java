@@ -78,7 +78,7 @@ public class TokenServiceImpl implements TokenService{
             // 로그인한 userId와 토큰의 userId가 일치 하는지 확인
             Long jwtUserId = getUserIdFromJWT(token);
             isSameUserId(jwtUserId, userId);
-
+            User user = userRepository.findById(userId).get();
             // 토큰의 유효 기간 확인
             Jws<Claims> claimsJws = Jwts.parserBuilder()
                     .setSigningKey(key)
@@ -88,14 +88,13 @@ public class TokenServiceImpl implements TokenService{
             Date expirationDate = claimsJws.getBody().getExpiration();
             if(expirationDate.before(new Date())) {
                 System.out.println("token is expired");
-                throw new TokenHandler(ErrorStatus.TOKEN_EXPIRED);
+                renewJWT(user.getRefreshToken()); // jwt 갱신
             }
             return true;
         } catch (Exception e) {
             System.out.println("토큰 파싱 실패" + e.getMessage());
             throw new GeneralException(ErrorStatus._BAD_REQUEST);
         }
-
     }
 
     // JWT를 이용해 가져온 userId와 로그인 한 userId가 일치하는지 확인
