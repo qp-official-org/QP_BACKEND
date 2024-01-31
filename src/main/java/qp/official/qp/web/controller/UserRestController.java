@@ -112,9 +112,5 @@ public class UserRestController {
         );
     }
 
-    @GetMapping("/reset")
-    public void reset(){
-        userService.reset();
-    }
 
 }

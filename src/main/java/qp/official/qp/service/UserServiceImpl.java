@@ -149,8 +149,4 @@ public class UserServiceImpl implements UserService {
         return gson.fromJson(res.toString(), KaKaoUserInfoDTO.class);
     }
 
-    @Override
-    public void reset(){
-        userRepository.deleteAll();
-    }
 }
