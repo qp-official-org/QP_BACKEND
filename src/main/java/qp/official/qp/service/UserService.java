@@ -4,10 +4,8 @@ import org.json.simple.parser.ParseException;
 import qp.official.qp.domain.User;
 import qp.official.qp.web.dto.UserRequestDTO;
 import qp.official.qp.web.dto.UserResponseDTO;
-
 import java.io.IOException;
 import java.util.Map;
-
 public interface UserService {
 
     User getUserInfo(Long userId);
@@ -16,5 +14,4 @@ public interface UserService {
 
     Map<String, String> refresh(String refreshToken);
     UserResponseDTO.UserSignUpResultDTO signUp(String code) throws IOException, ParseException;
-
 }

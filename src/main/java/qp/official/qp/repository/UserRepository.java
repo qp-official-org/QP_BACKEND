@@ -1,10 +1,10 @@
 package qp.official.qp.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 import qp.official.qp.domain.User;
 
-import java.util.Optional;
-
+@Repository
 public interface UserRepository extends JpaRepository<User, Long> {
     User findByUserId(Long userId);
 
@@ -13,5 +13,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     boolean existsByEmail(String email);
 
+    User findByRefreshToken(String refreshToken);
 
 }

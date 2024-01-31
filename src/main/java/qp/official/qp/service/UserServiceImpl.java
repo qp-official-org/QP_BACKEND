@@ -36,6 +36,7 @@ import qp.official.qp.web.dto.UserResponseDTO;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+
     private final JWTService jwtService;
     private final Gson gson;
 

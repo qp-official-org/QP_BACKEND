@@ -5,7 +5,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
-import qp.official.qp.service.JWTService;
+import qp.official.qp.service.TokenService.TokenService;
+import qp.official.qp.service.TokenService.TokenServiceImpl;
 
 @Configuration
 @PropertySources({
