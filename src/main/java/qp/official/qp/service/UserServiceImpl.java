@@ -112,18 +112,21 @@ public class UserServiceImpl implements UserService {
 
         if (userRepository.existsByEmail(userInfo.getKakao_account().getEmail())){
             User user = userRepository.findByEmail(email);
-            return UserConverter.toUserSignUpResultDTO(tokenService.getJWT(), user.getRefreshToken());
+            if (tokenService.isValidToken(tokenService.getJWT(), user.getUserId())){
+                return UserConverter.toUserSignUpResultDTO(tokenService.getJWT(), user.getRefreshToken());
+            }
+            return UserConverter.toUserSignUpResultDTO(tokenService.generateJWT(user.getUserId()), user.getRefreshToken());
         }
 
         User newUser = userRepository.save(UserConverter.toUserDTO(email, userInfo.getProperties().getNickname()));
 
         String jwtToken = tokenService.generateJWT(newUser.getUserId());
+        log.info(jwtToken);
         String refreshToken = tokenService.generateRefreshToken(newUser.getUserId());
         newUser.setRefreshToken(refreshToken);
 
         return UserConverter.toUserSignUpResultDTO(jwtToken, refreshToken);
     }
-
 
     private KaKaoUserInfoDTO getUserInfoByToken(String accessToken) throws IOException {
 
@@ -144,5 +147,10 @@ public class UserServiceImpl implements UserService {
         }
 
         return gson.fromJson(res.toString(), KaKaoUserInfoDTO.class);
+    }
+
+    @Override
+    public void reset(){
+        userRepository.deleteAll();
     }
 }

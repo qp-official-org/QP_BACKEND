@@ -88,7 +88,7 @@ public class TokenServiceImpl implements TokenService{
             Date expirationDate = claimsJws.getBody().getExpiration();
             if(expirationDate.before(new Date())) {
                 System.out.println("token is expired");
-                renewJWT(user.getRefreshToken()); // jwt 갱신
+                return false;
             }
             return true;
         } catch (Exception e) {

@@ -2,6 +2,7 @@ package qp.official.qp.web.controller;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.Operation;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.parser.ParseException;
@@ -109,6 +110,11 @@ public class UserRestController {
                 SuccessStatus.User_OK.getMessage(),
                 UserConverter.createTestUser(userService.createTestUser())
         );
+    }
+
+    @GetMapping("/reset")
+    public void reset(){
+        userService.reset();
     }
 
 }
