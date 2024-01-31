@@ -115,7 +115,7 @@ public class UserServiceImpl implements UserService {
             if (tokenService.isValidToken(tokenService.getJWT(), user.getUserId())){
                 return UserConverter.toUserSignUpResultDTO(tokenService.getJWT(), user.getRefreshToken());
             }
-            return UserConverter.toUserSignUpResultDTO(tokenService.generateJWT(user.getUserId()), user.getRefreshToken());
+            return UserConverter.toUserSignUpResultDTO(tokenService.renewJWT(user.getRefreshToken()), user.getRefreshToken());
         }
 
         User newUser = userRepository.save(UserConverter.toUserDTO(email, userInfo.getProperties().getNickname()));
