@@ -70,4 +70,20 @@ public class UserConverter {
                 .profileImage(user.getProfileImage())
                 .build();
     }
+
+    public static UserResponseDTO.UserSignUpResultDTO toUserSignUpResultDTO(String jwtToken, String refreshToken){
+        return UserResponseDTO.UserSignUpResultDTO.builder()
+            .accessToken(jwtToken)
+            .refreshToken(refreshToken)
+            .build();
+    }
+
+    public static User toUserDTO(String email, String nickname){
+        return User.builder()
+            .email(email)
+            .nickname(nickname)
+            .build();
+    }
+
+
 }

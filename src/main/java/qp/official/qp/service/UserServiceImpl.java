@@ -1,17 +1,22 @@
 package qp.official.qp.service;
 
+
+
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import com.google.gson.Gson;
-import org.springframework.beans.factory.annotation.Value;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import qp.official.qp.apiPayload.code.status.ErrorStatus;
-import qp.official.qp.apiPayload.exception.handler.UserHandler;
+import qp.official.qp.converter.UserConverter;
 import qp.official.qp.domain.User;
 import qp.official.qp.domain.enums.Gender;
 import qp.official.qp.domain.enums.Role;
@@ -101,28 +106,20 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserResponseDTO.UserSignUpResultDTO signUp(String accessToken) throws IOException {
         KaKaoUserInfoDTO userInfo = getUserInfoByToken(accessToken);
+        String email = userInfo.getKakao_account().getEmail();
 
         if (userRepository.existsByEmail(userInfo.getKakao_account().getEmail())){
-            User user = userRepository.findByEmail(userInfo.getKakao_account().getEmail());
-            return UserResponseDTO.UserSignUpResultDTO.builder()
-                .accessToken(accessToken)
-                .refreshToken(user.getRefreshToken())
-                .build();
+            User user = userRepository.findByEmail(email);
+            return UserConverter.toUserSignUpResultDTO(jwtService.getJWT(), user.getRefreshToken());
         }
 
-        User newUser = userRepository.save(User.builder()
-            .email(userInfo.getKakao_account().getEmail())
-            .nickname(userInfo.getProperties().getNickname())
-            .build());
+        User newUser = userRepository.save(UserConverter.toUserDTO(email, userInfo.getProperties().getNickname()));
 
         String jwtToken = jwtService.generateJWT(newUser.getUserId());
         String refreshToken = jwtService.generateRefreshToken(newUser.getUserId());
         newUser.setRefreshToken(refreshToken);
 
-        return UserResponseDTO.UserSignUpResultDTO.builder()
-            .accessToken(jwtToken)
-            .refreshToken(refreshToken)
-            .build();
+        return UserConverter.toUserSignUpResultDTO(jwtToken, refreshToken);
     }
 
 
