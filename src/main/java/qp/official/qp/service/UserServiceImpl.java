@@ -21,6 +21,7 @@ import qp.official.qp.domain.User;
 import qp.official.qp.domain.enums.Gender;
 import qp.official.qp.domain.enums.Role;
 import qp.official.qp.repository.UserRepository;
+import qp.official.qp.service.TokenService.TokenService;
 import qp.official.qp.web.dto.UserAuthDTO.KaKaoUserInfoDTO;
 import qp.official.qp.web.dto.UserRequestDTO;
 
@@ -37,7 +38,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
-    private final JWTService jwtService;
+    private final TokenService tokenService;
     private final Gson gson;
 
     /**
@@ -111,13 +112,13 @@ public class UserServiceImpl implements UserService {
 
         if (userRepository.existsByEmail(userInfo.getKakao_account().getEmail())){
             User user = userRepository.findByEmail(email);
-            return UserConverter.toUserSignUpResultDTO(jwtService.getJWT(), user.getRefreshToken());
+            return UserConverter.toUserSignUpResultDTO(tokenService.getJWT(), user.getRefreshToken());
         }
 
         User newUser = userRepository.save(UserConverter.toUserDTO(email, userInfo.getProperties().getNickname()));
 
-        String jwtToken = jwtService.generateJWT(newUser.getUserId());
-        String refreshToken = jwtService.generateRefreshToken(newUser.getUserId());
+        String jwtToken = tokenService.generateJWT(newUser.getUserId());
+        String refreshToken = tokenService.generateRefreshToken(newUser.getUserId());
         newUser.setRefreshToken(refreshToken);
 
         return UserConverter.toUserSignUpResultDTO(jwtToken, refreshToken);
