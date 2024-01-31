@@ -43,6 +43,14 @@ public class TokenController {
         return value;
     }
 
+    @GetMapping("/checkValidAndRenew")
+    public boolean check(@RequestParam @Valid Long userId) {
+        String token = tokenService.getJWT();
+        User user = userService.getUserInfo(userId);
+        boolean value = tokenService.checkValidAndRenew(token, user.getUserId());
+        return value;
+    }
+
     /**
      * refreshToken 생성하기
      * @return refreshToken

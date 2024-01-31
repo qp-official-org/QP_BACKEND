@@ -8,5 +8,6 @@ public interface TokenService {
     String getRefreshToken(Long userId);
     boolean isExpiredRefreshToken(String refreshToken);
     String renewJWT(String refreshToken);
+    boolean checkValidAndRenew(String token, Long userId);
 
 }
