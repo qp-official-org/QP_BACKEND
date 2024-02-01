@@ -77,8 +77,10 @@ public class TokenServiceImpl implements TokenService{
         try {
             // 로그인한 userId와 토큰의 userId가 일치 하는지 확인
             Long jwtUserId = getUserIdFromJWT(token);
-            isSameUserId(jwtUserId, userId);
-            User user = userRepository.findById(userId).get();
+            if (!isSameUserId(jwtUserId, userId)) {
+                throw new TokenHandler(ErrorStatus.TOKEN_EXPIRED);
+            }
+
             // 토큰의 유효 기간 확인
             Jws<Claims> claimsJws = Jwts.parserBuilder()
                     .setSigningKey(key)
@@ -86,7 +88,7 @@ public class TokenServiceImpl implements TokenService{
                     .parseClaimsJws(token);
             System.out.println("claimsJws: " + claimsJws);
             Date expirationDate = claimsJws.getBody().getExpiration();
-            if(expirationDate.before(new Date())) {
+            if (expirationDate.before(new Date())) {
                 System.out.println("token is expired");
                 return false;
             }
@@ -97,11 +99,23 @@ public class TokenServiceImpl implements TokenService{
         }
     }
 
+    // isValidToken을 이용해 유효성 검사 후 만료되었으면(false) jwt 재발급 후 true 반환
+    // 토큰이 만료되지 않았으면 true 반환
+    public boolean checkValidAndRenew(String token, Long userId) {
+        User user = userRepository.findById(userId).get();
+        if(!isValidToken(token, userId)) {
+            renewJWT(user.getRefreshToken());
+        }
+        return true;
+    }
+
     // JWT를 이용해 가져온 userId와 로그인 한 userId가 일치하는지 확인
     private boolean isSameUserId(Long userIdFromJWT, Long userId) {
+        // jwt의 userId가 null인 예외 처리
         if (userIdFromJWT == null) {
-            throw new TokenHandler(ErrorStatus.TOKEN_NOT_MATCH);
+            throw new GeneralException(ErrorStatus._BAD_REQUEST);
         }
+        // 같으면 true, 다르면 false 리턴
         return userIdFromJWT.equals(userId);
     }
 
