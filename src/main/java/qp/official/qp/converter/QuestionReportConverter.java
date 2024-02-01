@@ -1,17 +1,15 @@
 package qp.official.qp.converter;
 
 import qp.official.qp.domain.mapping.QuestionReport;
-import qp.official.qp.web.dto.AnswerReportRequestDTO;
-import qp.official.qp.web.dto.AnswerReportResponseDTO;
 import qp.official.qp.web.dto.QuestionReportRequestDTO;
 import qp.official.qp.web.dto.QuestionReportResponseDTO;
 
 public class QuestionReportConverter {
 
 
-    public static QuestionReportResponseDTO.QuestionReportReturnDTO toQuestionReportTestDTO(
+    public static QuestionReportResponseDTO.QuestionReportResultDTO toQuestionReportResultDTO(
         QuestionReport questionReport){
-        return QuestionReportResponseDTO.QuestionReportReturnDTO.builder()
+        return QuestionReportResponseDTO.QuestionReportResultDTO.builder()
             .questionId(questionReport.getQuestion().getQuestionId())
             .userId(questionReport.getUser().getUserId())
             .questionReportId(questionReport.getAnswerReportId())
@@ -21,9 +19,9 @@ public class QuestionReportConverter {
     }
 
 
-    public static QuestionReport toQuestionReport(QuestionReportRequestDTO.QuestionReportDTO request){
-        return null;
+    public static QuestionReport toQuestionReport(QuestionReportRequestDTO.QuestionReportDTO request) {
+        return QuestionReport.builder()
+                .content(request.getContent())
+                .build();
     }
-
-
 }

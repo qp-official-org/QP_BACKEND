@@ -1,21 +1,36 @@
 package qp.official.qp.service;
 
+
+import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import qp.official.qp.converter.UserConverter;
 import qp.official.qp.domain.User;
 import qp.official.qp.domain.enums.Gender;
 import qp.official.qp.domain.enums.Role;
 import qp.official.qp.repository.UserRepository;
+import qp.official.qp.service.TokenService.TokenService;
+import qp.official.qp.web.dto.UserAuthDTO.KaKaoUserInfoDTO;
 import qp.official.qp.web.dto.UserRequestDTO;
 
 import javax.transaction.Transactional;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+
+    private final TokenService tokenService;
+    private final Gson gson;
 
     /**
      * userId를 통한 유저 정보 조회
@@ -25,7 +40,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public User getUserInfo(Long userId) {
-        return userRepository.findById(userId).orElseThrow(NullPointerException::new);
+        return userRepository.findById(userId).get();
     }
 
     /**
@@ -37,7 +52,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public User updateUserInfo(Long userId, UserRequestDTO.UpdateUserInfoRequestDTO requestDTO) {
-        User user = userRepository.findById(userId).orElseThrow(NullPointerException::new);
+        User user = userRepository.findById(userId).get();
         user.updateNickname(requestDTO.getNickname());
         user.updateProfileImage(requestDTO.getProfile_image());
         return user;
@@ -47,7 +62,6 @@ public class UserServiceImpl implements UserService {
     public User createTestUser() {
 
         User newUser = User.builder()
-                .name("Test_Name")
                 .email("Test_Email")
                 .point(0L)
                 .lastLogin(LocalDateTime.now())
@@ -59,4 +73,43 @@ public class UserServiceImpl implements UserService {
 
         return userRepository.save(newUser);
     }
+
+    @Override
+    @Transactional
+    public User signUp(String accessToken) throws IOException {
+        KaKaoUserInfoDTO userInfo = getUserInfoByToken(accessToken);
+        String email = userInfo.getKakao_account().getEmail();
+
+        User newUser = UserConverter.toUserDTO(email, userInfo.getProperties().getNickname());
+
+        return userRepository.save(newUser);
+    }
+
+    @Override
+    public User autoSignIn(Long userId) {
+        return userRepository.findById(userId).get();
+    }
+
+
+    private KaKaoUserInfoDTO getUserInfoByToken(String accessToken) throws IOException {
+
+        String redirectUrl = "https://kapi.kakao.com/v2/user/me";
+
+        URL url = new URL(redirectUrl);
+
+        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+        urlConnection.setRequestProperty("Authorization", "Bearer " + accessToken);
+        urlConnection.setRequestMethod("GET");
+
+
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+        String line = "";
+        StringBuilder res = new StringBuilder();
+        while ((line = bufferedReader.readLine()) != null) {
+            res.append(line);
+        }
+
+        return gson.fromJson(res.toString(), KaKaoUserInfoDTO.class);
+    }
+
 }

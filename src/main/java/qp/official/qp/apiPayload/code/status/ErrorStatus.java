@@ -19,6 +19,7 @@ public enum ErrorStatus implements BaseErrorCode {
     // 회원 관려 에러 1000
     USER_NOT_FOUND(HttpStatus.BAD_REQUEST, "USER_1001", "사용자가 없습니다."),
     NAME_NOT_EXIST(HttpStatus.BAD_REQUEST, "USER_1002", "이름입력은 필수 입니다."),
+    USER_ALREADY_EXISTS(HttpStatus.CONFLICT, "USER_1003", "이미 존재하는 유저입니다."),
 
     // 질문 관려 에러 2000
     QUESTION_NOT_FOUND(HttpStatus.NOT_FOUND, "QUESTION_2001", "찾고있는 질문글이 없습니다."),
@@ -27,6 +28,8 @@ public enum ErrorStatus implements BaseErrorCode {
     ANSWER_NOT_FOUND(HttpStatus.NOT_FOUND, "ANSWER_3001", "찾고있는 답변이 없습니다."),
 
     // 신고 관련 에러 4000
+    ANSWERREPORT_NOT_FOUND(HttpStatus.NOT_FOUND, "ANSWER_4001", "찾고있는 답변신고가 없습니다."),
+    QUESTIONREPORT_NOT_FOUND(HttpStatus.NOT_FOUND, "QUESTION_4002", "찾고있는 질문신고가 없습니다."),
 
     // 이미지 관련 에러 5000
     IMAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "IMAGE_5001", "찾고있는 이미지가 없습니다."),
@@ -35,9 +38,14 @@ public enum ErrorStatus implements BaseErrorCode {
     HASHTAG_BAD_REQUEST(HttpStatus.BAD_REQUEST, "HASHTAG_6001", "해시태그 요청이 비어있습니다."),
     HASHTAG_NOT_FOUND(HttpStatus.NOT_FOUND, "HASHTAG_6001", "찾고있는 해시태그가 없습니다."),
     HASHTAG_ALREADY_EXISTS(HttpStatus.CONFLICT, "HASHTAG_6002", "이미 존재하는 해시태그입니다."),
-    HASHTAG_NOT_EXIST(HttpStatus.BAD_REQUEST, "HASHTAG_6003", "해당 해시태그가 존재하지 않습니다.");
+    HASHTAG_NOT_EXIST(HttpStatus.BAD_REQUEST, "HASHTAG_6003", "해당 해시태그가 존재하지 않습니다."),
 
     // 답변 좋아요 관련 에러 7000
+
+    // 토큰 관련 에러 8000
+    TOKEN_EXPIRED(HttpStatus.BAD_REQUEST, "TOKEN_8001","토큰이 만료되었습니다."),
+    TOKEN_NOT_MATCH(HttpStatus.BAD_REQUEST, "TOKEN_8002", "로그인한 사용자와 토큰의 사용자가 일치하지 않습니다."),
+    TOKEN_NOT_EXIST(HttpStatus.BAD_REQUEST, "TOKEN_8003", "토큰입력은 필수 입니다.");
 
     private final HttpStatus httpStatus;
     private final String code;

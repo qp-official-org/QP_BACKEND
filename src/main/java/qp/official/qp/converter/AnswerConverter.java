@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import qp.official.qp.web.dto.AnswerResponseDTO.ChildAnswerPreviewDTO;
 import qp.official.qp.web.dto.AnswerResponseDTO.ChildAnswerPreviewListDTO;
+import qp.official.qp.web.dto.AnswerResponseDTO.ParentAnswerPreviewDTO;
 import springfox.documentation.swagger2.mappers.ModelMapper;
 
 public class AnswerConverter {
@@ -26,15 +27,6 @@ public class AnswerConverter {
                 .build();
     }
 
-    public static Answer toAnswer(AnswerRequestDTO.UpdateDTO request){
-        return Answer.builder()
-                // userId 처리는 어떻게?
-                .title(request.getTitle())
-                .content(request.getContent())
-                .build();
-    }
-
-
     // 응답을 위한 Entity to DTO
 
     public static AnswerResponseDTO.CreateResultDTO toCreateResultDTO(Answer answer){
@@ -44,15 +36,21 @@ public class AnswerConverter {
                 .build();
     }
 
-    public static AnswerResponseDTO.ParentAnswerPreviewDTO parentAnswerPreviewDTO(Answer answer){
-        return null;
-    }
 
     public static AnswerResponseDTO.ParentAnswerPreviewListDTO parentAnswerPreviewListDTO(
         Page<Answer> parentAnswerList){
 
-        List<AnswerResponseDTO.ParentAnswerPreviewDTO> parentAnswerPreviewDTOList = parentAnswerList.stream()
-            .map(AnswerConverter::parentAnswerPreviewDTO).collect(Collectors.toList());
+        List<AnswerResponseDTO.ParentAnswerPreviewDTO> parentAnswerPreviewDTOList = parentAnswerList.getContent().stream()
+            .map(answer -> new ParentAnswerPreviewDTO(
+                answer.getAnswerId(),
+                answer.getUser().getUserId(),
+                answer.getTitle(),
+                answer.getContent(),
+                answer.getCategory(),
+                answer.getAnswerGroup(),
+                answer.getAnswerLikesList().size()
+            ))
+            .collect(Collectors.toList());
 
         return AnswerResponseDTO.ParentAnswerPreviewListDTO.builder()
             .parentAnswerList(parentAnswerPreviewDTOList)
@@ -64,21 +62,25 @@ public class AnswerConverter {
             .build();
     }
 
-    public static AnswerResponseDTO.ChildAnswerPreviewDTO childAnswerPreviewDTO(Answer answer){
-        return null;
-    }
-
-    public static AnswerResponseDTO.ChildAnswerPreviewListDTO childAnswerPreviewListDTO(Page<Answer> childAnswerList) {
-        List<ChildAnswerPreviewDTO> childAnswerDTOList = childAnswerList.getContent().stream()
-            .map(answer -> new ChildAnswerPreviewDTO(
+    private static List<ParentAnswerPreviewDTO> getParentAnswerPreviewDTOS(
+        Page<Answer> parentAnswerList) {
+        List<ParentAnswerPreviewDTO> parentAnswerPreviewDTOList = parentAnswerList.getContent()
+            .stream()
+            .map(answer -> new ParentAnswerPreviewDTO(
                 answer.getAnswerId(),
                 answer.getUser().getUserId(),
                 answer.getTitle(),
                 answer.getContent(),
                 answer.getCategory(),
-                answer.getAnswerGroup()
+                answer.getAnswerGroup(),
+                answer.getAnswerLikesList().size()
             ))
             .collect(Collectors.toList());
+        return parentAnswerPreviewDTOList;
+    }
+
+    public static AnswerResponseDTO.ChildAnswerPreviewListDTO childAnswerPreviewListDTO(Page<Answer> childAnswerList) {
+        List<ChildAnswerPreviewDTO> childAnswerDTOList = getChildAnswerPreviewDTOS(childAnswerList);
 
         return ChildAnswerPreviewListDTO.builder()
             .childAnswerList(childAnswerDTOList)
@@ -88,6 +90,31 @@ public class AnswerConverter {
             .isFirst(childAnswerList.isFirst())
             .isLast(childAnswerList.isLast())
             .build();
+    }
+
+    private static List<ChildAnswerPreviewDTO> getChildAnswerPreviewDTOS(Page<Answer> childAnswerList) {
+        List<ChildAnswerPreviewDTO> childAnswerDTOList = childAnswerList.getContent().stream()
+            .map(answer -> new ChildAnswerPreviewDTO(
+                answer.getAnswerId(),
+                answer.getUser().getUserId(),
+                answer.getTitle(),
+                answer.getContent(),
+                answer.getCategory(),
+                answer.getAnswerGroup(),
+                answer.getAnswerLikesList().size()
+            ))
+            .collect(Collectors.toList());
+        return childAnswerDTOList;
+    }
+
+
+    public static AnswerResponseDTO.UpdateResultDTO toUpdateResultDTO(Answer answer) {
+        return AnswerResponseDTO.UpdateResultDTO.builder()
+                .answerId(answer.getAnswerId())
+                .title(answer.getTitle())
+                .content(answer.getContent())
+                .updatedAt(answer.getUpdatedAt())
+                .build();
     }
 
 }

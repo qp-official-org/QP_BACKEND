@@ -19,7 +19,8 @@ public class AnswerRequestDTO {
     }
 
     @Getter
-    public static class UpdateDTO {
+    public static class AnswerUpdateDTO {
+        @ExistUser
         Long userId;
         String title;
         @NotBlank

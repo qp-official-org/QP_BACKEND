@@ -2,6 +2,7 @@ package qp.official.qp.converter;
 
 import qp.official.qp.domain.User;
 import qp.official.qp.domain.enums.UserStatus;
+import qp.official.qp.web.dto.TokenResponseDTO;
 import qp.official.qp.web.dto.UserResponseDTO;
 
 public class UserConverter {
@@ -35,6 +36,8 @@ public class UserConverter {
         return UserResponseDTO.GetUserInfoDTO.builder()
                 .nickname(user.getNickname())
                 .profile_image(user.getProfileImage())
+                .email(user.getEmail())
+                .gender(user.getGender())
                 .point(user.getPoint())
                 .build();
     }
@@ -42,6 +45,9 @@ public class UserConverter {
     public static UserResponseDTO.UpdateUserInfoDTO toUserUpdateDTO(User user) {
         return UserResponseDTO.UpdateUserInfoDTO.builder()
                 .userId(user.getUserId())
+                .nickname(user.getNickname())
+                .profile_image(user.getProfileImage())
+                .updatedAt(user.getUpdatedAt())
                 .build();
     }
 
@@ -52,9 +58,11 @@ public class UserConverter {
                 .build();
     }
 
-    public static UserResponseDTO.LoginResultDTO toUserAutoLoginDTO() {
-        return UserResponseDTO.LoginResultDTO.builder()
-                .userId(1L)
+    public static UserResponseDTO.AutoLoginDTO toUserAutoLoginDTO(TokenResponseDTO response, User user) {
+        return UserResponseDTO.AutoLoginDTO.builder()
+                .userId(user.getUserId())
+                .accessToken(response.getAccessToken())
+                .refreshToken(response.getRefreshToken())
                 .build();
     }
 
@@ -65,4 +73,21 @@ public class UserConverter {
                 .profileImage(user.getProfileImage())
                 .build();
     }
+
+    public static UserResponseDTO.UserSignUpResultDTO toUserSignUpResultDTO(TokenResponseDTO response, User user) {
+        return UserResponseDTO.UserSignUpResultDTO.builder()
+                .userId(user.getUserId())
+                .accessToken(response.getAccessToken())
+                .refreshToken(response.getRefreshToken())
+                .build();
+    }
+
+    public static User toUserDTO(String email, String nickname) {
+        return User.builder()
+                .email(email)
+                .nickname(nickname)
+                .build();
+    }
+
+
 }

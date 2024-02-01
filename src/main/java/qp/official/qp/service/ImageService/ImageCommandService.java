@@ -12,6 +12,8 @@ public interface ImageCommandService {
 
     public void deleteImage(String url) throws IOException;
 
+    public void deleteAllImages() throws IOException;
+
 
 
 

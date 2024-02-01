@@ -8,6 +8,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import qp.official.qp.domain.common.BaseEntity;
 import qp.official.qp.domain.enums.Category;
 import qp.official.qp.domain.mapping.AnswerLikes;
+import qp.official.qp.web.dto.AnswerRequestDTO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,10 +69,19 @@ public class Answer extends BaseEntity {
 
     public void setQuestion(Question question){this.question = question;}
 
-
     // user와 양방향 매핑하기
     public void setUser(User user){
         this.user = user;
+    }
+
+
+    public void addAnswerLike(AnswerLikes answerLikes){this.answerLikesList.add(answerLikes);}
+    public void deleteAnswerLike(AnswerLikes answerLikes){this.answerLikesList.remove(answerLikes);}
+
+
+    public void update(AnswerRequestDTO.AnswerUpdateDTO request) {
+        this.title = request.getTitle();
+        this.content = request.getContent();
     }
 
 }

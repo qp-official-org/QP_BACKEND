@@ -66,7 +66,7 @@ public class UserRequestDTO {
      */
     @Getter
     public static class AutoLoginRequestDTO {
-        private String email;
+        private Long userId;
     }
 
 

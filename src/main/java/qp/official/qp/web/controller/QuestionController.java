@@ -6,13 +6,21 @@ import org.springframework.data.domain.Page;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import qp.official.qp.apiPayload.ApiResponse;
+import qp.official.qp.apiPayload.code.status.ErrorStatus;
 import qp.official.qp.apiPayload.code.status.SuccessStatus;
+import qp.official.qp.apiPayload.exception.GeneralException;
+import qp.official.qp.apiPayload.exception.handler.TokenHandler;
 import qp.official.qp.converter.AnswerConverter;
 import qp.official.qp.converter.QuestionConverter;
 import qp.official.qp.domain.Question;
+import qp.official.qp.domain.User;
+import qp.official.qp.repository.QuestionRepository;
+import qp.official.qp.repository.UserRepository;
 import qp.official.qp.service.QuestionService.QuestionCommandService;
 import qp.official.qp.service.QuestionService.QuestionQueryService;
+import qp.official.qp.service.TokenService.TokenService;
 import qp.official.qp.validation.annotation.ExistQuestion;
+import qp.official.qp.validation.annotation.ExistUser;
 import qp.official.qp.web.dto.QuestionRequestDTO;
 import qp.official.qp.web.dto.QuestionResponseDTO;
 
@@ -29,12 +37,15 @@ import java.util.Optional;
 public class QuestionController {
     private final QuestionCommandService questionCommandService;
     private final QuestionQueryService questionQueryService;
+    private final TokenService tokenService;
 
     // 질문 작성
     @PostMapping
     public ApiResponse<QuestionResponseDTO.CreateResultDTO> createQuestion(
             @RequestBody @Valid QuestionRequestDTO.CreateDTO request
     ) {
+        // accessToken으로 유효한 유저인지 인가
+
         return ApiResponse.onSuccess(
                 SuccessStatus.Question_OK.getCode(),
                 SuccessStatus.Question_OK.getMessage(),
@@ -85,7 +96,10 @@ public class QuestionController {
     @DeleteMapping("/{questionId}")
     @Operation(summary = "질문 삭제 API",description = "특정 질문을 삭제하는 API입니다. path variable로 questionId를 주세요")
     public ApiResponse<?> deleteQuestion(
-            @ExistQuestion @PathVariable Long questionId) {
+            @ExistQuestion @PathVariable Long questionId,
+            @RequestParam("userId") @ExistUser Long userId) {
+        // accessToken으로 유효한 유저인지 인가
+
         questionCommandService.deleteQuestion(questionId);
         return ApiResponse.onSuccess(
                 SuccessStatus.Question_OK.getCode(),
@@ -101,6 +115,8 @@ public class QuestionController {
     public ApiResponse<QuestionResponseDTO.QuestionUpdateResultDTO> updateQuestion(
             @RequestBody @Valid QuestionRequestDTO.UpdateDTO request,
             @ExistQuestion @PathVariable Long questionId) {
+        // accessToken으로 유효한 유저인지 인가
+
         return ApiResponse.onSuccess(
                 SuccessStatus.Question_OK.getCode(),
                 SuccessStatus.Question_OK.getMessage(),

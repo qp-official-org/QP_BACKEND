@@ -32,4 +32,11 @@ public class QuestionReport extends BaseEntity {
     @JoinColumn(name = "question_id")
     private Question question;
 
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void setQuestion(Question question) {
+        this.question = question;
+    }
 }

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import qp.official.qp.domain.enums.Gender;
 import qp.official.qp.domain.enums.Role;
 import qp.official.qp.domain.enums.UserStatus;
 
@@ -21,6 +22,16 @@ public class UserResponseDTO {
     public static class JoinResultDTO{
         Long userId;
         LocalDateTime createdAt;
+    }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class UserSignUpResultDTO{
+        Long userId;
+        String accessToken;
+        String refreshToken;
     }
 
     /**
@@ -53,8 +64,11 @@ public class UserResponseDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class GetUserInfoDTO {
+        String name;
         String nickname;
         String profile_image;
+        String email;
+        Gender gender;
         Long point;
     }
 
@@ -67,6 +81,8 @@ public class UserResponseDTO {
     @AllArgsConstructor
     public static class UpdateUserInfoDTO {
         Long userId;
+        String nickname;
+        String profile_image;
         LocalDateTime updatedAt;
     }
 
@@ -90,8 +106,10 @@ public class UserResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class autoLoginDTO {
+    public static class AutoLoginDTO {
         Long userId;
+        String accessToken;
+        String refreshToken;
     }
 
     @Builder

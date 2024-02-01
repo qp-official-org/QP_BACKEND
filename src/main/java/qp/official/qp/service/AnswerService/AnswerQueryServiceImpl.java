@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import qp.official.qp.domain.Answer;
 import qp.official.qp.domain.Question;
+import qp.official.qp.domain.enums.Category;
+import qp.official.qp.repository.AnswerLikesRepository;
 import qp.official.qp.repository.AnswerRepository;
 import qp.official.qp.repository.QuestionRepository;
 
@@ -24,7 +26,7 @@ public class AnswerQueryServiceImpl implements AnswerQueryService {
     public Page<Answer> getAnswerListByQuestionId(Long questionId, int page, int size) {
         Question question = questionRepository.findById(questionId).orElseThrow(() -> new NoSuchElementException("해당 하는 질문이 존재하지 않습니다."));
         PageRequest pageRequest = PageRequest.of(page, size);
-        return answerRepository.findByQuestionOrderByCreatedAtDescAnswerIdDesc(question, pageRequest);
+        return answerRepository.findByQuestionAndCategoryOrderByCreatedAtDescAnswerIdDesc(question, Category.PARENT, pageRequest);
     }
 
     // 부모 답변의 자식 답변 페이징 조회

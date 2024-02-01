@@ -28,9 +28,6 @@ public class User extends BaseEntity {
     private Long userId;
 
     @Column(nullable = false, length = 20)
-    private String name;
-
-    @Column(nullable = false, length = 20)
     private String nickname;
 
     @Column(columnDefinition = "TEXT")
@@ -54,6 +51,14 @@ public class User extends BaseEntity {
     private UserStatus status;
 
     private LocalDateTime lastLogin;
+
+    @Setter
+    @Column(name = "refresh_token")
+    private String refreshToken;
+
+    @Setter
+    @Column(name = "refresh_token_expires_at")
+    private LocalDateTime refreshTokenExpiresAt;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Question> questionList = new ArrayList<>();
