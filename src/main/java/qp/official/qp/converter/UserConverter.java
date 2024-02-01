@@ -2,6 +2,7 @@ package qp.official.qp.converter;
 
 import qp.official.qp.domain.User;
 import qp.official.qp.domain.enums.UserStatus;
+import qp.official.qp.web.dto.TokenResponseDTO;
 import qp.official.qp.web.dto.UserResponseDTO;
 
 public class UserConverter {
@@ -57,9 +58,11 @@ public class UserConverter {
                 .build();
     }
 
-    public static UserResponseDTO.LoginResultDTO toUserAutoLoginDTO() {
-        return UserResponseDTO.LoginResultDTO.builder()
-                .userId(1L)
+    public static UserResponseDTO.AutoLoginDTO toUserAutoLoginDTO(TokenResponseDTO response, User user) {
+        return UserResponseDTO.AutoLoginDTO.builder()
+                .userId(user.getUserId())
+                .accessToken(response.getAccessToken())
+                .refreshToken(response.getRefreshToken())
                 .build();
     }
 
@@ -71,18 +74,19 @@ public class UserConverter {
                 .build();
     }
 
-    public static UserResponseDTO.UserSignUpResultDTO toUserSignUpResultDTO(String jwtToken, String refreshToken){
+    public static UserResponseDTO.UserSignUpResultDTO toUserSignUpResultDTO(TokenResponseDTO response, User user) {
         return UserResponseDTO.UserSignUpResultDTO.builder()
-            .accessToken(jwtToken)
-            .refreshToken(refreshToken)
-            .build();
+                .userId(user.getUserId())
+                .accessToken(response.getAccessToken())
+                .refreshToken(response.getRefreshToken())
+                .build();
     }
 
-    public static User toUserDTO(String email, String nickname){
+    public static User toUserDTO(String email, String nickname) {
         return User.builder()
-            .email(email)
-            .nickname(nickname)
-            .build();
+                .email(email)
+                .nickname(nickname)
+                .build();
     }
 
 

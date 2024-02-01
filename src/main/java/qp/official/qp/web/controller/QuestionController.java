@@ -45,7 +45,6 @@ public class QuestionController {
             @RequestBody @Valid QuestionRequestDTO.CreateDTO request
     ) {
         // accessToken으로 유효한 유저인지 인가
-        tokenService.checkTokenValid(tokenService.getJWT(), request.getUserId());
 
         return ApiResponse.onSuccess(
                 SuccessStatus.Question_OK.getCode(),
@@ -100,7 +99,6 @@ public class QuestionController {
             @ExistQuestion @PathVariable Long questionId,
             @RequestParam("userId") @ExistUser Long userId) {
         // accessToken으로 유효한 유저인지 인가
-        tokenService.checkTokenValid(tokenService.getJWT(), userId);
 
         questionCommandService.deleteQuestion(questionId);
         return ApiResponse.onSuccess(
@@ -118,7 +116,6 @@ public class QuestionController {
             @RequestBody @Valid QuestionRequestDTO.UpdateDTO request,
             @ExistQuestion @PathVariable Long questionId) {
         // accessToken으로 유효한 유저인지 인가
-        tokenService.checkTokenValid(tokenService.getJWT(), request.getUserId());
 
         return ApiResponse.onSuccess(
                 SuccessStatus.Question_OK.getCode(),

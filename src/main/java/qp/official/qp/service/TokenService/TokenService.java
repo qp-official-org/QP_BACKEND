@@ -1,12 +1,10 @@
 package qp.official.qp.service.TokenService;
 
+import qp.official.qp.web.dto.TokenResponseDTO;
+
 public interface TokenService {
-    String generateJWT(Long userId);
-    boolean isValidToken(String token, Long userId);
-    String getJWT();
-    String generateRefreshToken(Long userId);
-    String getRefreshToken(Long userId);
-    boolean isExpiredRefreshToken(String refreshToken);
-    String renewJWT(String refreshToken);
-    void checkTokenValid(String token, Long userId);
+    TokenResponseDTO createToken(Long userId);
+    TokenResponseDTO isValidToken(Long userId);
+
+    TokenResponseDTO autoSignIn(Long userId);
 }

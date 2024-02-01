@@ -29,6 +29,7 @@ public class UserResponseDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class UserSignUpResultDTO{
+        Long userId;
         String accessToken;
         String refreshToken;
     }
@@ -105,8 +106,10 @@ public class UserResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class autoLoginDTO {
+    public static class AutoLoginDTO {
         Long userId;
+        String accessToken;
+        String refreshToken;
     }
 
     @Builder
