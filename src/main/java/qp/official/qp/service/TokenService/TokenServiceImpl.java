@@ -12,6 +12,7 @@ import qp.official.qp.apiPayload.exception.GeneralException;
 import qp.official.qp.apiPayload.exception.handler.TokenHandler;
 import qp.official.qp.domain.User;
 import qp.official.qp.repository.UserRepository;
+import qp.official.qp.web.dto.TokenResponseDTO;
 
 import javax.crypto.SecretKey;
 import javax.servlet.http.HttpServletRequest;
@@ -158,5 +159,15 @@ public class TokenServiceImpl implements TokenService{
             token = generateJWT(user.getUserId());
         }
         return token;
+    }
+
+    @Override
+    public TokenResponseDTO createToken(Long userId) {
+        return null;
+    }
+
+    @Override
+    public TokenResponseDTO isValidToken(Long userId) {
+        return null;
     }
 }
