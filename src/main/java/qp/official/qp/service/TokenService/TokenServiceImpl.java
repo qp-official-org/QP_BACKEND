@@ -16,12 +16,11 @@ import qp.official.qp.web.dto.TokenResponseDTO;
 
 import javax.crypto.SecretKey;
 import javax.servlet.http.HttpServletRequest;
-import javax.transaction.Transactional;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
 @Service
-public class TokenServiceImpl implements TokenService{
+public class TokenServiceImpl implements TokenService {
     private String secretKey;
     private SecretKey key;
 
@@ -31,6 +30,7 @@ public class TokenServiceImpl implements TokenService{
         key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
         this.userRepository = userRepository;
     }
+
     public static final int JWT_EXPIRED_TIME = 60 * 60 * 2; // 2 hours
     public static final int REFRESH_TOKEN_EXPIRED_TIME = 60 * 60 * 24 * 14; // 14 days
     private final UserRepository userRepository;
@@ -50,21 +50,32 @@ public class TokenServiceImpl implements TokenService{
     public String getJWT() {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
                 .getRequest();
-        String token = request.getHeader("access_token"); // jwt
+
+        String token = request.getHeader("accessToken"); // jwt
+
+        if (token == null || token.isEmpty()) {
+            throw new TokenHandler(ErrorStatus.TOKEN_NOT_EXIST);
+        }
         return token;
     }
 
     // JWT Token 을 이용해 userId 가져오기
-    private Long getUserIdFromJWT(String token) throws JwtException{
+    private Long getUserIdFromJWT(String token) throws JwtException {
         String jwt = token;
         if (jwt == null || jwt.isEmpty()) {
             throw new TokenHandler(ErrorStatus.TOKEN_NOT_EXIST);
         }
         Jws<Claims> jws;
-        jws = Jwts.parserBuilder()
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(jwt);
+
+        try {
+            jws = Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(jwt);
+        }
+        catch (Exception e){
+            throw new TokenHandler(ErrorStatus.TOKEN_NOT_MATCH);
+        }
 
         return jws.getBody()
                 .get("userId", Long.class);
@@ -75,45 +86,27 @@ public class TokenServiceImpl implements TokenService{
         try {
             // 로그인한 userId와 토큰의 userId가 일치 하는지 확인
             Long jwtUserId = getUserIdFromJWT(token);
-            if (!isSameUserId(jwtUserId, userId)) {
+            if (jwtUserId.longValue() != userId.longValue()) {
                 throw new TokenHandler(ErrorStatus.TOKEN_NOT_MATCH);
             }
             return true;
         }
         // 토큰의 유효 기간 확인
-        catch(ExpiredJwtException e){
+        catch (ExpiredJwtException e) {
             return false;
-        }
-        catch(JwtException e) {
+        } catch (JwtException e) {
             System.out.println("토큰 파싱 실패" + e.getMessage());
             throw new GeneralException(ErrorStatus._FORBIDDEN);
         }
     }
 
-    // isValidToken을 이용해 유효성 검사 후 만료되었으면 TOKEN_EXPIRED에러 반환
-    public void checkTokenValid(String token, Long userId) {
-        if(!isValidToken(token, userId)){
-            throw new TokenHandler(ErrorStatus.TOKEN_EXPIRED);
-        }
-    }
-
-    // JWT를 이용해 가져온 userId와 로그인 한 userId가 일치하는지 확인
-    private boolean isSameUserId(Long userIdFromJWT, Long userId) {
-        // jwt의 userId가 null인 예외 처리
-        if (userIdFromJWT == null) {
-            throw new GeneralException(ErrorStatus._BAD_REQUEST);
-        }
-        // 같으면 true, 다르면 false 리턴
-        return userIdFromJWT.equals(userId);
-    }
-
     // Generate Refresh Token
-    @Transactional
     public String generateRefreshToken(Long userId) {
         Date now = new Date();
         String refreshToken = Jwts.builder()
                 .setSubject(userId.toString())
                 .setIssuedAt(now)
+                .claim("userId", userId)
                 .setExpiration(new Date(now.getTime() + REFRESH_TOKEN_EXPIRED_TIME * 1000))
                 .signWith(key)
                 .compact();
@@ -125,8 +118,7 @@ public class TokenServiceImpl implements TokenService{
     // get Refresh Token
     public String getRefreshToken(Long userId) {
         User user = userRepository.findById(userId).get();
-        String refreshToken = user.getRefreshToken();
-        return refreshToken;
+        return user.getRefreshToken();
     }
 
     // refresh Token 만료 기간 확인
@@ -136,38 +128,78 @@ public class TokenServiceImpl implements TokenService{
                 .build()
                 .parseClaimsJws(refreshToken);
         Date expirationDate = claimsRefresh.getBody().getExpiration();
-        if(expirationDate.before(new Date())) {
+        if (expirationDate.before(new Date())) {
             throw new TokenHandler(ErrorStatus.TOKEN_EXPIRED);
         }
         return true;
     }
 
-    // jwt 만료 시간이 1분 미만이면, refresh token을 이용하여 재발급
-    public String renewJWT(String refreshToken) {
-        User user = userRepository.findByRefreshToken(refreshToken); // refreshToken의 user 가져오기
-        String jwtoken = getJWT();
-
-        Jws<Claims> claimsJws = Jwts.parserBuilder()
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(jwtoken);
-        Date expirationDate = claimsJws.getBody().getExpiration();
-        long timeDiff = expirationDate.getTime() * 1000 - System.currentTimeMillis() * 1000;
-
-        String token = expirationDate.toString();
-        if(timeDiff < 60 * 1000) { // 만료 1분 전이면 jwt 재발급
-            token = generateJWT(user.getUserId());
-        }
-        return token;
-    }
-
     @Override
     public TokenResponseDTO createToken(Long userId) {
-        return null;
+        String refreshToken = generateRefreshToken(userId);
+        User findUser = userRepository.findById(userId).get();
+        findUser.setRefreshToken(refreshToken);
+        userRepository.save(findUser);
+
+        return TokenResponseDTO.builder()
+                .accessToken(generateJWT(userId))
+                .refreshToken(refreshToken)
+                .build();
     }
 
     @Override
     public TokenResponseDTO isValidToken(Long userId) {
-        return null;
+
+        String accessToken = getJWT();
+        String refreshToken = getRefreshToken(userId);
+
+        if (!isValidToken(accessToken, userId)) {
+            throw new TokenHandler(ErrorStatus.TOKEN_EXPIRED);
+        }
+        isExpiredRefreshToken(refreshToken);
+
+        return TokenResponseDTO.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .build();
+    }
+
+    @Override
+    public TokenResponseDTO autoSignIn(Long userId) {
+        String accessToken = getJWT();
+        String refreshToken = getRefreshToken(userId);
+
+        // Refresh Token 유효성 검사
+        // 만약 Refresh Token이 만료되었다면, 재로그인을 요청하도록 한다.
+        isExpiredRefreshToken(refreshToken);
+
+        Long getUserIdFromAccessToken = getUserIdFromJWT(accessToken);
+
+        // 로그인한 userId와 토큰의 userId가 일치 하는지 확인
+        if (getUserIdFromAccessToken.longValue() != userId.longValue()) {
+            // 로그인한 userId와 토큰의 userId가 일치하지 않는다면, 재로그인을 요청하도록 한다.
+            throw new TokenHandler(ErrorStatus.TOKEN_NOT_MATCH);
+        }
+
+        // Access Token 유효성 검사
+        Jws<Claims> claims = Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(accessToken);
+
+        // AccessToken 만료 시간 가져오기
+        Date expirationDate = claims.getBody().getExpiration();
+        // AccessToken 토큰의 만료 시간이 20분 미만이면, refresh token을 이용하여 재발급
+        long timeDiff = expirationDate.getTime() - new Date().getTime();
+//        if (timeDiff > 60 * 20 * 1000) { // 만료 20분 전이면 AccessToken 재발급
+        if(timeDiff > 0){
+            accessToken = generateJWT(userId);
+            System.out.print("accessToken 재발급");
+        }
+
+        return TokenResponseDTO.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .build();
     }
 }

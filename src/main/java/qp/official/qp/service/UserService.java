@@ -11,8 +11,8 @@ public interface UserService {
     User getUserInfo(Long userId);
     User updateUserInfo(Long userId, UserRequestDTO.UpdateUserInfoRequestDTO requestDTO);
     User createTestUser();
+    User signUp(String code) throws IOException, ParseException;
 
-    Map<String, String> refresh(String refreshToken);
-    UserResponseDTO.UserSignUpResultDTO signUp(String code) throws IOException, ParseException;
+    User autoSignIn(Long userId);
 
 }
