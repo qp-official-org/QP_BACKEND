@@ -43,12 +43,12 @@ public class TokenController {
         return value;
     }
 
-    @GetMapping("/checkValidAndRenew")
+    @GetMapping("/checkTokenValid")
     public boolean check(@RequestParam @Valid Long userId) {
         String token = tokenService.getJWT();
         User user = userService.getUserInfo(userId);
-        boolean value = tokenService.checkValidAndRenew(token, user.getUserId());
-        return value;
+        tokenService.checkTokenValid(token, user.getUserId());
+        return true;
     }
 
     /**

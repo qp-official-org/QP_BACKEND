@@ -9,9 +9,13 @@ import org.json.simple.parser.ParseException;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import qp.official.qp.apiPayload.ApiResponse;
+import qp.official.qp.apiPayload.code.status.ErrorStatus;
 import qp.official.qp.apiPayload.code.status.SuccessStatus;
+import qp.official.qp.apiPayload.exception.GeneralException;
+import qp.official.qp.apiPayload.exception.handler.TokenHandler;
 import qp.official.qp.converter.UserConverter;
 import qp.official.qp.domain.User;
+import qp.official.qp.service.TokenService.TokenService;
 import qp.official.qp.service.UserService;
 import qp.official.qp.validation.annotation.ExistUser;
 import qp.official.qp.web.dto.UserRequestDTO;
@@ -26,6 +30,7 @@ import java.io.IOException;
 public class UserRestController {
 
     private final UserService userService;
+    private final TokenService tokenService;
 
 
     @GetMapping("/sign_up")
@@ -58,6 +63,9 @@ public class UserRestController {
     @Operation(summary = "유저 정보 조회 API", description = "특정 유저 정보를 조회하는 API입니다. path variable로 조회할 userId를 주세요.")
     public ApiResponse<UserResponseDTO.GetUserInfoDTO> getUserInfo(
             @PathVariable @ExistUser Long userId) {
+        // accessToken으로 유효한 유저인지 인가
+        tokenService.checkTokenValid(tokenService.getJWT(), userId);
+
         System.out.println("controller: " + userId);
         User user = userService.getUserInfo(userId);
 
@@ -74,6 +82,9 @@ public class UserRestController {
     public ApiResponse<UserResponseDTO.UpdateUserInfoDTO> updateUserInfo(
             @PathVariable @ExistUser Long userId,
             @RequestBody UserRequestDTO.UpdateUserInfoRequestDTO requestDTO) {
+        // accessToken으로 유효한 유저인지 인가
+        tokenService.checkTokenValid(tokenService.getJWT(), userId);
+
         User user = userService.updateUserInfo(userId, requestDTO);
         return ApiResponse.onSuccess(
                 SuccessStatus.Question_OK.getCode(),
