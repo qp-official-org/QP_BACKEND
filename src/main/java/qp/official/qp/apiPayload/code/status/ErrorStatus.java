@@ -19,6 +19,7 @@ public enum ErrorStatus implements BaseErrorCode {
     // 회원 관려 에러 1000
     USER_NOT_FOUND(HttpStatus.BAD_REQUEST, "USER_1001", "사용자가 없습니다."),
     NAME_NOT_EXIST(HttpStatus.BAD_REQUEST, "USER_1002", "이름입력은 필수 입니다."),
+    USER_ALREADY_EXISTS(HttpStatus.CONFLICT, "USER_1003", "이미 존재하는 유저입니다."),
 
     // 질문 관려 에러 2000
     QUESTION_NOT_FOUND(HttpStatus.NOT_FOUND, "QUESTION_2001", "찾고있는 질문글이 없습니다."),
