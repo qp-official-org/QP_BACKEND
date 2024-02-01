@@ -28,9 +28,6 @@ public class User extends BaseEntity {
     private Long userId;
 
     @Column(nullable = false, length = 20)
-    private String name;
-
-    @Column(nullable = false, length = 20)
     private String nickname;
 
     @Column(columnDefinition = "TEXT")

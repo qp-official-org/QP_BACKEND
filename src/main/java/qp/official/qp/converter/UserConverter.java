@@ -33,7 +33,6 @@ public class UserConverter {
 
     public static UserResponseDTO.GetUserInfoDTO toUserGetInfoDTO(User user) {
         return UserResponseDTO.GetUserInfoDTO.builder()
-                .name(user.getName())
                 .nickname(user.getNickname())
                 .profile_image(user.getProfileImage())
                 .email(user.getEmail())
@@ -71,4 +70,20 @@ public class UserConverter {
                 .profileImage(user.getProfileImage())
                 .build();
     }
+
+    public static UserResponseDTO.UserSignUpResultDTO toUserSignUpResultDTO(String jwtToken, String refreshToken){
+        return UserResponseDTO.UserSignUpResultDTO.builder()
+            .accessToken(jwtToken)
+            .refreshToken(refreshToken)
+            .build();
+    }
+
+    public static User toUserDTO(String email, String nickname){
+        return User.builder()
+            .email(email)
+            .nickname(nickname)
+            .build();
+    }
+
+
 }
