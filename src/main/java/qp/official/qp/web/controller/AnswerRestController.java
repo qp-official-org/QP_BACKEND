@@ -48,7 +48,6 @@ public class AnswerRestController {
         @PathVariable @ExistQuestion Long questionId
     ){
         // accessToken으로 유효한 유저인지 인가
-        tokenService.checkTokenValid(tokenService.getJWT(), request.getUserId());
 
         Answer answer = answerCommandService.createAnswer(request, questionId);
         return ApiResponse.onSuccess(
@@ -96,7 +95,6 @@ public class AnswerRestController {
             @RequestParam("userId") @ExistUser Long userId
     ){
         // accessToken으로 유효한 유저인지 인가
-        tokenService.checkTokenValid(tokenService.getJWT(), userId);
 
         answerCommandService.deleteAnswer(answerId);
         return ApiResponse.onSuccess(
@@ -114,7 +112,6 @@ public class AnswerRestController {
             @ExistAnswer @PathVariable Long answerId
     ){
         // accessToken으로 유효한 유저인지 인가
-        tokenService.checkTokenValid(tokenService.getJWT(), request.getUserId());
 
         return ApiResponse.onSuccess(
                 SuccessStatus.Answer_OK.getCode(),
@@ -132,7 +129,6 @@ public class AnswerRestController {
             @PathVariable @ExistAnswer Long answerId
     ){
         // accessToken으로 유효한 유저인지 인가
-        tokenService.checkTokenValid(tokenService.getJWT(), userId);
 
         AnswerLikeStatus answerLikeStatus = answerCommandService.addAndDeleteLikeToAnswer(userId, answerId);
 
