@@ -20,6 +20,7 @@ import qp.official.qp.service.QuestionService.QuestionCommandService;
 import qp.official.qp.service.QuestionService.QuestionQueryService;
 import qp.official.qp.service.TokenService.TokenService;
 import qp.official.qp.validation.annotation.ExistQuestion;
+import qp.official.qp.validation.annotation.ExistUser;
 import qp.official.qp.web.dto.QuestionRequestDTO;
 import qp.official.qp.web.dto.QuestionResponseDTO;
 
@@ -37,7 +38,6 @@ public class QuestionController {
     private final QuestionCommandService questionCommandService;
     private final QuestionQueryService questionQueryService;
     private final TokenService tokenService;
-    private final QuestionRepository questionRepository;
 
     // 질문 작성
     @PostMapping
@@ -97,10 +97,10 @@ public class QuestionController {
     @DeleteMapping("/{questionId}")
     @Operation(summary = "질문 삭제 API",description = "특정 질문을 삭제하는 API입니다. path variable로 questionId를 주세요")
     public ApiResponse<?> deleteQuestion(
-            @ExistQuestion @PathVariable Long questionId) {
+            @ExistQuestion @PathVariable Long questionId,
+            @RequestParam("userId") @ExistUser Long userId) {
         // accessToken으로 유효한 유저인지 인가
-        User user = questionRepository.findById(questionId).get().getUser();
-        tokenService.checkTokenValid(tokenService.getJWT(), user.getUserId());
+        tokenService.checkTokenValid(tokenService.getJWT(), userId);
 
         questionCommandService.deleteQuestion(questionId);
         return ApiResponse.onSuccess(

@@ -83,7 +83,7 @@ public class TokenServiceImpl implements TokenService{
         catch(ExpiredJwtException e){
             return false;
         }
-        catch (JwtException e) {
+        catch(JwtException e) {
             System.out.println("토큰 파싱 실패" + e.getMessage());
             throw new GeneralException(ErrorStatus._FORBIDDEN);
         }

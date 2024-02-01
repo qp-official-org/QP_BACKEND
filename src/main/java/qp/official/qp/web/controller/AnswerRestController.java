@@ -40,7 +40,6 @@ public class AnswerRestController {
     private final AnswerCommandService answerCommandService;
     private final AnswerQueryService answerQueryService;
     private final TokenService tokenService;
-    private final AnswerRepository answerRepository;
 
     // 답변 작성
     @PostMapping("/questions/{questionId}")
@@ -93,11 +92,11 @@ public class AnswerRestController {
     @DeleteMapping("/{answerId}")
     @Operation(summary = "답변 삭제 API",description = "특정 답변 또는 대댓글을 삭제하는 API입니다. path variable로 answerId를 주세요")
     public ApiResponse<?> deleteAnswer(
-            @ExistAnswer @PathVariable Long answerId
+            @ExistAnswer @PathVariable Long answerId,
+            @RequestParam("userId") @ExistUser Long userId
     ){
         // accessToken으로 유효한 유저인지 인가
-        User user = answerRepository.findById(answerId).get().getUser();
-        tokenService.checkTokenValid(tokenService.getJWT(), user.getUserId());
+        tokenService.checkTokenValid(tokenService.getJWT(), userId);
 
         answerCommandService.deleteAnswer(answerId);
         return ApiResponse.onSuccess(
