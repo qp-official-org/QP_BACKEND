@@ -1,6 +1,9 @@
 package qp.official.qp.converter;
 
+import java.time.LocalDateTime;
 import qp.official.qp.domain.User;
+import qp.official.qp.domain.enums.Gender;
+import qp.official.qp.domain.enums.Role;
 import qp.official.qp.domain.enums.UserStatus;
 import qp.official.qp.web.dto.TokenResponseDTO;
 import qp.official.qp.web.dto.UserResponseDTO;
@@ -67,6 +70,12 @@ public class UserConverter {
 
     public static User toUserDTO(String email, String nickname) {
         return User.builder()
+                .gender(Gender.DEFAULT)
+                .profileImage("https://qp-backend-bucket.s3.ap-northeast-2.amazonaws.com/qp/icon.png")
+                .role(Role.USER)
+                .point(0L)
+                .status(UserStatus.ACTIVE)
+                .lastLogin(LocalDateTime.now())
                 .email(email)
                 .nickname(nickname)
                 .build();

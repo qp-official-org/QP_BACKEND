@@ -23,7 +23,7 @@ import qp.official.qp.domain.common.BaseEntity;
 @AllArgsConstructor
 public class Image extends BaseEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue
     private Long imageId;
 
     @Column(nullable = false)

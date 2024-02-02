@@ -2,6 +2,7 @@ package qp.official.qp.service.TokenService;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import java.time.ZoneId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -103,15 +104,17 @@ public class TokenServiceImpl implements TokenService {
     // Generate Refresh Token
     public String generateRefreshToken(Long userId) {
         Date now = new Date();
+        Date expiration = new Date(now.getTime() + REFRESH_TOKEN_EXPIRED_TIME * 1000);
         String refreshToken = Jwts.builder()
                 .setSubject(userId.toString())
                 .setIssuedAt(now)
                 .claim("userId", userId)
-                .setExpiration(new Date(now.getTime() + REFRESH_TOKEN_EXPIRED_TIME * 1000))
+                .setExpiration(expiration)
                 .signWith(key)
                 .compact();
         User user = userRepository.findById(userId).get();
         user.setRefreshToken(refreshToken);
+        user.setRefreshTokenExpiresAt(expiration.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
         return refreshToken;
     }
 
