@@ -14,6 +14,7 @@ import qp.official.qp.web.dto.ImageResponseDTO;
 import qp.official.qp.web.dto.ImageResponseDTO.CreateResultDTO;
 
 @RestController
+@CrossOrigin
 @RequiredArgsConstructor
 @RequestMapping("/images")
 @Slf4j
