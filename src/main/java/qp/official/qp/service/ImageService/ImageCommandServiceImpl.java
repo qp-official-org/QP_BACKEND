@@ -53,7 +53,7 @@ public class ImageCommandServiceImpl implements ImageCommandService {
         return null;
     }
 
-    //  qp 폴더 내 위치 하고 해당 url을 가진 이미지를 삭제함
+    //  qp 폴더에 위치한 해당 url을 가진 이미지를 삭제함
     @Override
     public void deleteImage(String url) throws IOException {
         try {
@@ -65,13 +65,16 @@ public class ImageCommandServiceImpl implements ImageCommandService {
         }
     }
 
-    // qp 폴더 내 모든 이미지를 삭제함 (qp 폴더는 삭제 되지 조건 추가 함)
+    // qp 폴더 내 모든 이미지를 삭제함 (qp 폴더는 삭제 되지 않도록 조건 추가 함)
     @Override
     public void deleteAllImages() throws IOException {
         try {
             ListObjectsV2Result result = amazonS3Client.listObjectsV2(bucket);
             for (S3ObjectSummary s3Object : result.getObjectSummaries()){
-                if (s3Object.getKey().equals("qp/")){
+                if (s3Object.getKey().startsWith("qp/")){
+
+                    if (isDefaultValue(s3Object)){continue;}
+
                     amazonS3Client.deleteObject(bucket, s3Object.getKey());
                 }
             }
@@ -79,6 +82,10 @@ public class ImageCommandServiceImpl implements ImageCommandService {
         }catch (SdkClientException e){
             throw new IOException("이미지 삭제 중 오류가 발생 했습니다.", e);
         }
+    }
+
+    private static boolean isDefaultValue(S3ObjectSummary s3Object) {
+        return s3Object.getKey().equals("qp/") || s3Object.getKey().equals("qp/icon.png");
     }
 
 
