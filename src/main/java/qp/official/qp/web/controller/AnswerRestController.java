@@ -35,7 +35,6 @@ public class AnswerRestController {
 
     private final AnswerCommandService answerCommandService;
     private final AnswerQueryService answerQueryService;
-    private final TokenService tokenService;
 
     // 답변 작성
     @PostMapping("/questions/{questionId}")
