@@ -34,27 +34,6 @@ public class UserResponseDTO {
         String refreshToken;
     }
 
-    /**
-     * 로그인
-     */
-    @Builder
-    @Getter
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class LoginResultDTO{
-        Long userId;
-    }
-
-    /**
-     * 로그아웃
-     */
-    @Builder
-    @Getter
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class LogoutResultDTO{
-        Long userId;
-    }
 
     /**
      * 유저 정보 조회

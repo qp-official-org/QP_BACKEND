@@ -67,16 +67,6 @@ public class AnswerCommandServiceImpl implements AnswerCommandService {
         answerLikesRepository.save(answerLikes);
         return AnswerLikeStatus.ADDED;
     }
-
-    private void deleteAnswerLike(Answer answer, User user, AnswerLikes answerLikes) {
-        answerLikesRepository.deleteByAnswerAndUser(answer, user);
-        answer.deleteAnswerLike(answerLikes);
-    }
-
-    private void addAnswerLike(Answer answer, AnswerLikes answerLikes) {
-        answer.addAnswerLike(answerLikes);
-        answerLikesRepository.save(answerLikes);
-    }
     private boolean isAlreadyExistAnswerLike(Answer answer, User user){
         return answerLikesRepository.existsByAnswerAndUser(answer, user);
     }

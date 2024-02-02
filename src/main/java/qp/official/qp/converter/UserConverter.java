@@ -7,28 +7,11 @@ import qp.official.qp.web.dto.UserResponseDTO;
 
 public class UserConverter {
 
-    public static UserResponseDTO.JoinResultDTO toUserTestDTO() {
-        return UserResponseDTO.JoinResultDTO.builder()
-                .userId(1L)
-                .build();
-    }
 
     public static UserResponseDTO.JoinResultDTO createTestUser(User user) {
         return UserResponseDTO.JoinResultDTO.builder()
                 .userId(user.getUserId())
                 .createdAt(user.getCreatedAt())
-                .build();
-    }
-
-    public static UserResponseDTO.LoginResultDTO toUserLoginDTO() {
-        return UserResponseDTO.LoginResultDTO.builder()
-                .userId(1L)
-                .build();
-    }
-
-    public static UserResponseDTO.LogoutResultDTO toUserLogoutDTO() {
-        return UserResponseDTO.LogoutResultDTO.builder()
-                .userId(1L)
                 .build();
     }
 

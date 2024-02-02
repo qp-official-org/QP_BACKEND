@@ -16,8 +16,6 @@ import springfox.documentation.swagger2.mappers.ModelMapper;
 
 public class AnswerConverter {
 
-    // 클라이언트의 요청 데이터를 JPA에서 처리하기 위한 DTO to Entity
-
     public static Answer toAnswer(AnswerRequestDTO.AnswerCreateDTO request){
         return Answer.builder()
                 .title(request.getTitle())
@@ -27,7 +25,6 @@ public class AnswerConverter {
                 .build();
     }
 
-    // 응답을 위한 Entity to DTO
 
     public static AnswerResponseDTO.CreateResultDTO toCreateResultDTO(Answer answer){
         return AnswerResponseDTO.CreateResultDTO.builder()
@@ -40,17 +37,7 @@ public class AnswerConverter {
     public static AnswerResponseDTO.ParentAnswerPreviewListDTO parentAnswerPreviewListDTO(
         Page<Answer> parentAnswerList){
 
-        List<AnswerResponseDTO.ParentAnswerPreviewDTO> parentAnswerPreviewDTOList = parentAnswerList.getContent().stream()
-            .map(answer -> new ParentAnswerPreviewDTO(
-                answer.getAnswerId(),
-                answer.getUser().getUserId(),
-                answer.getTitle(),
-                answer.getContent(),
-                answer.getCategory(),
-                answer.getAnswerGroup(),
-                answer.getAnswerLikesList().size()
-            ))
-            .collect(Collectors.toList());
+        List<AnswerResponseDTO.ParentAnswerPreviewDTO> parentAnswerPreviewDTOList = getParentAnswerPreviewDTOS(parentAnswerList);
 
         return AnswerResponseDTO.ParentAnswerPreviewListDTO.builder()
             .parentAnswerList(parentAnswerPreviewDTOList)
