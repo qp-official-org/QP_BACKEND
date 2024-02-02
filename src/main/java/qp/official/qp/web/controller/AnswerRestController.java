@@ -31,6 +31,7 @@ import qp.official.qp.web.dto.AnswerResponseDTO;
 
 import javax.validation.Valid;
 
+@CrossOrigin
 @RestController
 @RequiredArgsConstructor
 @Validated

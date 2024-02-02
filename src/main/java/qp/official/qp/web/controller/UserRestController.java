@@ -23,6 +23,7 @@ import java.io.IOException;
 @RestController
 @RequiredArgsConstructor
 @Validated
+@CrossOrigin
 @RequestMapping("/users")
 @Slf4j
 public class UserRestController {
