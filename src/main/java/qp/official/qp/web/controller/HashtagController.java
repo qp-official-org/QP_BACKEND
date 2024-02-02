@@ -3,13 +3,7 @@ package qp.official.qp.web.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import qp.official.qp.apiPayload.ApiResponse;
 import qp.official.qp.apiPayload.code.status.ErrorStatus;
 import qp.official.qp.apiPayload.code.status.SuccessStatus;
@@ -22,6 +16,7 @@ import qp.official.qp.web.dto.HashtagResponseDTO;
 
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin
 @Validated
 @RequestMapping("/hashtag")
 public class HashtagController {

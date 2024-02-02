@@ -33,6 +33,7 @@ import java.util.Optional;
 @RestController
 @RequiredArgsConstructor
 @Validated
+@CrossOrigin
 @RequestMapping("/questions")
 public class QuestionController {
     private final QuestionCommandService questionCommandService;
