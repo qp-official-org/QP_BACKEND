@@ -10,8 +10,6 @@ import qp.official.qp.domain.User;
 import qp.official.qp.domain.enums.Gender;
 import qp.official.qp.domain.enums.Role;
 import qp.official.qp.repository.UserRepository;
-import qp.official.qp.service.TokenService.TokenService;
-import qp.official.qp.service.UserService.UserService;
 import qp.official.qp.web.dto.UserAuthDTO.KaKaoUserInfoDTO;
 import qp.official.qp.web.dto.UserRequestDTO;
 
