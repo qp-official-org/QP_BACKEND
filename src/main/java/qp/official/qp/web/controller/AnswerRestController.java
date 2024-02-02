@@ -46,8 +46,7 @@ public class AnswerRestController {
 
         Answer answer = answerCommandService.createAnswer(request, questionId);
         return ApiResponse.onSuccess(
-            SuccessStatus.Answer_OK.getCode(),
-            SuccessStatus.Answer_OK.getMessage(),
+            SuccessStatus.Answer_OK,
             AnswerConverter.toCreateResultDTO(answer)
         );
     }
@@ -62,8 +61,7 @@ public class AnswerRestController {
         Page<Answer> answers = answerQueryService.getAnswerListByQuestionId(
             questionId, page, size);
         return ApiResponse.onSuccess(
-            SuccessStatus.Answer_OK.getCode(),
-            SuccessStatus.Answer_OK.getMessage(),
+            SuccessStatus.Answer_OK,
             AnswerConverter.parentAnswerPreviewListDTO(answers));
     }
 
@@ -76,8 +74,7 @@ public class AnswerRestController {
     ){
         Page<Answer> children = answerQueryService.getChildrenAnswersByParentAnswerId(parentAnswerId, page, size);
         return ApiResponse.onSuccess(
-            SuccessStatus.Answer_OK.getCode(),
-            SuccessStatus.Answer_OK.getMessage(),
+            SuccessStatus.Answer_OK,
             AnswerConverter.childAnswerPreviewListDTO(children)
         );
     }
@@ -93,8 +90,7 @@ public class AnswerRestController {
 
         answerCommandService.deleteAnswer(answerId);
         return ApiResponse.onSuccess(
-                SuccessStatus.Answer_OK.getCode(),
-                SuccessStatus.Answer_OK.getMessage(),
+                SuccessStatus.Answer_OK,
                 null
         );
     }
@@ -109,8 +105,7 @@ public class AnswerRestController {
         // accessToken으로 유효한 유저인지 인가
 
         return ApiResponse.onSuccess(
-                SuccessStatus.Answer_OK.getCode(),
-                SuccessStatus.Answer_OK.getMessage(),
+                SuccessStatus.Answer_OK,
                 AnswerConverter.toUpdateResultDTO(
                         answerCommandService.updateQuestion(answerId, request)
                 )
@@ -128,8 +123,7 @@ public class AnswerRestController {
         AnswerLikeStatus answerLikeStatus = answerCommandService.addAndDeleteLikeToAnswer(userId, answerId);
 
         return ApiResponse.onSuccess(
-            SuccessStatus.AnswerLike_OK.getCode(),
-            SuccessStatus.AnswerLike_OK.getMessage(),
+            SuccessStatus.AnswerLike_OK,
             AnswerLikesConverter.toAnswerLikesResultDTO(answerLikeStatus));
     }
 }

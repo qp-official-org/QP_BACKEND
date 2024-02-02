@@ -31,7 +31,6 @@ import java.util.Optional;
 public class QuestionController {
     private final QuestionCommandService questionCommandService;
     private final QuestionQueryService questionQueryService;
-    private final TokenService tokenService;
 
     // 질문 작성
     @PostMapping
@@ -41,8 +40,7 @@ public class QuestionController {
         // accessToken으로 유효한 유저인지 인가
 
         return ApiResponse.onSuccess(
-                SuccessStatus.Question_OK.getCode(),
-                SuccessStatus.Question_OK.getMessage(),
+                SuccessStatus.Question_OK,
                 QuestionConverter.toCreateResultDTO(
                         questionCommandService.createQuestion(request)
                 )
@@ -55,8 +53,7 @@ public class QuestionController {
             @PathVariable @ExistQuestion Long questionId
     ) {
         return ApiResponse.onSuccess(
-                SuccessStatus.Question_OK.getCode(),
-                SuccessStatus.Question_OK.getMessage(),
+                SuccessStatus.Question_OK,
                 QuestionConverter.toQuestionDTO(
                         questionQueryService.findById(questionId)
                 )
@@ -77,8 +74,7 @@ public class QuestionController {
         List<Integer> expertCounts = questionQueryService.findExpertCountByQuestion(questions);
 
         return ApiResponse.onSuccess(
-                SuccessStatus.Question_OK.getCode(),
-                SuccessStatus.Question_OK.getMessage(),
+                SuccessStatus.Question_OK,
                 QuestionConverter.toQuestionPreviewDTOList(
                         questions,
                         expertCounts
@@ -92,12 +88,10 @@ public class QuestionController {
     public ApiResponse<?> deleteQuestion(
             @ExistQuestion @PathVariable Long questionId,
             @RequestParam("userId") @ExistUser Long userId) {
-        // accessToken으로 유효한 유저인지 인가
 
         questionCommandService.deleteQuestion(questionId);
         return ApiResponse.onSuccess(
-                SuccessStatus.Question_OK.getCode(),
-                SuccessStatus.Question_OK.getMessage(),
+                SuccessStatus.Question_OK,
                 null
         );
     }
@@ -109,11 +103,9 @@ public class QuestionController {
     public ApiResponse<QuestionResponseDTO.QuestionUpdateResultDTO> updateQuestion(
             @RequestBody @Valid QuestionRequestDTO.UpdateDTO request,
             @ExistQuestion @PathVariable Long questionId) {
-        // accessToken으로 유효한 유저인지 인가
 
         return ApiResponse.onSuccess(
-                SuccessStatus.Question_OK.getCode(),
-                SuccessStatus.Question_OK.getMessage(),
+                SuccessStatus.Question_OK,
                 QuestionConverter.toQuestionUpdateReturnDTO(
                         questionCommandService.updateQuestion(questionId, request)
                 )

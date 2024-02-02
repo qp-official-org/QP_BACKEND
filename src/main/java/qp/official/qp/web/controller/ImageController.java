@@ -26,20 +26,26 @@ public class ImageController {
     public ApiResponse<ImageResponseDTO.CreateResultDTO> uploadImage(@RequestParam MultipartFile image) throws IOException {
         Image savedImage = imageCommandService.saveImage(image);
         CreateResultDTO result = ImageResponseDTO.CreateResultDTO.builder().url(savedImage.getUrl()).build();
-        return ApiResponse.onSuccess(SuccessStatus.Image_OK.getCode(), SuccessStatus.Image_OK.getMessage(), result);
+        return ApiResponse.onSuccess(
+            SuccessStatus.Image_OK,
+            result);
     }
 
     @DeleteMapping
     public ApiResponse<?> deleteImage(@RequestBody ImageRequestDTO.ImageDTO request) throws IOException {
         String url = request.getUrl();
         imageCommandService.deleteImage(url);
-        return ApiResponse.onSuccess(SuccessStatus.Image_OK.getCode(), SuccessStatus.Image_OK.getMessage(), null);
+        return ApiResponse.onSuccess(
+            SuccessStatus.Image_OK,
+            null);
     }
 
     @DeleteMapping("/reset-S3")
     public ApiResponse<?> deleteAllImages() throws  IOException {
         imageCommandService.deleteAllImages();
-        return ApiResponse.onSuccess(SuccessStatus.Image_OK.getCode(), SuccessStatus.Image_OK.getMessage(), null);
+        return ApiResponse.onSuccess(
+            SuccessStatus.Image_OK,
+            null);
     }
 
 }
