@@ -3,6 +3,8 @@ package qp.official.qp.web.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +17,6 @@ import qp.official.qp.domain.Image;
 import qp.official.qp.service.ImageService.ImageCommandService;
 import qp.official.qp.web.dto.ImageRequestDTO;
 import qp.official.qp.web.dto.ImageResponseDTO;
-import qp.official.qp.web.dto.ImageResponseDTO.CreateResultDTO;
 
 @RestController
 @CrossOrigin
@@ -29,12 +30,17 @@ public class ImageController {
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "AWS S3 버킷과 DB에 이미지 저장 하는 API",
         description = "원하는 이미지를 AWS S3 버킷과 DB에 저장하는 API로, 클라이언트로부터 이미지를 받아서 해당 이미지를 저장합니다. 이미지를 저장한 후 이미지의 URL을 생성하여 반환합니다.")
-    public ApiResponse<ImageResponseDTO.CreateResultDTO> uploadImage(
+    @ApiResponses({
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "IMAGE_5000", description = "성공입니다."),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "IMAGE_5002", description = "이미 해당 파일 명이 존재합니다.", content = @Content(schema = @Schema(implementation = ApiResponse.class)))
+    })
+
+    public ApiResponse<ImageResponseDTO.ImageCreateResultDTO> uploadImage(
         @Parameter(
             description = "`multipart/form-data` 형식의 이미지를 `Input`으로 받습니다. `key` 값은 `image` 입니다."
         ) @RequestParam MultipartFile image) throws IOException {
         Image savedImage = imageCommandService.saveImage(image);
-        CreateResultDTO result = ImageResponseDTO.CreateResultDTO.builder().url(savedImage.getUrl()).build();
+        ImageResponseDTO.ImageCreateResultDTO result = ImageResponseDTO.ImageCreateResultDTO.builder().url(savedImage.getUrl()).build();
         return ApiResponse.onSuccess(
             SuccessStatus.Image_OK,
             result);
@@ -43,6 +49,10 @@ public class ImageController {
     @DeleteMapping
     @Operation(summary = "AWS S3 버킷과 DB에 존재 하는 이미지를 삭제 하는 API",
     description = "AWS S3 버킷과 DB에서 이미지를 삭제하는 API로, 클라이언트로부터 이미지의 `URL`을 입력 받아서, AWS S3 버킷과 DB에 `URL`에 해당하는 이미지를 삭제합니다.")
+    @ApiResponses({
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "IMAGE_5000", description = "성공입니다."),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "IMAGE_5001", description = "찾고 있는 이미지가 없습니다.", content = @Content(schema = @Schema(implementation = ApiResponse.class)))
+    })
     public ApiResponse<?> deleteImage( @RequestBody ImageRequestDTO.ImageDTO request) throws IOException {
         String url = request.getUrl();
         imageCommandService.deleteImage(url);

@@ -17,6 +17,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import qp.official.qp.apiPayload.code.status.ErrorStatus;
+import qp.official.qp.apiPayload.exception.handler.ImageHandler;
 import qp.official.qp.domain.Image;
 import qp.official.qp.repository.ImageRepository;
 
@@ -38,6 +40,12 @@ public class ImageCommandServiceImpl implements ImageCommandService {
     public String upload(MultipartFile multipartFile) throws IOException {
         File uploadFile = convert(multipartFile).orElseThrow(() -> new IllegalArgumentException("파일 전환 실패"));
         String fileName = "qp/" + uploadFile.getName();
+
+        // 해당 파일 이름과 동일한 이름을 가진 이미지가 존재 하면, 에러 발생
+        if (imageRepository.existsByFileName(uploadFile.getName())){
+            removeLocalFile(uploadFile);
+            throw new ImageHandler(ErrorStatus.IMAGE_ALREADY_EXISTS);
+        }
         String url = putImage(uploadFile, fileName);
         removeLocalFile(uploadFile);
         return url;
@@ -46,8 +54,8 @@ public class ImageCommandServiceImpl implements ImageCommandService {
     @Override
     public Image saveImage(MultipartFile multipartFile) throws IOException {
         if (!multipartFile.isEmpty()){
-            String storedFileName = upload(multipartFile);
-            Image image = Image.builder().url(storedFileName).fileName(multipartFile.getOriginalFilename()).build();
+            String url = upload(multipartFile);
+            Image image = Image.builder().url(url).fileName(multipartFile.getOriginalFilename()).build();
             return imageRepository.save(image);
         }
         return null;
