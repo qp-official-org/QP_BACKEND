@@ -63,7 +63,7 @@ public class AnswerController {
 
     // 특정 질문의 부모 답변 페이징 조회
     @GetMapping("/questions/{questionId}")
-    @Operation(summary = "부모 답변 페이징 조회 API",description = "path variable로 questionId를 입력하세요.")
+    @Operation(summary = "부모 답변 페이징 조회 API", description = "path variable로 questionId를 입력하세요.")
     public ApiResponse<AnswerResponseDTO.ParentAnswerPreviewListDTO> findParentAnswerByPaging(
             @PathVariable @ExistQuestion Long questionId,
             @RequestParam @Min(0) Integer page,
@@ -78,7 +78,7 @@ public class AnswerController {
 
     // 부모 답변의 자식 답변 페이징 조회
     @GetMapping("/{parentAnswerId}")
-    @Operation(summary = "자식 답변 페이징 조회 API",description = "path variable로 parentAnswerId를 입력하세요.")
+    @Operation(summary = "자식 답변 페이징 조회 API", description = "path variable로 parentAnswerId를 입력하세요.")
     public ApiResponse<AnswerResponseDTO.ChildAnswerPreviewListDTO> findChildAnswerByPaging(
             @PathVariable @ExistAnswer Long parentAnswerId,
             @RequestParam @Min(0) Integer page,
@@ -135,13 +135,11 @@ public class AnswerController {
     }
 
     // 답변 좋아요
-    @Operation(summary = "답변 좋아요 API",
-            description = "# `header`로 `accessToken`을 받아서 유효한 유저인지 확인합니다.\n" +
-                    " ### 답변을 좋아요 합니다. 이미 좋아요를 누른 상태에서 다시 누르면 좋아요가 `취소`됩니다. ")
     @PostMapping("/{answerId}/users/{userId}")
     @Operation(
             summary = "답변 좋아요 API"
-            , description = "Header에 accessToken 필요. path variable로 userId와 answerId를 입력하세요."
+            , description = "# Header에 accessToken 필요. path variable로 userId와 answerId를 입력하세요 \n." +
+            " ### 답변을 좋아요 합니다. 이미 좋아요를 누른 상태에서 다시 누르면 좋아요가 `취소`됩니다. "
             , security = @SecurityRequirement(name = "accessToken")
     )
     public ApiResponse<AnswerLikeResponseDTO.AnswerLikesResultDTO> AnswerLike(
