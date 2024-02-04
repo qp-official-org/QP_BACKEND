@@ -4,6 +4,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.validation.annotation.Validated;
@@ -38,7 +39,11 @@ public class AnswerRestController {
 
     // 답변 작성
     @PostMapping("/questions/{questionId}")
-    @Operation(summary = "특정 질문에 대한 답변 작성 API",description = "path variable로 questionId를 입력하고, Request Body에 답변을 입력하세요.")
+    @Operation(
+            summary = "특정 질문에 대한 답변 작성 API"
+            , description = "path variable로 questionId를 입력하고, Request Body에 답변을 입력하세요."
+            , security = @SecurityRequirement(name = "accessToken")
+    )
     public ApiResponse<AnswerResponseDTO.CreateResultDTO> createAnswer(
         @RequestBody @Valid AnswerRequestDTO.AnswerCreateDTO request,
         @PathVariable @ExistQuestion Long questionId
@@ -84,7 +89,11 @@ public class AnswerRestController {
 
     // 답변 삭제
     @DeleteMapping("/{answerId}")
-    @Operation(summary = "답변 삭제 API",description = "path variable로 삭제할 answerId를 입력하세요.")
+    @Operation(
+            summary = "답변 삭제 API"
+            , description = "path variable로 삭제할 answerId를 입력하세요."
+            , security = @SecurityRequirement(name = "accessToken")
+    )
     public ApiResponse<?> deleteAnswer(
             @ExistAnswer @PathVariable Long answerId,
             @RequestParam("userId") @ExistUser Long userId
@@ -100,7 +109,11 @@ public class AnswerRestController {
 
     // 답변 수정
     @PatchMapping("/{answerId}")
-    @Operation(summary = "답변 수정 API",description = "path variable로 수정할 answerId를 입력하고 Reauest Body에 title과 content를 입력하세요.")
+    @Operation(
+            summary = "답변 수정 API"
+            , description = "path variable로 수정할 answerId를 입력하고 Reauest Body에 title과 content를 입력하세요."
+            , security = @SecurityRequirement(name = "accessToken")
+    )
     public ApiResponse<AnswerResponseDTO.UpdateResultDTO> updateAnswer(
             @RequestBody @Valid AnswerRequestDTO.AnswerUpdateDTO request,
             @ExistAnswer @PathVariable Long answerId
@@ -117,7 +130,11 @@ public class AnswerRestController {
 
     // 답변 좋아요
     @PostMapping("/{answerId}/users/{userId}")
-    @Operation(summary = "답변 좋아요 API",description = "path variable로 userId와 answerId를 입력하세요.")
+    @Operation(
+            summary = "답변 좋아요 API"
+            , description = "path variable로 userId와 answerId를 입력하세요."
+            , security = @SecurityRequirement(name = "accessToken")
+    )
     public ApiResponse<AnswerLikeResponseDTO.AnswerLikesResultDTO> AnswerLike(
             @PathVariable @ExistUser Long userId,
             @PathVariable @ExistAnswer Long answerId

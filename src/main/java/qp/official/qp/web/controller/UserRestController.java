@@ -2,6 +2,7 @@ package qp.official.qp.web.controller;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.parser.ParseException;
@@ -48,7 +49,11 @@ public class UserRestController {
     
     @ApiOperation(value = "유저 정보 조회", notes = "유저 정보 조회")
     @GetMapping("/{userId}")
-    @Operation(summary = "유저 정보 조회 API", description = "Header에 accessToken 필요. path variable로 조회할 userId를 입력하세요.")
+    @Operation(
+            summary = "유저 정보 조회 API"
+            , description = "Header에 accessToken 필요. path variable로 조회할 userId를 입력하세요."
+            , security = @SecurityRequirement(name = "accessToken")
+    )
     public ApiResponse<UserResponseDTO.GetUserInfoDTO> getUserInfo(
             @PathVariable @ExistUser Long userId) {
 
@@ -65,7 +70,11 @@ public class UserRestController {
     }
 
     @PostMapping("/auto_sign_in")
-    @Operation(summary = "자동 로그인 API", description = "Request body에 로그인 할 userId를 입력하세요.")
+    @Operation(
+            summary = "자동 로그인 API"
+            , description = "Header에 accessToken, refreshToken 필요. Request body에 로그인 할 userId를 입력하세요."
+            , security = {@SecurityRequirement(name = "accessToken"), @SecurityRequirement(name = "refreshToken")}
+    )
     public ApiResponse<UserResponseDTO.AutoLoginDTO> autoSignIn(
             @RequestBody UserRequestDTO.AutoLoginRequestDTO request
     ) {
@@ -79,7 +88,11 @@ public class UserRestController {
 
     @ApiOperation(value = "유저 정보 수정", notes = "유저 정보 수정")
     @PatchMapping("/{userId}")
-    @Operation(summary = "유저 정보 수정 API", description = "Header에 accessToken 필요. path variable로 userId를 입력하고, Request body에 수정할 정보를 입력하세요.")
+    @Operation(
+            summary = "유저 정보 수정 API"
+            , description = "Header에 accessToken 필요. path variable로 userId를 입력하고, Request body에 수정할 정보를 입력하세요."
+            , security = @SecurityRequirement(name = "accessToken")
+    )
     public ApiResponse<UserResponseDTO.UpdateUserInfoDTO> updateUserInfo(
             @PathVariable @ExistUser Long userId,
             @RequestBody UserRequestDTO.UpdateUserInfoRequestDTO requestDTO) {

@@ -1,6 +1,7 @@
 package qp.official.qp.web.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.validation.annotation.Validated;
@@ -34,7 +35,11 @@ public class QuestionController {
 
     // 질문 작성
     @PostMapping
-    @Operation(summary = "질문 작성 API",description = "Request Body에 생성할 질문을 입력하세요.")
+    @Operation(
+            summary = "질문 작성 API"
+            , description = "Request Body에 생성할 질문을 입력하세요."
+            , security = @SecurityRequirement(name = "accessToken")
+    )
     public ApiResponse<QuestionResponseDTO.CreateResultDTO> createQuestion(
             @RequestBody @Valid QuestionRequestDTO.CreateDTO request
     ) {
@@ -102,7 +107,7 @@ public class QuestionController {
 
     // 질문 수정
     @PatchMapping("/{questionId}")
-    @Operation(summary = "질문 수정 API",description = "path variable로 questionId를 입력하고, Reauest Body에 수정할 title과 content를 입력하세요.")
+    @Operation(summary = "질문 수정 API", description = "path variable로 questionId를 입력하고, Reauest Body에 수정할 title과 content를 입력하세요.")
     public ApiResponse<QuestionResponseDTO.QuestionUpdateResultDTO> updateQuestion(
             @RequestBody @Valid QuestionRequestDTO.UpdateDTO request,
             @ExistQuestion @PathVariable Long questionId) {
