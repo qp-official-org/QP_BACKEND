@@ -16,7 +16,6 @@ import qp.official.qp.domain.Answer;
 import qp.official.qp.domain.enums.AnswerLikeStatus;
 import qp.official.qp.service.AnswerService.AnswerCommandService;
 import qp.official.qp.service.AnswerService.AnswerQueryService;
-import qp.official.qp.service.TokenService.TokenService;
 import qp.official.qp.validation.annotation.ExistAnswer;
 import qp.official.qp.validation.annotation.ExistQuestion;
 import qp.official.qp.validation.annotation.ExistUser;
@@ -31,7 +30,7 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 @Validated
 @RequestMapping("/answers")
-public class AnswerRestController {
+public class AnswerController {
 
     private final AnswerCommandService answerCommandService;
     private final AnswerQueryService answerQueryService;
