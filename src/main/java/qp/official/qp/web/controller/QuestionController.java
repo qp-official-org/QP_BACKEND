@@ -37,7 +37,7 @@ public class QuestionController {
     @PostMapping
     @Operation(
             summary = "질문 작성 API"
-            , description = "Request Body에 생성할 질문을 입력하세요."
+            , description = "Header에 accessToken 필요. Request Body에 생성할 질문을 입력하세요."
             , security = @SecurityRequirement(name = "accessToken")
     )
     public ApiResponse<QuestionResponseDTO.CreateResultDTO> createQuestion(

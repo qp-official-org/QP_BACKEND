@@ -41,7 +41,7 @@ public class AnswerRestController {
     @PostMapping("/questions/{questionId}")
     @Operation(
             summary = "특정 질문에 대한 답변 작성 API"
-            , description = "path variable로 questionId를 입력하고, Request Body에 답변을 입력하세요."
+            , description = "Header에 accessToken 필요. path variable로 questionId를 입력하고, Request Body에 답변을 입력하세요."
             , security = @SecurityRequirement(name = "accessToken")
     )
     public ApiResponse<AnswerResponseDTO.CreateResultDTO> createAnswer(
@@ -91,7 +91,7 @@ public class AnswerRestController {
     @DeleteMapping("/{answerId}")
     @Operation(
             summary = "답변 삭제 API"
-            , description = "path variable로 삭제할 answerId를 입력하세요."
+            , description = "Header에 accessToken 필요. path variable로 삭제할 answerId를 입력하세요."
             , security = @SecurityRequirement(name = "accessToken")
     )
     public ApiResponse<?> deleteAnswer(
@@ -111,7 +111,7 @@ public class AnswerRestController {
     @PatchMapping("/{answerId}")
     @Operation(
             summary = "답변 수정 API"
-            , description = "path variable로 수정할 answerId를 입력하고 Reauest Body에 title과 content를 입력하세요."
+            , description = "Header에 accessToken 필요. path variable로 수정할 answerId를 입력하고 Reauest Body에 title과 content를 입력하세요."
             , security = @SecurityRequirement(name = "accessToken")
     )
     public ApiResponse<AnswerResponseDTO.UpdateResultDTO> updateAnswer(
@@ -132,7 +132,7 @@ public class AnswerRestController {
     @PostMapping("/{answerId}/users/{userId}")
     @Operation(
             summary = "답변 좋아요 API"
-            , description = "path variable로 userId와 answerId를 입력하세요."
+            , description = "Header에 accessToken 필요. path variable로 userId와 answerId를 입력하세요."
             , security = @SecurityRequirement(name = "accessToken")
     )
     public ApiResponse<AnswerLikeResponseDTO.AnswerLikesResultDTO> AnswerLike(
