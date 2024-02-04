@@ -3,20 +3,15 @@ package qp.official.qp.converter;
 import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import qp.official.qp.domain.Answer;
-import qp.official.qp.domain.enums.Category;
 import qp.official.qp.web.dto.AnswerRequestDTO;
 import qp.official.qp.web.dto.AnswerResponseDTO;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import qp.official.qp.web.dto.AnswerResponseDTO.ChildAnswerPreviewDTO;
 import qp.official.qp.web.dto.AnswerResponseDTO.ChildAnswerPreviewListDTO;
 import qp.official.qp.web.dto.AnswerResponseDTO.ParentAnswerPreviewDTO;
-import springfox.documentation.swagger2.mappers.ModelMapper;
 
 public class AnswerConverter {
-
-    // 클라이언트의 요청 데이터를 JPA에서 처리하기 위한 DTO to Entity
 
     public static Answer toAnswer(AnswerRequestDTO.AnswerCreateDTO request){
         return Answer.builder()
@@ -27,7 +22,6 @@ public class AnswerConverter {
                 .build();
     }
 
-    // 응답을 위한 Entity to DTO
 
     public static AnswerResponseDTO.CreateResultDTO toCreateResultDTO(Answer answer){
         return AnswerResponseDTO.CreateResultDTO.builder()
@@ -40,17 +34,7 @@ public class AnswerConverter {
     public static AnswerResponseDTO.ParentAnswerPreviewListDTO parentAnswerPreviewListDTO(
         Page<Answer> parentAnswerList){
 
-        List<AnswerResponseDTO.ParentAnswerPreviewDTO> parentAnswerPreviewDTOList = parentAnswerList.getContent().stream()
-            .map(answer -> new ParentAnswerPreviewDTO(
-                answer.getAnswerId(),
-                answer.getUser().getUserId(),
-                answer.getTitle(),
-                answer.getContent(),
-                answer.getCategory(),
-                answer.getAnswerGroup(),
-                answer.getAnswerLikesList().size()
-            ))
-            .collect(Collectors.toList());
+        List<AnswerResponseDTO.ParentAnswerPreviewDTO> parentAnswerPreviewDTOList = getParentAnswerPreviewDTOS(parentAnswerList);
 
         return AnswerResponseDTO.ParentAnswerPreviewListDTO.builder()
             .parentAnswerList(parentAnswerPreviewDTOList)

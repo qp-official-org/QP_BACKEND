@@ -3,6 +3,12 @@ package qp.official.qp.web.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
 import qp.official.qp.apiPayload.ApiResponse;
 import qp.official.qp.apiPayload.code.status.SuccessStatus;
@@ -36,8 +42,7 @@ public class QuestionReportController {
     {
         QuestionReport questionReport = questionReportCommandService.createQuestionReport(request, questionId);
         return ApiResponse.onSuccess(
-                SuccessStatus.Report_OK.getCode(),
-                SuccessStatus.Report_OK.getMessage(),
+                SuccessStatus.Report_OK,
                 QuestionReportConverter.toQuestionReportResultDTO(questionReport)
         );
     }
@@ -51,8 +56,7 @@ public class QuestionReportController {
     {
         QuestionReport questionReport = questionReportQueryService.getQuestionReport(reportId);
         return ApiResponse.onSuccess(
-                SuccessStatus.Report_OK.getCode(),
-                SuccessStatus.Report_OK.getMessage(),
+                SuccessStatus.Report_OK,
                 QuestionReportConverter.toQuestionReportResultDTO(questionReport)
         );
     }

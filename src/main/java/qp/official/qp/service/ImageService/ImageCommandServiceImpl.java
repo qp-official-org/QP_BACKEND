@@ -3,11 +3,8 @@ package qp.official.qp.service.ImageService;
 import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.DeleteObjectRequest;
-import com.amazonaws.services.s3.model.ListObjectsV2Request;
 import com.amazonaws.services.s3.model.ListObjectsV2Result;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -20,6 +17,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import qp.official.qp.apiPayload.code.status.ErrorStatus;
+import qp.official.qp.apiPayload.exception.handler.ImageHandler;
 import qp.official.qp.domain.Image;
 import qp.official.qp.repository.ImageRepository;
 
@@ -41,6 +40,12 @@ public class ImageCommandServiceImpl implements ImageCommandService {
     public String upload(MultipartFile multipartFile) throws IOException {
         File uploadFile = convert(multipartFile).orElseThrow(() -> new IllegalArgumentException("파일 전환 실패"));
         String fileName = "qp/" + uploadFile.getName();
+
+        // 해당 파일 이름과 동일한 이름을 가진 이미지가 존재 하면, 에러 발생
+        if (imageRepository.existsByFileName(uploadFile.getName())){
+            removeLocalFile(uploadFile);
+            throw new ImageHandler(ErrorStatus.IMAGE_ALREADY_EXISTS);
+        }
         String url = putImage(uploadFile, fileName);
         removeLocalFile(uploadFile);
         return url;
@@ -49,14 +54,14 @@ public class ImageCommandServiceImpl implements ImageCommandService {
     @Override
     public Image saveImage(MultipartFile multipartFile) throws IOException {
         if (!multipartFile.isEmpty()){
-            String storedFileName = upload(multipartFile);
-            Image image = Image.builder().url(storedFileName).fileName(multipartFile.getOriginalFilename()).build();
+            String url = upload(multipartFile);
+            Image image = Image.builder().url(url).fileName(multipartFile.getOriginalFilename()).build();
             return imageRepository.save(image);
         }
         return null;
     }
 
-    //  qp 폴더 내 위치 하고 해당 url을 가진 이미지를 삭제함
+    //  qp 폴더에 위치한 해당 url을 가진 이미지를 삭제함
     @Override
     public void deleteImage(String url) throws IOException {
         try {
@@ -68,13 +73,16 @@ public class ImageCommandServiceImpl implements ImageCommandService {
         }
     }
 
-    // qp 폴더 내 모든 이미지를 삭제함 (qp 폴더는 삭제 되지 조건 추가 함)
+    // qp 폴더 내 모든 이미지를 삭제함 (qp 폴더는 삭제 되지 않도록 조건 추가 함)
     @Override
     public void deleteAllImages() throws IOException {
         try {
             ListObjectsV2Result result = amazonS3Client.listObjectsV2(bucket);
             for (S3ObjectSummary s3Object : result.getObjectSummaries()){
-                if (s3Object.getKey().equals("qp/")){
+                if (s3Object.getKey().startsWith("qp/")){
+
+                    if (isDefaultValue(s3Object)){continue;}
+
                     amazonS3Client.deleteObject(bucket, s3Object.getKey());
                 }
             }
@@ -82,6 +90,10 @@ public class ImageCommandServiceImpl implements ImageCommandService {
         }catch (SdkClientException e){
             throw new IOException("이미지 삭제 중 오류가 발생 했습니다.", e);
         }
+    }
+
+    private static boolean isDefaultValue(S3ObjectSummary s3Object) {
+        return s3Object.getKey().equals("qp/") || s3Object.getKey().equals("qp/icon.png");
     }
 
 

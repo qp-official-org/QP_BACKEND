@@ -36,8 +36,7 @@ public class AnswerReportController {
     {
         AnswerReport answerReport = answerReportCommandService.createAnswerReport(request, answerId);
         return ApiResponse.onSuccess(
-                SuccessStatus.Report_OK.getCode(),
-                SuccessStatus.Report_OK.getMessage(),
+                SuccessStatus.Report_OK,
                 AnswerReportConverter.toAnswerReportResultDTO(answerReport)
         );
     }
@@ -50,8 +49,7 @@ public class AnswerReportController {
     {
         AnswerReport answerReport = answerReportQueryService.getAnswerReport(reportId);
         return ApiResponse.onSuccess(
-                SuccessStatus.Report_OK.getCode(),
-                SuccessStatus.Report_OK.getMessage(),
+                SuccessStatus.Report_OK,
                 AnswerReportConverter.toAnswerReportResultDTO(answerReport)
         );
     }

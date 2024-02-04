@@ -32,7 +32,8 @@ public enum ErrorStatus implements BaseErrorCode {
     QUESTIONREPORT_NOT_FOUND(HttpStatus.NOT_FOUND, "QUESTION_4002", "찾고있는 질문신고가 없습니다."),
 
     // 이미지 관련 에러 5000
-    IMAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "IMAGE_5001", "찾고있는 이미지가 없습니다."),
+    IMAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "IMAGE_5001", "찾고 있는 이미지가 없습니다."),
+    IMAGE_ALREADY_EXISTS(HttpStatus.CONFLICT, "IMAGE_5002", "이미 해당 파일 명이 존재합니다."),
 
     // 해시태그 관련 에러 6000
     HASHTAG_BAD_REQUEST(HttpStatus.BAD_REQUEST, "HASHTAG_6001", "해시태그 요청이 비어있습니다."),

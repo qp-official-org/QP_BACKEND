@@ -6,16 +6,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import qp.official.qp.apiPayload.ApiResponse;
-import qp.official.qp.apiPayload.code.status.ErrorStatus;
 import qp.official.qp.apiPayload.code.status.SuccessStatus;
-import qp.official.qp.apiPayload.exception.GeneralException;
-import qp.official.qp.apiPayload.exception.handler.TokenHandler;
-import qp.official.qp.converter.AnswerConverter;
 import qp.official.qp.converter.QuestionConverter;
 import qp.official.qp.domain.Question;
-import qp.official.qp.domain.User;
-import qp.official.qp.repository.QuestionRepository;
-import qp.official.qp.repository.UserRepository;
 import qp.official.qp.service.QuestionService.QuestionCommandService;
 import qp.official.qp.service.QuestionService.QuestionQueryService;
 import qp.official.qp.service.TokenService.TokenService;
@@ -38,7 +31,6 @@ import java.util.Optional;
 public class QuestionController {
     private final QuestionCommandService questionCommandService;
     private final QuestionQueryService questionQueryService;
-    private final TokenService tokenService;
 
     // 질문 작성
     @PostMapping
@@ -48,8 +40,7 @@ public class QuestionController {
         // accessToken으로 유효한 유저인지 인가
 
         return ApiResponse.onSuccess(
-                SuccessStatus.Question_OK.getCode(),
-                SuccessStatus.Question_OK.getMessage(),
+                SuccessStatus.Question_OK,
                 QuestionConverter.toCreateResultDTO(
                         questionCommandService.createQuestion(request)
                 )
@@ -62,8 +53,7 @@ public class QuestionController {
             @PathVariable @ExistQuestion Long questionId
     ) {
         return ApiResponse.onSuccess(
-                SuccessStatus.Question_OK.getCode(),
-                SuccessStatus.Question_OK.getMessage(),
+                SuccessStatus.Question_OK,
                 QuestionConverter.toQuestionDTO(
                         questionQueryService.findById(questionId)
                 )
@@ -84,8 +74,7 @@ public class QuestionController {
         List<Integer> expertCounts = questionQueryService.findExpertCountByQuestion(questions);
 
         return ApiResponse.onSuccess(
-                SuccessStatus.Question_OK.getCode(),
-                SuccessStatus.Question_OK.getMessage(),
+                SuccessStatus.Question_OK,
                 QuestionConverter.toQuestionPreviewDTOList(
                         questions,
                         expertCounts
@@ -99,12 +88,10 @@ public class QuestionController {
     public ApiResponse<?> deleteQuestion(
             @ExistQuestion @PathVariable Long questionId,
             @RequestParam("userId") @ExistUser Long userId) {
-        // accessToken으로 유효한 유저인지 인가
 
         questionCommandService.deleteQuestion(questionId);
         return ApiResponse.onSuccess(
-                SuccessStatus.Question_OK.getCode(),
-                SuccessStatus.Question_OK.getMessage(),
+                SuccessStatus.Question_OK,
                 null
         );
     }
@@ -116,11 +103,9 @@ public class QuestionController {
     public ApiResponse<QuestionResponseDTO.QuestionUpdateResultDTO> updateQuestion(
             @RequestBody @Valid QuestionRequestDTO.UpdateDTO request,
             @ExistQuestion @PathVariable Long questionId) {
-        // accessToken으로 유효한 유저인지 인가
 
         return ApiResponse.onSuccess(
-                SuccessStatus.Question_OK.getCode(),
-                SuccessStatus.Question_OK.getMessage(),
+                SuccessStatus.Question_OK,
                 QuestionConverter.toQuestionUpdateReturnDTO(
                         questionCommandService.updateQuestion(questionId, request)
                 )
