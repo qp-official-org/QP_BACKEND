@@ -17,6 +17,7 @@ import qp.official.qp.domain.Answer;
 import qp.official.qp.domain.enums.AnswerLikeStatus;
 import qp.official.qp.service.AnswerService.AnswerCommandService;
 import qp.official.qp.service.AnswerService.AnswerQueryService;
+import qp.official.qp.service.TokenService.TokenService;
 import qp.official.qp.validation.annotation.ExistAnswer;
 import qp.official.qp.validation.annotation.ExistQuestion;
 import qp.official.qp.validation.annotation.ExistUser;
@@ -33,6 +34,8 @@ import javax.validation.Valid;
 @RequestMapping("/answers")
 public class AnswerController {
 
+    private final TokenService tokenService;
+
     private final AnswerCommandService answerCommandService;
     private final AnswerQueryService answerQueryService;
 
@@ -43,6 +46,7 @@ public class AnswerController {
             @PathVariable @ExistQuestion Long questionId
     ) {
         // accessToken으로 유효한 유저인지 인가
+        tokenService.isValidToken(request.getUserId());
 
         Answer answer = answerCommandService.createAnswer(request, questionId);
         return ApiResponse.onSuccess(
@@ -87,6 +91,7 @@ public class AnswerController {
             @RequestParam("userId") @ExistUser Long userId
     ) {
         // accessToken으로 유효한 유저인지 인가
+        tokenService.isValidToken(userId);
 
         answerCommandService.deleteAnswer(answerId);
         return ApiResponse.onSuccess(
@@ -103,6 +108,7 @@ public class AnswerController {
             @ExistAnswer @PathVariable Long answerId
     ) {
         // accessToken으로 유효한 유저인지 인가
+        tokenService.isValidToken(request.getUserId());
 
         return ApiResponse.onSuccess(
                 SuccessStatus.Answer_OK,
@@ -128,6 +134,7 @@ public class AnswerController {
             @PathVariable @ExistAnswer Long answerId
     ) {
         // accessToken으로 유효한 유저인지 인가
+        tokenService.isValidToken(userId);
 
         AnswerLikeStatus answerLikeStatus = answerCommandService.addAndDeleteLikeToAnswer(userId, answerId);
 
