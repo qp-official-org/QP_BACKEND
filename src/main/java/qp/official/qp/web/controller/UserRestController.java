@@ -33,6 +33,7 @@ public class UserRestController {
 
 
     @GetMapping("/sign_up")
+    @Operation(summary = "회원 가입 API", description = "회원 가입을 위해 parameter로 accessToken을 입력하세요.")
     public ApiResponse<UserResponseDTO.UserSignUpResultDTO> getKakaoCode(
             @RequestParam String accessToken
     ) throws IOException, ParseException {
@@ -47,7 +48,11 @@ public class UserRestController {
 
     //    @ApiOperation(value = "유저 정보 조회", notes = "유저 정보 조회")
     @GetMapping("/{userId}")
-    @Operation(summary = "유저 정보 조회 API", description = "특정 유저 정보를 조회하는 API입니다. path variable로 조회할 userId를 주세요.")
+    @Operation(
+            summary = "유저 정보 조회 API"
+            , description = "Header에 accessToken 필요. path variable로 조회할 userId를 입력하세요."
+            , security = @SecurityRequirement(name = "accessToken")
+    )
     public ApiResponse<UserResponseDTO.GetUserInfoDTO> getUserInfo(
             @PathVariable @ExistUser Long userId) {
 
@@ -67,6 +72,11 @@ public class UserRestController {
             , security = {@SecurityRequirement(name = "accessToken"), @SecurityRequirement(name = "refreshToken")}
     )
     @PostMapping("/auto_sign_in")
+    @Operation(
+            summary = "자동 로그인 API"
+            , description = "Header에 accessToken, refreshToken 필요. Request body에 로그인 할 userId를 입력하세요."
+            , security = {@SecurityRequirement(name = "accessToken"), @SecurityRequirement(name = "refreshToken")}
+    )
     public ApiResponse<UserResponseDTO.AutoLoginDTO> autoSignIn(
             @RequestBody UserRequestDTO.AutoLoginRequestDTO request
     ) {
@@ -80,7 +90,11 @@ public class UserRestController {
 
     //    @ApiOperation(value = "유저 정보 수정", notes = "유저 정보 수정")
     @PatchMapping("/{userId}")
-    @Operation(summary = "유저 정보 수정 API", description = "특정 유저 정보를 수정하는 API입니다. path variable로 수정할 userId를 주세요.")
+    @Operation(
+            summary = "유저 정보 수정 API"
+            , description = "Header에 accessToken 필요. path variable로 userId를 입력하고, Request body에 수정할 정보를 입력하세요."
+            , security = @SecurityRequirement(name = "accessToken")
+    )
     public ApiResponse<UserResponseDTO.UpdateUserInfoDTO> updateUserInfo(
             @PathVariable @ExistUser Long userId,
             @RequestBody UserRequestDTO.UpdateUserInfoRequestDTO requestDTO) {
@@ -95,6 +109,7 @@ public class UserRestController {
     }
 
     @PatchMapping("/delete")
+    @Operation(summary = "유저 삭제 API", description = "현재 로그인 한 유저의 상태가 DELETED로 변경됩니다.")
     public ApiResponse<UserResponseDTO.deleteUserDTO> delete() {
         return ApiResponse.onSuccess(
                 SuccessStatus.User_OK,
