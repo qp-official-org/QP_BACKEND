@@ -1,6 +1,5 @@
 package qp.official.qp.web.controller;
 
-import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
@@ -46,8 +45,8 @@ public class UserRestController {
         );
     }
 
-    
-    @ApiOperation(value = "유저 정보 조회", notes = "유저 정보 조회")
+
+    //    @ApiOperation(value = "유저 정보 조회", notes = "유저 정보 조회")
     @GetMapping("/{userId}")
     @Operation(
             summary = "유저 정보 조회 API"
@@ -86,7 +85,7 @@ public class UserRestController {
         );
     }
 
-    @ApiOperation(value = "유저 정보 수정", notes = "유저 정보 수정")
+    //    @ApiOperation(value = "유저 정보 수정", notes = "유저 정보 수정")
     @PatchMapping("/{userId}")
     @Operation(
             summary = "유저 정보 수정 API"
@@ -117,6 +116,7 @@ public class UserRestController {
 
     @Operation(summary = "테스트 유저 생성", description =
             "# Test User를 생성합니다. 다른 기능을 테스트 할때 이용 하세요"
+            , security = {@SecurityRequirement(name = "accessToken"), @SecurityRequirement(name = "refreshToken")}
     )
     @PostMapping("/test")
     public ApiResponse<UserResponseDTO.JoinResultDTO> createTestUser() {

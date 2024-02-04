@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class SwaggerConfig {
     @Bean
-    public OpenAPI customOpenApi(){
+    public OpenAPI customOpenAPI() {
         return new OpenAPI()
                 .components(
                         new Components()
@@ -27,5 +27,4 @@ public class SwaggerConfig {
                                 )
                 );
     }
-
 }
