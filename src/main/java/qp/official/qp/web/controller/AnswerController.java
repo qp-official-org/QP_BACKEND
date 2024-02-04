@@ -5,6 +5,7 @@ import javax.validation.constraints.Min;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.validation.annotation.Validated;
@@ -41,6 +42,11 @@ public class AnswerController {
 
     // 답변 작성
     @PostMapping("/questions/{questionId}")
+    @Operation(
+            summary = "특정 질문에 대한 답변 작성 API"
+            , description = "Header에 accessToken 필요. path variable로 questionId를 입력하고, Request Body에 답변을 입력하세요."
+            , security = @SecurityRequirement(name = "accessToken")
+    )
     public ApiResponse<AnswerResponseDTO.CreateResultDTO> createAnswer(
             @RequestBody @Valid AnswerRequestDTO.AnswerCreateDTO request,
             @PathVariable @ExistQuestion Long questionId
@@ -57,6 +63,7 @@ public class AnswerController {
 
     // 특정 질문의 부모 답변 페이징 조회
     @GetMapping("/questions/{questionId}")
+    @Operation(summary = "부모 답변 페이징 조회 API",description = "path variable로 questionId를 입력하세요.")
     public ApiResponse<AnswerResponseDTO.ParentAnswerPreviewListDTO> findParentAnswerByPaging(
             @PathVariable @ExistQuestion Long questionId,
             @RequestParam @Min(0) Integer page,
@@ -71,6 +78,7 @@ public class AnswerController {
 
     // 부모 답변의 자식 답변 페이징 조회
     @GetMapping("/{parentAnswerId}")
+    @Operation(summary = "자식 답변 페이징 조회 API",description = "path variable로 parentAnswerId를 입력하세요.")
     public ApiResponse<AnswerResponseDTO.ChildAnswerPreviewListDTO> findChildAnswerByPaging(
             @PathVariable @ExistAnswer Long parentAnswerId,
             @RequestParam @Min(0) Integer page,
@@ -85,7 +93,11 @@ public class AnswerController {
 
     // 답변 삭제
     @DeleteMapping("/{answerId}")
-    @Operation(summary = "답변 삭제 API", description = "특정 답변 또는 대댓글을 삭제하는 API입니다. path variable로 answerId를 주세요")
+    @Operation(
+            summary = "답변 삭제 API"
+            , description = "Header에 accessToken 필요. path variable로 삭제할 answerId를 입력하세요."
+            , security = @SecurityRequirement(name = "accessToken")
+    )
     public ApiResponse<?> deleteAnswer(
             @ExistAnswer @PathVariable Long answerId,
             @RequestParam("userId") @ExistUser Long userId
@@ -102,7 +114,11 @@ public class AnswerController {
 
     // 답변 수정
     @PatchMapping("/{answerId}")
-    @Operation(summary = "답변 수정 API", description = "특정 답변 또는 대댓글을 수정하는 API입니다. path variable로 answerId와 Reauest Body로 수정할 title과 content를 주세요")
+    @Operation(
+            summary = "답변 수정 API"
+            , description = "Header에 accessToken 필요. path variable로 수정할 answerId를 입력하고 Reauest Body에 title과 content를 입력하세요."
+            , security = @SecurityRequirement(name = "accessToken")
+    )
     public ApiResponse<AnswerResponseDTO.UpdateResultDTO> updateAnswer(
             @RequestBody @Valid AnswerRequestDTO.AnswerUpdateDTO request,
             @ExistAnswer @PathVariable Long answerId
@@ -123,6 +139,11 @@ public class AnswerController {
             description = "# `header`로 `accessToken`을 받아서 유효한 유저인지 확인합니다.\n" +
                     " ### 답변을 좋아요 합니다. 이미 좋아요를 누른 상태에서 다시 누르면 좋아요가 `취소`됩니다. ")
     @PostMapping("/{answerId}/users/{userId}")
+    @Operation(
+            summary = "답변 좋아요 API"
+            , description = "Header에 accessToken 필요. path variable로 userId와 answerId를 입력하세요."
+            , security = @SecurityRequirement(name = "accessToken")
+    )
     public ApiResponse<AnswerLikeResponseDTO.AnswerLikesResultDTO> AnswerLike(
             @Parameter(
                     description = "좋아요를 누를 유저의 `userId`를 `path variable`로 받습니다."

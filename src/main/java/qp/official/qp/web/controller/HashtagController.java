@@ -1,6 +1,7 @@
 package qp.official.qp.web.controller;
 
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +27,7 @@ public class HashtagController {
 
 
     @PostMapping("/")
+    @Operation(summary = "해시태그 생성 API", description = "Request Body에 생성할 해시태그를 입력하세요.")
     public ApiResponse<HashtagResponseDTO.HashtagReturnDTO> generate(@RequestBody HashtagRequestDTO.HashtagDTO request){
         Hashtag hashtag = hashtagQueryService.saveHashtag(request);
         return ApiResponse.onSuccess(
@@ -34,6 +36,7 @@ public class HashtagController {
     }
 
     @GetMapping("/")
+    @Operation(summary = "해시태그 조회 API", description = "Request Body에 조회할 해시태그를 입력하세요.")
     public ApiResponse<HashtagResponseDTO.HashtagReturnDTO> findHashtag(@RequestBody HashtagRequestDTO.HashtagDTO request){
         Hashtag hashtag = hashtagCommandService.findHashtag(request);
         return ApiResponse.onSuccess(
@@ -42,6 +45,7 @@ public class HashtagController {
     }
 
     @DeleteMapping("/{hashtagId}")
+    @Operation(summary = "해시태그 삭제 API", description = "path variable로 삭제 할 hashtagId를 입력하세요.")
     public ApiResponse<HashtagResponseDTO.HashtagReturnDTO> deleteHashtag(@PathVariable Long hashtagId){
         try {
             Hashtag hashtag = hashtagQueryService.deleteHashtag(hashtagId);
