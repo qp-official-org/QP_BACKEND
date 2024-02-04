@@ -8,7 +8,6 @@ import qp.official.qp.validation.annotation.ExistAnswer;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
-import java.util.List;
 
 @Component
 @RequiredArgsConstructor

@@ -30,14 +30,18 @@ public class HashtagController {
     @Operation(summary = "해시태그 생성 API", description = "Request Body에 생성할 해시태그를 입력하세요.")
     public ApiResponse<HashtagResponseDTO.HashtagReturnDTO> generate(@RequestBody HashtagRequestDTO.HashtagDTO request){
         Hashtag hashtag = hashtagQueryService.saveHashtag(request);
-        return ApiResponse.onSuccess(SuccessStatus.Hashtag_OK.getCode(), SuccessStatus.Hashtag_OK.getMessage(), HashtagConverter.toHashtagResultDTO(hashtag));
+        return ApiResponse.onSuccess(
+            SuccessStatus.Hashtag_OK,
+            HashtagConverter.toHashtagResultDTO(hashtag));
     }
 
     @GetMapping("/")
     @Operation(summary = "해시태그 조회 API", description = "Request Body에 조회할 해시태그를 입력하세요.")
     public ApiResponse<HashtagResponseDTO.HashtagReturnDTO> findHashtag(@RequestBody HashtagRequestDTO.HashtagDTO request){
         Hashtag hashtag = hashtagCommandService.findHashtag(request);
-        return ApiResponse.onSuccess(SuccessStatus.Hashtag_OK.getCode(), SuccessStatus.Hashtag_OK.getMessage(), HashtagConverter.toHashtagResultDTO(hashtag));
+        return ApiResponse.onSuccess(
+            SuccessStatus.Hashtag_OK,
+            HashtagConverter.toHashtagResultDTO(hashtag));
     }
 
     @DeleteMapping("/{hashtagId}")
@@ -45,9 +49,14 @@ public class HashtagController {
     public ApiResponse<HashtagResponseDTO.HashtagReturnDTO> deleteHashtag(@PathVariable Long hashtagId){
         try {
             Hashtag hashtag = hashtagQueryService.deleteHashtag(hashtagId);
-            return ApiResponse.onSuccess(SuccessStatus.Hashtag_OK.getCode(), SuccessStatus.Hashtag_OK.getMessage(), HashtagConverter.toHashtagResultDTO(hashtag));
+            return ApiResponse.onSuccess(
+                SuccessStatus.Hashtag_OK,
+                HashtagConverter.toHashtagResultDTO(hashtag));
         } catch (Exception e) {
-            return ApiResponse.onFailure(ErrorStatus.HASHTAG_NOT_EXIST.getCode(), ErrorStatus.HASHTAG_NOT_EXIST.getMessage(), null);
+            return ApiResponse.onFailure(
+                ErrorStatus.HASHTAG_NOT_EXIST.getCode(),
+                ErrorStatus.HASHTAG_NOT_EXIST.getMessage(),
+                null);
         }
     }
 
