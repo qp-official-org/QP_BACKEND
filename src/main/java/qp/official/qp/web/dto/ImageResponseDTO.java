@@ -10,7 +10,7 @@ public class ImageResponseDTO {
     @AllArgsConstructor
     @NoArgsConstructor
     @Getter
-    public static class CreateResultDTO{
+    public static class ImageCreateResultDTO{
         private String url;
     }
 }

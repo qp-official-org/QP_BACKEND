@@ -12,7 +12,7 @@ import qp.official.qp.apiPayload.code.status.SuccessStatus;
 import qp.official.qp.converter.UserConverter;
 import qp.official.qp.domain.User;
 import qp.official.qp.service.TokenService.TokenService;
-import qp.official.qp.service.UserService;
+import qp.official.qp.service.UserService.UserService;
 import qp.official.qp.validation.annotation.ExistUser;
 import qp.official.qp.web.dto.TokenResponseDTO;
 import qp.official.qp.web.dto.UserRequestDTO;
@@ -39,8 +39,7 @@ public class UserRestController {
         User newUser = userService.signUp(accessToken);
         TokenResponseDTO tokenResponseDTO = tokenService.createToken(newUser.getUserId());
         return ApiResponse.onSuccess(
-                SuccessStatus.User_OK.getCode(),
-                SuccessStatus.User_OK.getMessage(),
+                SuccessStatus.User_OK,
                 UserConverter.toUserSignUpResultDTO(tokenResponseDTO, newUser)
         );
     }
@@ -59,8 +58,7 @@ public class UserRestController {
         User user = userService.getUserInfo(userId);
 
         return ApiResponse.onSuccess(
-                SuccessStatus.Question_OK.getCode(),
-                SuccessStatus.Question_OK.getMessage(),
+                SuccessStatus.User_OK,
                 UserConverter.toUserGetInfoDTO(user)
         );
     }
@@ -75,8 +73,7 @@ public class UserRestController {
         TokenResponseDTO tokenResponseDTO = tokenService.autoSignIn(request.getUserId());
         User findUser = userService.autoSignIn(request.getUserId());
         return ApiResponse.onSuccess(
-                SuccessStatus.User_OK.getCode(),
-                SuccessStatus.User_OK.getMessage(),
+                SuccessStatus.User_OK,
                 UserConverter.toUserAutoLoginDTO(tokenResponseDTO, findUser)
         );
     }
@@ -92,8 +89,7 @@ public class UserRestController {
 
         User user = userService.updateUserInfo(userId, requestDTO);
         return ApiResponse.onSuccess(
-                SuccessStatus.Question_OK.getCode(),
-                SuccessStatus.Question_OK.getMessage(),
+                SuccessStatus.User_OK,
                 UserConverter.toUserUpdateDTO(user)
         );
     }
@@ -101,8 +97,7 @@ public class UserRestController {
     @PatchMapping("/delete")
     public ApiResponse<UserResponseDTO.deleteUserDTO> delete() {
         return ApiResponse.onSuccess(
-                SuccessStatus.Question_OK.getCode(),
-                SuccessStatus.Question_OK.getMessage(),
+                SuccessStatus.User_OK,
                 UserConverter.toUserDeleteDTO()
         );
     }
@@ -114,8 +109,7 @@ public class UserRestController {
     @PostMapping("/test")
     public ApiResponse<UserResponseDTO.JoinResultDTO> createTestUser() {
         return ApiResponse.onSuccess(
-                SuccessStatus.User_OK.getCode(),
-                SuccessStatus.User_OK.getMessage(),
+                SuccessStatus.User_OK,
                 UserConverter.createTestUser(userService.createTestUser())
         );
     }

@@ -1,4 +1,4 @@
-package qp.official.qp.service;
+package qp.official.qp.service.UserService;
 
 
 import com.google.gson.Gson;
@@ -10,7 +10,6 @@ import qp.official.qp.domain.User;
 import qp.official.qp.domain.enums.Gender;
 import qp.official.qp.domain.enums.Role;
 import qp.official.qp.repository.UserRepository;
-import qp.official.qp.service.TokenService.TokenService;
 import qp.official.qp.web.dto.UserAuthDTO.KaKaoUserInfoDTO;
 import qp.official.qp.web.dto.UserRequestDTO;
 
@@ -29,7 +28,6 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
-    private final TokenService tokenService;
     private final Gson gson;
 
     /**

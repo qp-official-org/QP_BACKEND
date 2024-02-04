@@ -28,22 +28,31 @@ public class HashtagController {
     @PostMapping("/")
     public ApiResponse<HashtagResponseDTO.HashtagReturnDTO> generate(@RequestBody HashtagRequestDTO.HashtagDTO request){
         Hashtag hashtag = hashtagQueryService.saveHashtag(request);
-        return ApiResponse.onSuccess(SuccessStatus.Hashtag_OK.getCode(), SuccessStatus.Hashtag_OK.getMessage(), HashtagConverter.toHashtagResultDTO(hashtag));
+        return ApiResponse.onSuccess(
+            SuccessStatus.Hashtag_OK,
+            HashtagConverter.toHashtagResultDTO(hashtag));
     }
 
     @GetMapping("/")
     public ApiResponse<HashtagResponseDTO.HashtagReturnDTO> findHashtag(@RequestBody HashtagRequestDTO.HashtagDTO request){
         Hashtag hashtag = hashtagCommandService.findHashtag(request);
-        return ApiResponse.onSuccess(SuccessStatus.Hashtag_OK.getCode(), SuccessStatus.Hashtag_OK.getMessage(), HashtagConverter.toHashtagResultDTO(hashtag));
+        return ApiResponse.onSuccess(
+            SuccessStatus.Hashtag_OK,
+            HashtagConverter.toHashtagResultDTO(hashtag));
     }
 
     @DeleteMapping("/{hashtagId}")
     public ApiResponse<HashtagResponseDTO.HashtagReturnDTO> deleteHashtag(@PathVariable Long hashtagId){
         try {
             Hashtag hashtag = hashtagQueryService.deleteHashtag(hashtagId);
-            return ApiResponse.onSuccess(SuccessStatus.Hashtag_OK.getCode(), SuccessStatus.Hashtag_OK.getMessage(), HashtagConverter.toHashtagResultDTO(hashtag));
+            return ApiResponse.onSuccess(
+                SuccessStatus.Hashtag_OK,
+                HashtagConverter.toHashtagResultDTO(hashtag));
         } catch (Exception e) {
-            return ApiResponse.onFailure(ErrorStatus.HASHTAG_NOT_EXIST.getCode(), ErrorStatus.HASHTAG_NOT_EXIST.getMessage(), null);
+            return ApiResponse.onFailure(
+                ErrorStatus.HASHTAG_NOT_EXIST.getCode(),
+                ErrorStatus.HASHTAG_NOT_EXIST.getMessage(),
+                null);
         }
     }
 

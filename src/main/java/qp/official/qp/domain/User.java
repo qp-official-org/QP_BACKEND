@@ -2,6 +2,7 @@ package qp.official.qp.domain;
 
 import javax.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import qp.official.qp.domain.common.BaseEntity;
@@ -37,13 +38,14 @@ public class User extends BaseEntity {
     private String email;
 
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "VARCHAR(10)")
+    @Column(columnDefinition = "VARCHAR(10) DEFAULT DEFAULT")
     private Gender gender;
 
+    @ColumnDefault("0")
     private Long point;
 
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "VARCHAR(10)")
+    @Column(columnDefinition = "VARCHAR(10) DEFAULT USER")
     private Role role;
 
     @Enumerated(EnumType.STRING)
