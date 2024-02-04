@@ -53,7 +53,7 @@ public class TokenConverter {
     }
 
     public static AccessTokenDTO parseAccessToken(String accessToken, SecretKey key) {
-        Claims body = getJwtBody(accessToken, key);
+        Claims body = isTokenValidByKey(accessToken, key);
 
         Date issuedAt = body.getIssuedAt();
         Date expiredDate = body.getExpiration();
@@ -62,7 +62,7 @@ public class TokenConverter {
     }
 
     public static RefreshTokenDTO parseRefreshToken(String refreshToken, SecretKey key) {
-        Claims body = getJwtBody(refreshToken, key);
+        Claims body = isTokenValidByKey(refreshToken, key);
 
         Date issuedAt = body.getIssuedAt();
         Date expiredDate = body.getExpiration();
@@ -70,7 +70,8 @@ public class TokenConverter {
         return createRefreshTokenDTO(userId, refreshToken, issuedAt, expiredDate);
     }
 
-    private static Claims getJwtBody(String token, SecretKey key) {
+    // 토큰 파싱 및 검증
+    private static Claims isTokenValidByKey(String token, SecretKey key) {
         JwtParser parser = Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build();

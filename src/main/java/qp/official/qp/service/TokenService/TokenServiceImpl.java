@@ -84,7 +84,8 @@ public class TokenServiceImpl implements TokenService {
         AccessTokenDTO accessTokenDTO = TokenConverter.parseAccessToken(accessToken, key);
 
         // 토큰 유효성 검사 (userId)
-        if (accessTokenDTO.isMatchUserId(userId)) {
+
+        if (!accessTokenDTO.isMatchUserId(userId)) {
             throw new TokenHandler(ErrorStatus.TOKEN_NOT_MATCH);
         }
 

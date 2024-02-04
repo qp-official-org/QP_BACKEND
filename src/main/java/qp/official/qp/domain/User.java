@@ -1,19 +1,19 @@
 package qp.official.qp.domain;
 
-import javax.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import qp.official.qp.domain.common.BaseEntity;
 import qp.official.qp.domain.enums.Gender;
-import qp.official.qp.domain.enums.UserStatus;
 import qp.official.qp.domain.enums.Role;
+import qp.official.qp.domain.enums.UserStatus;
 import qp.official.qp.domain.mapping.AnswerLikes;
 import qp.official.qp.web.dto.TokenDTO.RefreshTokenDTO;
 
-import java.sql.Timestamp;
+import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -79,6 +79,8 @@ public class User extends BaseEntity {
 
     public void setRefreshToken(RefreshTokenDTO refreshTokenDTO) {
         this.refreshToken = refreshTokenDTO.getRefreshToken();
-        this.refreshTokenExpiresAt = Timestamp.valueOf(refreshTokenDTO.getExpiredAt().toString()).toLocalDateTime();
+        this.refreshTokenExpiresAt = refreshTokenDTO.getExpiredAt().toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime();
     }
 }
