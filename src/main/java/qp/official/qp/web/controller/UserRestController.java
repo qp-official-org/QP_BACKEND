@@ -68,9 +68,6 @@ public class UserRestController {
         );
     }
 
-    @Operation(summary = "자동로그인"
-            , security = {@SecurityRequirement(name = "accessToken"), @SecurityRequirement(name = "refreshToken")}
-    )
     @PostMapping("/auto_sign_in")
     @Operation(
             summary = "자동 로그인 API"
