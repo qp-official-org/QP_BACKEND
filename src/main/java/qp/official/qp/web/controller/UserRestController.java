@@ -1,7 +1,7 @@
 package qp.official.qp.web.controller;
 
-import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.parser.ParseException;
@@ -46,8 +46,7 @@ public class UserRestController {
     }
 
 
-
-    @ApiOperation(value = "유저 정보 조회", notes = "유저 정보 조회")
+    //    @ApiOperation(value = "유저 정보 조회", notes = "유저 정보 조회")
     @GetMapping("/{userId}")
     @Operation(summary = "유저 정보 조회 API", description = "특정 유저 정보를 조회하는 API입니다. path variable로 조회할 userId를 주세요.")
     public ApiResponse<UserResponseDTO.GetUserInfoDTO> getUserInfo(
@@ -66,6 +65,9 @@ public class UserRestController {
         );
     }
 
+    @Operation(summary = "자동로그인"
+            , security = {@SecurityRequirement(name = "accessToken"), @SecurityRequirement(name = "refreshToken")}
+    )
     @PostMapping("/auto_sign_in")
     public ApiResponse<UserResponseDTO.AutoLoginDTO> autoSignIn(
             @RequestBody UserRequestDTO.AutoLoginRequestDTO request
@@ -79,7 +81,7 @@ public class UserRestController {
         );
     }
 
-    @ApiOperation(value = "유저 정보 수정", notes = "유저 정보 수정")
+    //    @ApiOperation(value = "유저 정보 수정", notes = "유저 정보 수정")
     @PatchMapping("/{userId}")
     @Operation(summary = "유저 정보 수정 API", description = "특정 유저 정보를 수정하는 API입니다. path variable로 수정할 userId를 주세요.")
     public ApiResponse<UserResponseDTO.UpdateUserInfoDTO> updateUserInfo(
@@ -107,6 +109,7 @@ public class UserRestController {
 
     @Operation(summary = "테스트 유저 생성", description =
             "# Test User를 생성합니다. 다른 기능을 테스트 할때 이용 하세요"
+            , security = {@SecurityRequirement(name = "accessToken"), @SecurityRequirement(name = "refreshToken")}
     )
     @PostMapping("/test")
     public ApiResponse<UserResponseDTO.JoinResultDTO> createTestUser() {

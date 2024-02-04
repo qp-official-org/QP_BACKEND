@@ -1,11 +1,9 @@
 package qp.official.qp.web.dto;
 
-import io.swagger.models.auth.In;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import qp.official.qp.domain.Answer;
 import qp.official.qp.domain.enums.Category;
 
 import java.time.LocalDateTime;
