@@ -1,6 +1,7 @@
 package qp.official.qp.web.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.validation.annotation.Validated;
@@ -34,6 +35,11 @@ public class QuestionController {
 
     // 질문 작성
     @PostMapping
+    @Operation(
+            summary = "질문 작성 API"
+            , description = "Header에 accessToken 필요. Request Body에 생성할 질문을 입력하세요."
+            , security = @SecurityRequirement(name = "accessToken")
+    )
     public ApiResponse<QuestionResponseDTO.CreateResultDTO> createQuestion(
             @RequestBody @Valid QuestionRequestDTO.CreateDTO request
     ) {
@@ -49,6 +55,7 @@ public class QuestionController {
 
     // 특정 질문 조회
     @GetMapping("/{questionId}")
+    @Operation(summary = "특정 질문 조회 API",description = "path variable로 조회 할 questionId를 입력하세요.")
     public ApiResponse<QuestionResponseDTO.QuestionDTO> findQuestion(
             @PathVariable @ExistQuestion Long questionId
     ) {
@@ -62,6 +69,7 @@ public class QuestionController {
 
     // 전체 질문 페이징 조회 (검색 가능)
     @GetMapping
+    @Operation(summary = "전체 질문 조회 API",description = "RequestParam으로 페이징 조회를 위한 page와 size를 입력하세요. 검색을 원할 경우 search를 입력하세요.")
     public ApiResponse<QuestionResponseDTO.QuestionPreviewListDTO> findQuestionByPaging(
             @RequestParam @Min(0) Integer page,
             @RequestParam @Min(1) @Max(10) Integer size,
@@ -84,7 +92,7 @@ public class QuestionController {
 
     // 질문 삭제
     @DeleteMapping("/{questionId}")
-    @Operation(summary = "질문 삭제 API",description = "특정 질문을 삭제하는 API입니다. path variable로 questionId를 주세요")
+    @Operation(summary = "질문 삭제 API", description = "path variable로 삭제할 questionId를 입력하세요.")
     public ApiResponse<?> deleteQuestion(
             @ExistQuestion @PathVariable Long questionId,
             @RequestParam("userId") @ExistUser Long userId) {
@@ -99,7 +107,7 @@ public class QuestionController {
 
     // 질문 수정
     @PatchMapping("/{questionId}")
-    @Operation(summary = "질문 수정 API",description = "특정 질문을 수정하는 API입니다. path variable로 questionId와 Reauest Body로 수정할 title과 content를 주세요")
+    @Operation(summary = "질문 수정 API", description = "path variable로 questionId를 입력하고, Reauest Body에 수정할 title과 content를 입력하세요.")
     public ApiResponse<QuestionResponseDTO.QuestionUpdateResultDTO> updateQuestion(
             @RequestBody @Valid QuestionRequestDTO.UpdateDTO request,
             @ExistQuestion @PathVariable Long questionId) {
