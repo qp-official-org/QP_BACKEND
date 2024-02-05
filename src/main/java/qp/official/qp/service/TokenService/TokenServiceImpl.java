@@ -156,26 +156,4 @@ public class TokenServiceImpl implements TokenService {
 
         return token;
     }
-
-    // JWT Token 을 이용해 userId 가져오기
-    private Long getUserIdFromToken(String token) {
-
-        if (token == null || token.isEmpty()) {
-            throw new TokenHandler(ErrorStatus.TOKEN_NOT_EXIST);
-        }
-
-        Jws<Claims> jws;
-
-        try {
-            jws = Jwts.parserBuilder()
-                    .setSigningKey(key)
-                    .build()
-                    .parseClaimsJws(token);
-        } catch (Exception e) {
-            throw new TokenHandler(ErrorStatus.TOKEN_NOT_MATCH);
-        }
-
-        return jws.getBody()
-                .get("userId", Long.class);
-    }
 }
