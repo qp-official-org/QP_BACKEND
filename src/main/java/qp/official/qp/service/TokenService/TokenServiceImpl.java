@@ -141,9 +141,10 @@ public class TokenServiceImpl implements TokenService {
     public TokenResponseDTO createToken(Long userId) {
         User findUser = userRepository.findById(userId).get();
 
+
         if (findUser.getRefreshToken() != null){
             return TokenResponseDTO.builder()
-                .accessToken(getJWT())
+                .accessToken(generateJWT(userId))
                 .refreshToken(findUser.getRefreshToken())
                 .build();
         }
