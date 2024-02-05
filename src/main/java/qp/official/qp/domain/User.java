@@ -19,6 +19,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@Table(name = "users")
 @Builder
 @DynamicUpdate
 @DynamicInsert
