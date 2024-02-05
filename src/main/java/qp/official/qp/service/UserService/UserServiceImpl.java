@@ -2,15 +2,9 @@ package qp.official.qp.service.UserService;
 
 
 import com.google.gson.Gson;
-import java.io.BufferedWriter;
-import java.io.OutputStreamWriter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Service;
-import qp.official.qp.apiPayload.code.BaseErrorCode;
 import qp.official.qp.apiPayload.code.status.ErrorStatus;
 import qp.official.qp.apiPayload.exception.handler.UserHandler;
 import qp.official.qp.converter.UserConverter;
@@ -89,11 +83,12 @@ public class UserServiceImpl implements UserService {
         }catch (IOException e){
             throw new UserHandler(ErrorStatus.TOKEN_NOT_INCORRECT);
         }
-
         String email = userInfo.getKakao_account().getEmail();
+        if (userRepository.existsByEmail(email)){
+            return userRepository.findByEmail(email);
+        }
 
         User newUser = UserConverter.toUserDTO(email, userInfo.getProperties().getNickname());
-
         return userRepository.save(newUser);
     }
 
@@ -122,59 +117,6 @@ public class UserServiceImpl implements UserService {
         }
 
         return gson.fromJson(res.toString(), KaKaoUserInfoDTO.class);
-    }
-    public String getTokenByAuthorizeCode(String code) throws IOException {
-        String host = "https://kauth.kakao.com/oauth/token"; // 리다이렉트 보낼 URL
-        URL url = new URL(host);
-        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-        String token = "";
-        try {
-
-            urlConnection.setRequestProperty("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
-            urlConnection.setRequestMethod("POST"); // POST 메소드로 보냄
-            urlConnection.setDoOutput(true); // 기록 보여주기
-
-            BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(urlConnection.getOutputStream()));
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("grant_type=authorization_code");
-            stringBuilder.append("&client_id=5f7c349cebbbf1716e105b687b6428b7");
-            stringBuilder.append("&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fusers%2Fsign_up");
-            stringBuilder.append("&code=" + code);
-
-            bufferedWriter.write(stringBuilder.toString());
-            bufferedWriter.flush();
-
-            int responseCode = urlConnection.getResponseCode();
-            log.info("responseCode : {}", responseCode);
-
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-            String line = "";
-            String result = "";
-            while ((line = bufferedReader.readLine()) != null) {
-                result += line;
-            }
-            log.info("result : {}",  result);
-
-            JSONParser jsonParser = new JSONParser();
-            JSONObject jsonObject = (JSONObject) jsonParser.parse(result);
-
-            String accessToken = jsonObject.get("access_token").toString();
-            String refreshToken = jsonObject.get("refresh_token").toString();
-            log.info("accessToken : {}", accessToken);
-            log.info("refreshToken : {}", refreshToken);
-
-            token = accessToken;
-            bufferedReader.close();
-            bufferedWriter.close();
-
-        }catch (IOException e){
-            e.printStackTrace();
-
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
-
-        return token;
     }
 
 }

@@ -140,6 +140,14 @@ public class TokenServiceImpl implements TokenService {
     @Override
     public TokenResponseDTO createToken(Long userId) {
         User findUser = userRepository.findById(userId).get();
+
+        if (findUser.getRefreshToken() != null){
+            return TokenResponseDTO.builder()
+                .accessToken(getJWT())
+                .refreshToken(findUser.getRefreshToken())
+                .build();
+        }
+
         String refreshToken = generateRefreshToken(userId);
         findUser.setRefreshToken(refreshToken);
         userRepository.save(findUser);
