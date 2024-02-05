@@ -10,6 +10,7 @@ import qp.official.qp.converter.AnswerReportConverter;
 import qp.official.qp.domain.mapping.AnswerReport;
 import qp.official.qp.service.AnswerReportService.AnswerReportCommandService;
 import qp.official.qp.service.AnswerReportService.AnswerReportQueryService;
+import qp.official.qp.service.TokenService.TokenService;
 import qp.official.qp.validation.annotation.ExistAnswer;
 import qp.official.qp.validation.annotation.ExistAnswerReport;
 import qp.official.qp.web.dto.AnswerReportRequestDTO;
@@ -24,6 +25,8 @@ import javax.validation.Valid;
 @RequestMapping("/report")
 public class AnswerReportController {
 
+    private final TokenService tokenService;
+
     private final AnswerReportCommandService answerReportCommandService;
     private final AnswerReportQueryService answerReportQueryService;
 
@@ -34,6 +37,7 @@ public class AnswerReportController {
         @RequestBody @Valid AnswerReportRequestDTO.AnswerReportDTO request,
         @PathVariable @ExistAnswer Long answerId)
     {
+        tokenService.isValidToken(request.getUserId());
         AnswerReport answerReport = answerReportCommandService.createAnswerReport(request, answerId);
         return ApiResponse.onSuccess(
                 SuccessStatus.Report_OK,
