@@ -1,5 +1,6 @@
 package qp.official.qp.web.dto;
 
+import javax.validation.constraints.NotBlank;
 import lombok.*;
 
 
@@ -7,6 +8,7 @@ public class UserAuthDTO {
 
     @Getter
     @Builder
+    @NotBlank
     @NoArgsConstructor
     @AllArgsConstructor
     public static class UserSignUpDTO {
@@ -18,6 +20,7 @@ public class UserAuthDTO {
 
     @Getter
     @Builder
+    @NotBlank
     @NoArgsConstructor
     @AllArgsConstructor
     public static class KaKaoUserInfoDTO {
@@ -29,6 +32,7 @@ public class UserAuthDTO {
 
     @Getter
     @Builder
+    @NotBlank
     @NoArgsConstructor
     @AllArgsConstructor
     public static class KaKaoAccountDTO {
@@ -41,6 +45,7 @@ public class UserAuthDTO {
 
     @Getter
     @Builder
+    @NotBlank
     @NoArgsConstructor
     @AllArgsConstructor
     public static class KaKaoPropertiesDTO{

@@ -1,6 +1,7 @@
 package qp.official.qp.web.dto;
 
 import lombok.*;
+import qp.official.qp.validation.annotation.ExistUser;
 
 
 public class UserRequestDTO {
@@ -18,6 +19,7 @@ public class UserRequestDTO {
      */
     @Getter
     public static class AutoLoginRequestDTO {
+        @ExistUser
         private Long userId;
     }
 
