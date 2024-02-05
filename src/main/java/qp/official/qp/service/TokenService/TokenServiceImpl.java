@@ -106,9 +106,16 @@ public class TokenServiceImpl implements TokenService {
         // Access Token, Refresh Token 생성
         AccessTokenDTO accessToken = createAccessToken(userId);
         RefreshTokenDTO refreshToken = createRefreshToken(userId);
-
-        // DB에 저장
         User findUser = userRepository.findById(userId).get();
+
+
+        if (findUser.getRefreshToken() != null){
+            return TokenResponseDTO.builder()
+                .accessToken(accessToken.getAccessToken())
+                .refreshToken(findUser.getRefreshToken())
+                .build();
+        }
+
         findUser.setRefreshToken(refreshToken);
         userRepository.save(findUser);
 
