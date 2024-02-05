@@ -38,18 +38,18 @@ public class User extends BaseEntity {
     private String email;
 
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "VARCHAR(10) DEFAULT DEFAULT")
+    @Column
     private Gender gender;
 
     @ColumnDefault("0")
     private Long point;
 
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "VARCHAR(10) DEFAULT USER")
+    @Column
     private Role role;
 
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "VARCHAR(15) DEFAULT 'ACTIVE'")
+    @Column
     private UserStatus status;
 
     private LocalDateTime lastLogin;
