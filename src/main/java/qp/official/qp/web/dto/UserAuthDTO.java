@@ -8,19 +8,21 @@ public class UserAuthDTO {
 
     @Getter
     @Builder
-    @NotBlank
     @NoArgsConstructor
     @AllArgsConstructor
     public static class UserSignUpDTO {
+        @NotBlank
         String name;
+        @NotBlank
         String nickname;
+        @NotBlank
         String email;
+        @NotBlank
         String profileImage;
     }
 
     @Getter
     @Builder
-    @NotBlank
     @NoArgsConstructor
     @AllArgsConstructor
     public static class KaKaoUserInfoDTO {
@@ -32,7 +34,6 @@ public class UserAuthDTO {
 
     @Getter
     @Builder
-    @NotBlank
     @NoArgsConstructor
     @AllArgsConstructor
     public static class KaKaoAccountDTO {
@@ -40,17 +41,20 @@ public class UserAuthDTO {
         Boolean email_needs_agreement;
         Boolean is_email_valid;
         Boolean is_email_verified;
+        @NotBlank
         String email;
     }
 
     @Getter
     @Builder
-    @NotBlank
     @NoArgsConstructor
     @AllArgsConstructor
     public static class KaKaoPropertiesDTO{
+        @NotBlank
         String nickname;
+        @NotBlank
         String profile_image;
+        @NotBlank
         String thumbnail_image;
     }
 }

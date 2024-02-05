@@ -15,11 +15,11 @@ public class QuestionRequestDTO {
     public static class CreateDTO {
         @ExistUser
         Long userId;
-        @NotBlank
+
         @Size(min = 1, max = 50)
         @NotBlank
         String title;
-        @NotBlank
+
         @Size(min = 1, max = 1500)
         @NotBlank
         String content;
@@ -34,11 +34,11 @@ public class QuestionRequestDTO {
     public static class UpdateDTO {
         @ExistUser
         Long userId;
-        @NotBlank
+
         @Size(min = 1, max = 50)
         @NotBlank
         String title;
-        @NotBlank
+
         @Size(min = 1, max = 1500)
         @NotBlank
         String content;
