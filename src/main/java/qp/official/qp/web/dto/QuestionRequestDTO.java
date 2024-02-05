@@ -1,5 +1,6 @@
 package qp.official.qp.web.dto;
 
+import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import qp.official.qp.validation.annotation.ExistHashTag;
 import qp.official.qp.validation.annotation.ExistUser;
@@ -14,14 +15,16 @@ public class QuestionRequestDTO {
     public static class CreateDTO {
         @ExistUser
         Long userId;
+
         @NotBlank
         @Size(min = 1, max = 50)
         String title;
+      
         @NotBlank
         @Size(min = 1, max = 1500)
         String content;
 
-        // size = 1, max = 10
+        @NotNull
         @Size(min = 0, max = 10)
         @ExistHashTag
         List<Long> hashtag;
