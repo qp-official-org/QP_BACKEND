@@ -111,12 +111,11 @@ public class TokenServiceImpl implements TokenService {
 
         if (findUser.getRefreshToken() != null){
             return TokenResponseDTO.builder()
-                .accessToken(generateJWT(userId))
+                .accessToken(accessToken.getAccessToken())
                 .refreshToken(findUser.getRefreshToken())
                 .build();
         }
 
-        String refreshToken = generateRefreshToken(userId);
         findUser.setRefreshToken(refreshToken);
         userRepository.save(findUser);
 

@@ -2,8 +2,13 @@ package qp.official.qp.service.UserService;
 
 
 import com.google.gson.Gson;
+import java.io.BufferedWriter;
+import java.io.OutputStreamWriter;
+import java.text.ParseException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.stereotype.Service;
 import qp.official.qp.apiPayload.code.status.ErrorStatus;
 import qp.official.qp.apiPayload.exception.handler.UserHandler;
@@ -96,7 +101,6 @@ public class UserServiceImpl implements UserService {
     public User autoSignIn(Long userId) {
         return userRepository.findById(userId).get();
     }
-
 
     private KaKaoUserInfoDTO getUserInfoByToken(String accessToken) throws IOException {
 
