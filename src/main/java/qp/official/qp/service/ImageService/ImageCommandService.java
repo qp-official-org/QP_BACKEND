@@ -6,13 +6,13 @@ import qp.official.qp.domain.Image;
 
 public interface ImageCommandService {
 
-    public String upload(MultipartFile multipartFile) throws IOException;
+     String upload(MultipartFile multipartFile) throws IOException;
 
-    public Image saveImage(MultipartFile multipartFile) throws IOException;
+     Image saveImage(MultipartFile multipartFile) throws IOException;
 
-    public void deleteImage(String url) throws IOException;
+     void deleteImage(String url) throws IOException;
 
-    public void deleteAllImages() throws IOException;
+     void deleteAllImages() throws IOException;
 
 
 

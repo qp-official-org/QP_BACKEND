@@ -1,6 +1,5 @@
-package qp.official.qp.web.dto;
+package qp.official.qp.web.dto.TokenDTO;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 

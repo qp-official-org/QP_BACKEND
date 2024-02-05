@@ -1,16 +1,19 @@
 package qp.official.qp.domain;
 
-import javax.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import qp.official.qp.domain.common.BaseEntity;
 import qp.official.qp.domain.enums.Gender;
-import qp.official.qp.domain.enums.UserStatus;
 import qp.official.qp.domain.enums.Role;
+import qp.official.qp.domain.enums.UserStatus;
 import qp.official.qp.domain.mapping.AnswerLikes;
+import qp.official.qp.web.dto.TokenDTO.RefreshTokenDTO;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,27 +40,25 @@ public class User extends BaseEntity {
     private String email;
 
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "VARCHAR(10)")
+    @Column
     private Gender gender;
 
+    @ColumnDefault("0")
     private Long point;
 
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "VARCHAR(10)")
+    @Column
     private Role role;
 
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "VARCHAR(15) DEFAULT 'ACTIVE'")
+    @Column
     private UserStatus status;
 
     private LocalDateTime lastLogin;
 
-    @Setter
     @Column(name = "refresh_token")
     private String refreshToken;
 
-    @Setter
-    @Column(name = "refresh_token_expires_at")
     private LocalDateTime refreshTokenExpiresAt;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
@@ -74,5 +75,12 @@ public class User extends BaseEntity {
     }
     public void updateProfileImage(String profileImage){
         this.profileImage = profileImage;
+    }
+
+    public void setRefreshToken(RefreshTokenDTO refreshTokenDTO) {
+        this.refreshToken = refreshTokenDTO.getRefreshToken();
+        this.refreshTokenExpiresAt = refreshTokenDTO.getExpiredAt().toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime();
     }
 }

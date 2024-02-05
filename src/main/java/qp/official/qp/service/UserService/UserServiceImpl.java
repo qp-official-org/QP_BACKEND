@@ -1,16 +1,22 @@
-package qp.official.qp.service;
+package qp.official.qp.service.UserService;
 
 
 import com.google.gson.Gson;
+import java.io.BufferedWriter;
+import java.io.OutputStreamWriter;
+import java.text.ParseException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.stereotype.Service;
+import qp.official.qp.apiPayload.code.status.ErrorStatus;
+import qp.official.qp.apiPayload.exception.handler.UserHandler;
 import qp.official.qp.converter.UserConverter;
 import qp.official.qp.domain.User;
 import qp.official.qp.domain.enums.Gender;
 import qp.official.qp.domain.enums.Role;
 import qp.official.qp.repository.UserRepository;
-import qp.official.qp.service.TokenService.TokenService;
 import qp.official.qp.web.dto.UserAuthDTO.KaKaoUserInfoDTO;
 import qp.official.qp.web.dto.UserRequestDTO;
 
@@ -29,7 +35,6 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
-    private final TokenService tokenService;
     private final Gson gson;
 
     /**
@@ -76,12 +81,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public User signUp(String accessToken) throws IOException {
-        KaKaoUserInfoDTO userInfo = getUserInfoByToken(accessToken);
+    public User signUp(String accessToken){
+        KaKaoUserInfoDTO userInfo;
+        try {
+            userInfo = getUserInfoByToken(accessToken);
+        }catch (IOException e){
+            throw new UserHandler(ErrorStatus.TOKEN_NOT_INCORRECT);
+        }
         String email = userInfo.getKakao_account().getEmail();
+        if (userRepository.existsByEmail(email)){
+            return userRepository.findByEmail(email);
+        }
 
         User newUser = UserConverter.toUserDTO(email, userInfo.getProperties().getNickname());
-
         return userRepository.save(newUser);
     }
 
@@ -89,7 +101,6 @@ public class UserServiceImpl implements UserService {
     public User autoSignIn(Long userId) {
         return userRepository.findById(userId).get();
     }
-
 
     private KaKaoUserInfoDTO getUserInfoByToken(String accessToken) throws IOException {
 
