@@ -16,9 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "users")
 @Getter
 @Builder
+@Table(name = "users")
 @DynamicUpdate
 @DynamicInsert
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -39,14 +39,14 @@ public class User extends BaseEntity {
     private String email;
 
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "VARCHAR(10) DEFAULT DEFAULT")
+    @Column(columnDefinition = "VARCHAR(10) DEFAULT 'DEFAULT'")
     private Gender gender;
 
     @ColumnDefault("0")
     private Long point;
 
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "VARCHAR(10) DEFAULT USER")
+    @Column(columnDefinition = "VARCHAR(10) DEFAULT 'USER'")
     private Role role;
 
     @Enumerated(EnumType.STRING)
