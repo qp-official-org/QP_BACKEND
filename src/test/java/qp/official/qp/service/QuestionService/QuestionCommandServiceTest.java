@@ -109,7 +109,7 @@ class QuestionCommandServiceTest {
 
         // 연관관계 검증
         assertEquals(question.getUser().getUserId(), userId);
-        assertEquals(question.getUser().getQuestionList().size(), 2);
+        assertEquals(question.getUser().getQuestionList().size(), hashtagSize);
         assertEquals(question.getUser().getQuestionList().get(0).getQuestionId(), questionId);
         for (int i = 0; i < question.getQuestionHashTagList().size(); i++) {
             assertEquals(question.getQuestionHashTagList().get(i).getHashtag().getHashtagId(), hashtags.get(i).getHashtagId());
