@@ -23,7 +23,7 @@ class ImageRepositoryTest {
     void findByUrlTest(){
         // given
         String url = "http://test/image";
-        String fileName = "testing";
+        String fileName = "test.png";
 
         Image image = Image.builder()
             .fileName(fileName)
@@ -45,7 +45,7 @@ class ImageRepositoryTest {
     void existByUrlTest(){
         // given
         String url = "http://test/image";
-        String fileName = "testing";
+        String fileName = "test.png";
 
         Image image = Image.builder()
             .fileName(fileName)
@@ -77,7 +77,7 @@ class ImageRepositoryTest {
     void existByFileNameTest(){
         // given
         String url = "http://test/image";
-        String fileName = "testing";
+        String fileName = "test.png";
 
         Image image = Image.builder()
             .fileName(fileName)
