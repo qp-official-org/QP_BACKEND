@@ -1,9 +1,13 @@
 package qp.official.qp.web.dto;
 
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import qp.official.qp.validation.annotation.ExistHashTag;
 import qp.official.qp.validation.annotation.ExistUser;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.List;
 
@@ -13,12 +17,17 @@ public class QuestionRequestDTO {
     public static class CreateDTO {
         @ExistUser
         Long userId;
+
+        @NotBlank
         @Size(min = 1, max = 50)
         String title;
+
+
         @Size(min = 1, max = 1500)
+        @NotBlank
         String content;
 
-        // size = 1, max = 10
+        @NotNull
         @Size(min = 0, max = 10)
         @ExistHashTag
         List<Long> hashtag;
@@ -28,9 +37,13 @@ public class QuestionRequestDTO {
     public static class UpdateDTO {
         @ExistUser
         Long userId;
+
         @Size(min = 1, max = 50)
+        @NotBlank
         String title;
+
         @Size(min = 1, max = 1500)
+        @NotBlank
         String content;
     }
 }

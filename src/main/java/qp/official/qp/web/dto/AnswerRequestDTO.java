@@ -11,9 +11,11 @@ public class AnswerRequestDTO {
     public static class AnswerCreateDTO {
         @ExistUser
         Long userId;
+        @NotBlank
         String title;
         @NotBlank
         String content;
+        @NotBlank
         Category category;
         Long answerGroup;
     }
@@ -22,6 +24,7 @@ public class AnswerRequestDTO {
     public static class AnswerUpdateDTO {
         @ExistUser
         Long userId;
+        @NotBlank
         String title;
         @NotBlank
         String content;
