@@ -22,6 +22,10 @@ public class ExistQuestionValidator implements ConstraintValidator<ExistQuestion
 
     @Override
     public boolean isValid(Long questionId, ConstraintValidatorContext context) {
+        // null check
+        if (questionId == null) {
+            return true;
+        }
 
         // isExist Question
         boolean isValid = questionRepository.findById(questionId).isPresent();
