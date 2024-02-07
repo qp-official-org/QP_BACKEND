@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService {
     public User updateUserInfo(Long userId, UserRequestDTO.UpdateUserInfoRequestDTO requestDTO) {
         User user = userRepository.findById(userId).get();
         user.updateNickname(requestDTO.getNickname());
-        user.updateProfileImage(requestDTO.getProfile_image());
+        user.updateProfileImage(requestDTO.getProfileImage());
         return user;
     }
 
