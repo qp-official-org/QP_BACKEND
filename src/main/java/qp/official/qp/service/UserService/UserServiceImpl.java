@@ -58,8 +58,17 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public User updateUserInfo(Long userId, UserRequestDTO.UpdateUserInfoRequestDTO requestDTO) {
         User user = userRepository.findById(userId).get();
-        user.updateNickname(requestDTO.getNickname());
-        user.updateProfileImage(requestDTO.getProfile_image());
+
+        String updateNickname = requestDTO.getNickname();
+        String updateProfileImage = requestDTO.getProfile_image();
+
+        if (updateNickname != null && !updateNickname.isEmpty()){
+            user.updateNickname(requestDTO.getNickname());
+        }
+
+        if (updateProfileImage != null && !updateProfileImage.isEmpty()){
+            user.updateProfileImage(requestDTO.getProfile_image());
+        }
         return user;
     }
 
