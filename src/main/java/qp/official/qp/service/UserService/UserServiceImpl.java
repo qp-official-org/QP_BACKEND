@@ -2,9 +2,16 @@ package qp.official.qp.service.UserService;
 
 
 import com.google.gson.Gson;
+import java.io.BufferedWriter;
+import java.io.OutputStreamWriter;
+import java.text.ParseException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.stereotype.Service;
+import qp.official.qp.apiPayload.code.status.ErrorStatus;
+import qp.official.qp.apiPayload.exception.handler.UserHandler;
 import qp.official.qp.converter.UserConverter;
 import qp.official.qp.domain.User;
 import qp.official.qp.domain.enums.Gender;
@@ -51,8 +58,18 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public User updateUserInfo(Long userId, UserRequestDTO.UpdateUserInfoRequestDTO requestDTO) {
         User user = userRepository.findById(userId).get();
-        user.updateNickname(requestDTO.getNickname());
-        user.updateProfileImage(requestDTO.getProfile_image());
+
+        String updateNickname = requestDTO.getNickname();
+        String updateProfileImage = requestDTO.getProfileImage();
+
+        if (updateNickname != null && !updateNickname.isEmpty()){
+            user.updateNickname(requestDTO.getNickname());
+        }
+
+        if (updateProfileImage != null && !updateProfileImage.isEmpty()){
+            user.updateProfileImage(requestDTO.getProfileImage());
+        }
+
         return user;
     }
 
@@ -74,12 +91,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public User signUp(String accessToken) throws IOException {
-        KaKaoUserInfoDTO userInfo = getUserInfoByToken(accessToken);
+    public User signUp(String accessToken){
+        KaKaoUserInfoDTO userInfo;
+        try {
+            userInfo = getUserInfoByToken(accessToken);
+        }catch (IOException e){
+            throw new UserHandler(ErrorStatus.TOKEN_NOT_INCORRECT);
+        }
         String email = userInfo.getKakao_account().getEmail();
+        if (userRepository.existsByEmail(email)){
+            return userRepository.findByEmail(email);
+        }
 
         User newUser = UserConverter.toUserDTO(email, userInfo.getProperties().getNickname());
-
         return userRepository.save(newUser);
     }
 
@@ -87,7 +111,6 @@ public class UserServiceImpl implements UserService {
     public User autoSignIn(Long userId) {
         return userRepository.findById(userId).get();
     }
-
 
     private KaKaoUserInfoDTO getUserInfoByToken(String accessToken) throws IOException {
 

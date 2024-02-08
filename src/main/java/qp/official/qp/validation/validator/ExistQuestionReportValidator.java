@@ -13,6 +13,7 @@ import javax.validation.ConstraintValidatorContext;
 @RequiredArgsConstructor
 public class ExistQuestionReportValidator implements ConstraintValidator<ExistQuestionReport, Long> {
     private final QuestionReportRepository questionReportRepository;
+
     @Override
     public void initialize(ExistQuestionReport constraintAnnotation) {
         ConstraintValidator.super.initialize(constraintAnnotation);
@@ -20,6 +21,9 @@ public class ExistQuestionReportValidator implements ConstraintValidator<ExistQu
 
     @Override
     public boolean isValid(Long reportId, ConstraintValidatorContext context) {
+        if (reportId == null) {
+            return true;
+        }
 
         boolean isValid = true;
 

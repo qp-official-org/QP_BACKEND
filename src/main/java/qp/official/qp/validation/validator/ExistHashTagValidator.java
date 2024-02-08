@@ -24,6 +24,11 @@ public class ExistHashTagValidator implements ConstraintValidator<ExistHashTag, 
     public boolean isValid(List<Long> hashtagList, ConstraintValidatorContext context) {
 
         boolean isValid = true;
+
+        if (hashtagList == null) {
+            return true;
+        }
+
         for (Long hashtagId : hashtagList) {
 
             // 존재 하는지 확인
