@@ -69,6 +69,7 @@ public class UserServiceImpl implements UserService {
         if (updateProfileImage != null && !updateProfileImage.isEmpty()){
             user.updateProfileImage(requestDTO.getProfile_image());
         }
+
         return user;
     }
 
