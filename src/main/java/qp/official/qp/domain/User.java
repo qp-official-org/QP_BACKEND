@@ -41,14 +41,14 @@ public class User extends BaseEntity {
     private String email;
 
     @Enumerated(EnumType.STRING)
-    @Column
+    @Column(columnDefinition = "VARCHAR(10) DEFAULT 'DEFAULT'")
     private Gender gender;
 
     @ColumnDefault("0")
     private Long point;
 
     @Enumerated(EnumType.STRING)
-    @Column
+    @Column(columnDefinition = "VARCHAR(10) DEFAULT 'USER'")
     private Role role;
 
     @Enumerated(EnumType.STRING)
