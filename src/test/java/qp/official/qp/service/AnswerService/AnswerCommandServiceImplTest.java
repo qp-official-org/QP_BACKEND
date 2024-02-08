@@ -6,6 +6,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.Optional;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -38,36 +39,45 @@ class AnswerCommandServiceImplTest {
     private AnswerCommandServiceImpl answerCommandService;
 
     @Test
-    void createAnswer() {
+    @DisplayName("부모 답변 생성 테스트 코드")
+    void createParentAnswer() {
         // given
+
+        // 질문 및 유저 정보
         Long userId = 1L;
         Long questionId = 1L;
         String questionTitle = "questionTestTitle";
 
+        // 답변 정보
         String title = "testTitle";
         String content = "testContent";
         Category category = Category.PARENT;
 
         Long answerId = 1L;
 
+        // 예상 되는 답변 객체 생성
         Answer expectAnswer = Answer.builder()
             .answerId(answerId)
             .title(title)
             .content(content)
             .category(category)
+            .children(new ArrayList<>())
             .build();
 
+        // 테스트 사용자 객체 생성
         User testUser = User.builder()
             .userId(userId)
             .answerList(new ArrayList<>())
             .build();
 
+        // 테스트 질문 객체 생성
         Question testQuestion = Question.builder()
             .questionId(questionId)
             .title(questionTitle)
             .answers(new ArrayList<>())
             .build();
 
+        // 연관 관계 설정
         expectAnswer.setUser(testUser);
         expectAnswer.setQuestion(testQuestion);
 
@@ -80,6 +90,9 @@ class AnswerCommandServiceImplTest {
         // questionRepository.findById
         when(questionRepository.findById(questionId)).thenReturn(Optional.of(testQuestion));
 
+        // answerRepository.findById
+        when(answerRepository.findById(answerId)).thenReturn(Optional.of(expectAnswer));
+
         // when
         AnswerRequestDTO.AnswerCreateDTO request = AnswerRequestDTO.AnswerCreateDTO.builder()
             .userId(userId)
@@ -88,7 +101,25 @@ class AnswerCommandServiceImplTest {
             .category(category)
             .build();
 
+        // 부모 질문 생성
         Answer answer = answerCommandService.createAnswer(request, questionId);
+
+
+
+        // 자식 질문 생성
+        int childAnswerSize = 3;
+        Category child = Category.CHILD;
+
+        for (int i = 0; i < childAnswerSize; i++){
+            AnswerRequestDTO.AnswerCreateDTO childRequest = AnswerRequestDTO.AnswerCreateDTO.builder()
+                .userId(userId)
+                .title("testTitle" + i)
+                .content("testContent" + i)
+                .category(child)
+                .answerGroup(answerId)
+                .build();
+            answerCommandService.createAnswer(childRequest, questionId);
+        }
 
         // then
 
@@ -104,7 +135,14 @@ class AnswerCommandServiceImplTest {
         assertSame(answer.getQuestion().getAnswers().get(0).getAnswerId(), answer.getAnswerId());
         assertEquals(answerId, answer.getQuestion().getAnswers().get(0).getAnswerId());
         assertEquals(answerId, answer.getUser().getAnswerList().get(0).getAnswerId());
+
+        // 자식 관계 검증
+        assertEquals(childAnswerSize, answer.getChildren().size());
+        for (int i = 0; i < answer.getChildren().size(); i++){
+            assertEquals(answerId, answer.getChildren().get(i).getParent().getAnswerId());
+        }
     }
+
 
     @Test
     void addAndDeleteLikeToAnswer() {
