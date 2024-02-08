@@ -3,7 +3,10 @@ package qp.official.qp.web.dto;
 
 import javax.validation.constraints.*;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import qp.official.qp.validation.annotation.ExistHashTag;
 import qp.official.qp.validation.annotation.ExistUser;
 
@@ -13,6 +16,9 @@ import java.util.List;
 public class QuestionRequestDTO {
 
     @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class CreateDTO {
         @NotNull
         @ExistUser
