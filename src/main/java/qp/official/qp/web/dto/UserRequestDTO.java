@@ -14,7 +14,7 @@ public class UserRequestDTO {
     @Getter
     public static class UpdateUserInfoRequestDTO {
         private String nickname;
-        private String profile_image;
+        private String profileImage;
     }
     /**
      * 자동 로그인
