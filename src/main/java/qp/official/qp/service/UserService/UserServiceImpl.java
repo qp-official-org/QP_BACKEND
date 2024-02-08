@@ -60,14 +60,14 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(userId).get();
 
         String updateNickname = requestDTO.getNickname();
-        String updateProfileImage = requestDTO.getProfile_image();
+        String updateProfileImage = requestDTO.getProfileImage();
 
         if (updateNickname != null && !updateNickname.isEmpty()){
             user.updateNickname(requestDTO.getNickname());
         }
 
         if (updateProfileImage != null && !updateProfileImage.isEmpty()){
-            user.updateProfileImage(requestDTO.getProfile_image());
+            user.updateProfileImage(requestDTO.getProfileImage());
         }
 
         return user;
