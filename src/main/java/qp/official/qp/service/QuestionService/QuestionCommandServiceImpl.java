@@ -36,10 +36,10 @@ public class QuestionCommandServiceImpl implements QuestionCommandService {
         List<Hashtag> hashtagList = hashtagRepository.findAllById(request.getHashtag());
 
         // QuestionHashTag 생성
-        List<QuestionHashTag> questionHashTagList = QuestionHashtagConverter.toQuestionHashTagList(newQuestion, hashtagList);
+        newQuestion.addAllHashTag(hashtagList);
 
         // QuestionHashTag 저장
-        questionHashTagRepository.saveAll(questionHashTagList);
+        questionRepository.save(newQuestion);
 
         // FindById User
         User findUser = userRepository.findById(request.getUserId()).get();

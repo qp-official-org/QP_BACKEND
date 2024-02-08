@@ -64,4 +64,32 @@ public class Question extends BaseEntity {
         this.title = request.getTitle();
         this.content = request.getContent();
     }
+
+    public void addHashTag(Hashtag hashtag) {
+        QuestionHashTag questionHashTag = QuestionHashTag.builder()
+                .question(this)
+                .hashtag(hashtag)
+                .build();
+
+        this.questionHashTagList.add(questionHashTag);
+    }
+
+    public void addAllHashTag(List<Hashtag> hashtagList) {
+        for (Hashtag hashtag : hashtagList) {
+            addHashTag(hashtag);
+        }
+    }
+
+    public void removeHashTag(Hashtag hashtag) {
+        this.questionHashTagList.removeIf(questionHashTag -> questionHashTag.getHashtag().equals(hashtag));
+    }
+
+    public void removeAllHashTag() {
+        this.questionHashTagList.clear();
+    }
+
+    public void delete() {
+        this.user.getQuestionList().remove(this);
+        this.getQuestionHashTagList().forEach(questionHashTag -> questionHashTag.getHashtag().getQuestionHashTagList().remove(questionHashTag));
+    }
 }
