@@ -1,5 +1,6 @@
 package qp.official.qp.web.dto;
 
+import lombok.Builder;
 import lombok.Getter;
 import qp.official.qp.validation.annotation.ExistHashTag;
 import qp.official.qp.validation.annotation.ExistUser;
@@ -24,6 +25,7 @@ public class QuestionRequestDTO {
         List<Long> hashtag;
     }
 
+    @Builder
     @Getter
     public static class UpdateDTO {
         @ExistUser

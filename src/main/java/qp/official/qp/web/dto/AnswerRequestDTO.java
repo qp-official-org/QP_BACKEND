@@ -1,5 +1,6 @@
 package qp.official.qp.web.dto;
 
+import lombok.Builder;
 import lombok.Getter;
 
 import javax.validation.constraints.NotBlank;
@@ -18,6 +19,7 @@ public class AnswerRequestDTO {
         Long answerGroup;
     }
 
+    @Builder
     @Getter
     public static class AnswerUpdateDTO {
         @ExistUser

@@ -77,7 +77,7 @@ public class AnswerCommandServiceImpl implements AnswerCommandService {
     }
 
     @Override
-    public Answer updateQuestion(Long answerId, AnswerRequestDTO.AnswerUpdateDTO request){
+    public Answer updateAnswer(Long answerId, AnswerRequestDTO.AnswerUpdateDTO request){
         Answer updateAnswer = answerRepository.findById(answerId).get();
         updateAnswer.update(request);
 

@@ -13,6 +13,6 @@ public interface AnswerCommandService {
 
     void deleteAnswer(Long answerId);
 
-    Answer updateQuestion(Long answerId, AnswerRequestDTO.AnswerUpdateDTO request);
+    Answer updateAnswer(Long answerId, AnswerRequestDTO.AnswerUpdateDTO request);
 
 }
