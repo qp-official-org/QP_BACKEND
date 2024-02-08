@@ -268,9 +268,11 @@ class AnswerCommandServiceImplTest {
         when(answerRepository.findById(answerId)).thenReturn(Optional.of(expectAnswer));
 
         // when
+        // 답변 삭제
         answerCommandService.deleteAnswer(answerId);
 
         // then
+        // delete 메소드가 실행 되었는 지 확인
         verify(answerRepository).delete(expectAnswer);
     }
 
