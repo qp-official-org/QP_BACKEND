@@ -22,6 +22,10 @@ public class ExistUserValidator implements ConstraintValidator<ExistUser, Long> 
 
     @Override
     public boolean isValid(Long userId, ConstraintValidatorContext context) {
+        // null is invalid
+        if (userId == null) {
+            return true;
+        }
 
         // isExist User
         boolean isValid = userRepository.findById(userId).isPresent();

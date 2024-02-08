@@ -22,6 +22,10 @@ public class ExistAnswerValidator implements ConstraintValidator<ExistAnswer, Lo
     @Override
     public boolean isValid(Long answerId, ConstraintValidatorContext context) {
 
+        if (answerId == null) {
+            return true;
+        }
+
         boolean isValid = true;
 
         boolean isExist = answerRepository.findById(answerId).isPresent();
