@@ -84,4 +84,7 @@ public class User extends BaseEntity {
                 .atZone(ZoneId.systemDefault())
                 .toLocalDateTime();
     }
+    public void addAnswer(Answer answer){
+        this.answerList.add(answer);
+    }
 }

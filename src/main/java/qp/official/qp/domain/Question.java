@@ -60,6 +60,10 @@ public class Question extends BaseEntity {
         user.getQuestionList().add(this);
     }
 
+    public void addAnswer(Answer answer){
+        this.answers.add(answer);
+    }
+
     public void update(QuestionRequestDTO.UpdateDTO request){
         this.title = request.getTitle();
         this.content = request.getContent();
