@@ -2,6 +2,7 @@ package qp.official.qp.service.AnswerService;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -203,6 +204,8 @@ class AnswerCommandServiceImplTest {
     @Test
     @DisplayName("좋아요 취소 테스트 코드")
     void deleteAnswerLike(){
+        // given
+
         // 질문 및 유저 정보
         Long userId = 1L;
 
@@ -249,6 +252,26 @@ class AnswerCommandServiceImplTest {
 
     @Test
     void deleteAnswer() {
+        // given
+
+        // 답변 정보
+        String title = "testTitle";
+        Long answerId = 1L;
+
+        // 예상 답변 객체 생성
+        Answer expectAnswer = Answer.builder()
+            .answerId(answerId)
+            .title(title)
+            .build();
+
+        // answerRepository.findById
+        when(answerRepository.findById(answerId)).thenReturn(Optional.of(expectAnswer));
+
+        // when
+        answerCommandService.deleteAnswer(answerId);
+
+        // then
+        verify(answerRepository).delete(expectAnswer);
     }
 
     @Test
