@@ -5,7 +5,7 @@ import qp.official.qp.domain.User;
 import qp.official.qp.domain.enums.Gender;
 import qp.official.qp.domain.enums.Role;
 import qp.official.qp.domain.enums.UserStatus;
-import qp.official.qp.web.dto.TokenResponseDTO;
+import qp.official.qp.web.dto.TokenDTO.TokenResponseDTO;
 import qp.official.qp.web.dto.UserResponseDTO;
 
 public class UserConverter {
