@@ -76,13 +76,10 @@ class QuestionCommandServiceTest {
         expectQuestion.setUser(testUser);
 
 
-        List<QuestionHashTag> questionHashTagList = QuestionHashtagConverter.toQuestionHashTagList(expectQuestion, hashtags);
+        expectQuestion.addAllHashTag(hashtags);
 
         // hashtagRepository.findById
         when(hashtagRepository.findAllById(hashtagIds)).thenReturn(hashtags);
-
-        // questionHashTagRepository.save
-        when(questionHashTagRepository.saveAll(any(List.class))).thenReturn(questionHashTagList);
 
         // userRepository.findById
         when(userRepository.findById(userId)).thenReturn(Optional.of(testUser));

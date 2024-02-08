@@ -13,15 +13,4 @@ public class QuestionHashtagConverter {
         .map(QuestionHashTag::getHashtag)
         .collect(Collectors.toList());
     }
-
-    public static List<QuestionHashTag> toQuestionHashTagList(Question question, List<Hashtag> hashtags) {
-        return hashtags.stream()
-        .map(hashtag -> {
-            QuestionHashTag questionHashTag = QuestionHashTag.builder().build();
-            questionHashTag.setQuestion(question);
-            questionHashTag.setHashtag(hashtag);
-            return questionHashTag;
-        })
-        .collect(Collectors.toList());
-    }
 }
