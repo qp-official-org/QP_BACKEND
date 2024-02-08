@@ -15,6 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import qp.official.qp.domain.Answer;
 import qp.official.qp.domain.Question;
 import qp.official.qp.domain.User;
+import qp.official.qp.domain.enums.AnswerLikeStatus;
 import qp.official.qp.domain.enums.Category;
 import qp.official.qp.domain.mapping.AnswerLikes;
 import qp.official.qp.repository.AnswerLikesRepository;
@@ -145,7 +146,105 @@ class AnswerCommandServiceImplTest {
 
 
     @Test
-    void addAndDeleteLikeToAnswer() {
+    @DisplayName("좋아요 추가 테스트 코드")
+    void addLikeToAnswer() {
+        // given
+
+        // 질문 및 유저 정보
+        Long userId = 1L;
+
+        // 답변 정보
+        String title = "testTitle";
+        Long answerId = 1L;
+
+        // 예상 답변 객체 생성
+        Answer expectAnswer = Answer.builder()
+            .answerId(answerId)
+            .title(title)
+            .build();
+
+        // 테스트 사용자 객체 생성
+        User testUser = User.builder()
+            .userId(userId)
+            .answerList(new ArrayList<>())
+            .build();
+
+        // 답변 좋아요 객체 생성
+        Long answerLikesId = 1L;
+        AnswerLikes answerLikes = AnswerLikes.builder()
+            .AnswerLikeId(answerLikesId)
+            .answer(expectAnswer)
+            .user(testUser)
+            .build();
+
+
+        // userRepository.findById
+        when(userRepository.findById(userId)).thenReturn(Optional.of(testUser));
+
+        // answerRepository.findById
+        when(answerRepository.findById(answerId)).thenReturn(Optional.of(expectAnswer));
+
+        // answerLikesRepository.save
+        when(answerLikesRepository.save(any(AnswerLikes.class))).thenReturn(answerLikes);
+
+        // answerLikesRepository.existsByAnswerAndUser
+        when(answerLikesRepository.existsByAnswerAndUser(expectAnswer, testUser)).thenReturn(false);
+
+        // when
+
+        // 답변 좋아요 누르기
+        AnswerLikeStatus answerLikeAddStatus = answerCommandService.addAndDeleteLikeToAnswer(userId, answerId);
+
+        // then
+
+        // 첫 생성 시에는 좋아요 추가
+        assertEquals(AnswerLikeStatus.ADDED, answerLikeAddStatus);
+    }
+    @Test
+    @DisplayName("좋아요 취소 테스트 코드")
+    void deleteAnswerLike(){
+        // 질문 및 유저 정보
+        Long userId = 1L;
+
+        // 답변 정보
+        String title = "testTitle";
+        Long answerId = 1L;
+
+        // 예상 답변 객체 생성
+        Answer expectAnswer = Answer.builder()
+            .answerId(answerId)
+            .title(title)
+            .build();
+
+        // 테스트 사용자 객체 생성
+        User testUser = User.builder()
+            .userId(userId)
+            .answerList(new ArrayList<>())
+            .build();
+
+        // 이미 좋아요 있는 상태의 AnswerLikes 객체 생성
+        Long alreadyAddedLikeAnswerLikeId = 2L;
+        AnswerLikes existingAnswerLikes = AnswerLikes.builder()
+            .AnswerLikeId(alreadyAddedLikeAnswerLikeId)
+            .answer(expectAnswer)
+            .user(testUser)
+            .build();
+
+        // userRepository.findById
+        when(userRepository.findById(userId)).thenReturn(Optional.of(testUser));
+
+        // answerRepository.findById
+        when(answerRepository.findById(answerId)).thenReturn(Optional.of(expectAnswer));
+
+        // answerLikesRepository.existsByAnswerAndUser
+        when(answerLikesRepository.existsByAnswerAndUser(expectAnswer, testUser)).thenReturn(true);
+
+        // when
+        AnswerLikeStatus answerLikeDeleteStatus = answerCommandService.addAndDeleteLikeToAnswer(userId, answerId);
+
+        // then
+        assertEquals(AnswerLikeStatus.DELETED, answerLikeDeleteStatus);
+
     }
 
     @Test
