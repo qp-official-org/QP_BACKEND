@@ -227,11 +227,6 @@ class AnswerCommandServiceImplTest {
 
         // 이미 좋아요 있는 상태의 AnswerLikes 객체 생성
         Long alreadyAddedLikeAnswerLikeId = 2L;
-        AnswerLikes existingAnswerLikes = AnswerLikes.builder()
-            .AnswerLikeId(alreadyAddedLikeAnswerLikeId)
-            .answer(expectAnswer)
-            .user(testUser)
-            .build();
 
         // userRepository.findById
         when(userRepository.findById(userId)).thenReturn(Optional.of(testUser));
@@ -278,5 +273,43 @@ class AnswerCommandServiceImplTest {
 
     @Test
     void updateQuestion() {
+        // given
+        Long answerId = 1L;
+        Long userId = 1L;
+
+        // 업데이트 전 답변 정보
+        String originalTitle = "Original Title";
+        String originalContent = "Original Content";
+
+        // 업데이트 요청 정보
+        String updatedTitle = "Updated Title";
+        String updatedContent = "Updated Content";
+
+        // 기존 답변 객체 생성
+        Answer originalAnswer = Answer.builder()
+            .answerId(answerId)
+            .title(originalTitle)
+            .content(originalContent)
+            .build();
+
+        // 답변 업데이트 DTO 생성
+        AnswerRequestDTO.AnswerUpdateDTO request = AnswerRequestDTO.AnswerUpdateDTO.builder()
+            .userId(userId)
+            .title(updatedTitle)
+            .content(updatedContent)
+            .build();
+
+        // answerRepository.findById
+        when(answerRepository.findById(answerId)).thenReturn(Optional.of(originalAnswer));
+
+        // when
+        // 질문 업데이트
+        Answer updatedAnswer = answerCommandService.updateQuestion(answerId, request);
+
+        // then
+        // answer 업데이트 확인
+        assertEquals(answerId, updatedAnswer.getAnswerId());
+        assertEquals(updatedTitle, updatedAnswer.getTitle());
+        assertEquals(updatedContent, updatedAnswer.getContent());
     }
 }

@@ -30,6 +30,9 @@ public class AnswerRequestDTO {
     }
 
     @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class AnswerUpdateDTO {
         @NotNull
         @ExistUser
