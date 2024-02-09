@@ -84,4 +84,8 @@ public class User extends BaseEntity {
                 .atZone(ZoneId.systemDefault())
                 .toLocalDateTime();
     }
+
+    public void updateStatus(UserStatus status) {
+        this.status = status;
+    }
 }

@@ -11,5 +11,5 @@ public interface UserService {
     User createTestUser();
     User signUp(String code) throws IOException, ParseException;
     User autoSignIn(Long userId);
-
+    User deleteUser(Long userId);
 }
