@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import qp.official.qp.converter.QuestionConverter;
+import qp.official.qp.converter.QuestionHashtagConverter;
 import qp.official.qp.domain.Hashtag;
 import qp.official.qp.domain.Question;
 import qp.official.qp.domain.User;
@@ -13,6 +14,8 @@ import qp.official.qp.repository.QuestionHashTagRepository;
 import qp.official.qp.repository.QuestionRepository;
 import qp.official.qp.repository.UserRepository;
 import qp.official.qp.web.dto.QuestionRequestDTO;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -29,20 +32,14 @@ public class QuestionCommandServiceImpl implements QuestionCommandService {
         // Question 생성
         Question newQuestion = QuestionConverter.toQuestion(request);
 
+        // HashTag List 조회
+        List<Hashtag> hashtagList = hashtagRepository.findAllById(request.getHashtag());
+
+        // QuestionHashTag 생성
+        newQuestion.addAllHashTag(hashtagList);
+
         // QuestionHashTag 저장
-        request.getHashtag().forEach(hashtagId -> {
-            // FindById Hashtag
-            Hashtag findHashTag = hashtagRepository.findById(hashtagId).get();
-
-            // QuestionHashTag 생성
-            QuestionHashTag newQuestionHashTag = QuestionHashTag.builder().build();
-            // 연관관계 설정
-            newQuestionHashTag.setQuestion(newQuestion);
-            newQuestionHashTag.setHashtag(findHashTag);
-
-            // Save QuestionHashTag
-            questionHashTagRepository.save(newQuestionHashTag);
-        });
+        questionRepository.save(newQuestion);
 
         // FindById User
         User findUser = userRepository.findById(request.getUserId()).get();
@@ -55,7 +52,7 @@ public class QuestionCommandServiceImpl implements QuestionCommandService {
     }
 
     @Override
-    public Question updateQuestion(Long questionId, QuestionRequestDTO.UpdateDTO request){
+    public Question updateQuestion(Long questionId, QuestionRequestDTO.UpdateDTO request) {
         // FindById Question
         Question updateQuestion = questionRepository.findById(questionId).get();
         updateQuestion.update(request);
@@ -64,7 +61,7 @@ public class QuestionCommandServiceImpl implements QuestionCommandService {
     }
 
     @Override
-    public void deleteQuestion(Long questionId){
+    public void deleteQuestion(Long questionId) {
         Question deleteQuestion = questionRepository.findById(questionId).get();
         questionRepository.delete(deleteQuestion);
     }

@@ -28,9 +28,11 @@ public class HashtagQueryServiceImpl implements HashtagQueryService {
 
         checkIsEmpty(request);
 
+        // 이미 존재 한다면, 그 해시태그 값을 리턴함.
         if (hashtagRepository.existsByHashtag(request.getHashtag())) {
-            throw new HashtagHandler(ErrorStatus.HASHTAG_ALREADY_EXISTS);
+            return hashtagRepository.findByHashtag(request.getHashtag());
         }
+
         Hashtag hashtag = HashtagConverter.toHashtag(request);
         return hashtagRepository.save(hashtag);
     }

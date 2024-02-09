@@ -1,6 +1,9 @@
 package qp.official.qp.web.dto;
 
 import lombok.*;
+import qp.official.qp.validation.annotation.ExistUser;
+
+import javax.validation.constraints.NotNull;
 
 
 public class UserRequestDTO {
@@ -11,13 +14,15 @@ public class UserRequestDTO {
     @Getter
     public static class UpdateUserInfoRequestDTO {
         private String nickname;
-        private String profile_image;
+        private String profileImage;
     }
     /**
      * 자동 로그인
      */
     @Getter
     public static class AutoLoginRequestDTO {
+        @NotNull
+        @ExistUser
         private Long userId;
     }
 

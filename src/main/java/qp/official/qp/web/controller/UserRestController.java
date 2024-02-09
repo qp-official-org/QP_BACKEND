@@ -14,7 +14,7 @@ import qp.official.qp.domain.User;
 import qp.official.qp.service.TokenService.TokenService;
 import qp.official.qp.service.UserService.UserService;
 import qp.official.qp.validation.annotation.ExistUser;
-import qp.official.qp.web.dto.TokenResponseDTO;
+import qp.official.qp.web.dto.TokenDTO.TokenResponseDTO;
 import qp.official.qp.web.dto.UserRequestDTO;
 import qp.official.qp.web.dto.UserResponseDTO;
 
