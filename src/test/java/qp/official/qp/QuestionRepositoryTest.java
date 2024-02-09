@@ -19,7 +19,9 @@ import qp.official.qp.web.dto.QuestionRequestDTO;
 
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -83,13 +85,7 @@ public class QuestionRepositoryTest {
                 .questionHashTagList(new ArrayList<>())
                 .build();
         hashtagRepository.save(testHashtag);
-
-        //QuestionHashTag
-        testQuestionHashTag = QuestionHashTag.builder()
-                .build();
-
-        testQuestionHashTag.setQuestion(testQuestion);
-        testQuestionHashTag.setHashtag(testHashtag);
+        testQuestion.addHashTag(testHashtag);
     }
 
     //QuestionRepository에 저장 되는지 확인, QuestionHashTagRepository에 저장 되는지 확인
@@ -104,7 +100,6 @@ public class QuestionRepositoryTest {
         // when------------------------------------------------------------------------------------------
         //QuestionRepository에 저장
         Question saveQuestion = questionRepository.save(testQuestion);
-        QuestionHashTag saveQuestionHashTag = questionHashTagRepository.save(testQuestionHashTag);
 
         // then------------------------------------------------------------------------------------------
         //Question
@@ -112,11 +107,6 @@ public class QuestionRepositoryTest {
         assertThat(saveQuestion.getTitle().equals(testQuestion.getTitle()));
         assertThat(saveQuestion.getContent().equals(testQuestion.getContent()));
         assertThat(saveQuestion.getUser().equals(testQuestion.getUser()));
-
-        //QuestionHashtag
-        assertThat(saveQuestionHashTag).isNotNull();
-        assertThat(saveQuestionHashTag.getQuestion().equals(saveQuestionHashTag.getQuestion()));
-        assertThat(saveQuestionHashTag.getHashtag().equals(saveQuestionHashTag.getHashtag()));
     }
 
     @Test
@@ -125,12 +115,10 @@ public class QuestionRepositoryTest {
         // given-----------------------------------------------------------------------------------------
         // static testQuestion 사용
         questionRepository.save(testQuestion);
-        questionHashTagRepository.save(testQuestionHashTag);
 
         // when------------------------------------------------------------------------------------------
         // testQuestion조회
         List<Question> allQuestion = questionRepository.findAll();
-        List<QuestionHashTag> allQuestionHashtag = questionHashTagRepository.findAll();
 
         // then------------------------------------------------------------------------------------------
         //Question
@@ -138,38 +126,66 @@ public class QuestionRepositoryTest {
         assertEquals(testQuestion.getTitle(), allQuestion.stream().findAny().get().getTitle());
         assertEquals(testQuestion.getContent(), allQuestion.stream().findAny().get().getContent());
         assertEquals(newUser, allQuestion.stream().findAny().get().getUser());
-
-        //QuestionHashtag
-        assertEquals(1, allQuestionHashtag.size());
-        assertEquals(testQuestion, allQuestionHashtag.stream().findAny().get().getQuestion());
-        assertEquals(testHashtag, allQuestionHashtag.stream().findAny().get().getHashtag());
     }
 
-//    @Test
-//    @DisplayName("질문 페이징 조회") // 1. 검색어로 조회 2. 검색어 없이 모두 조회
-//    public void findQuestionByPagingTest(){
-//        // given-----------------------------------------------------------------------------------------
-//        //Question
-//        String title2 = "testTitle2";
-//        String content2 = "testContent2";
-//        Question testQuestion2 = Question.builder()
-//                .title(title2)
-//                .content(content2)
-//                .build();
-//        testQuestion2.setUser(newUser);
-//
-//        // when------------------------------------------------------------------------------------------
-//        // testQuestion조회
-//        PageRequest request = PageRequest.of(1, 2);
-//        Page<Question> allPageQuestion = questionRepository.findAllByOrderByCreatedAtDescQuestionIdDesc(request);
-//
-//        // then------------------------------------------------------------------------------------------
-//        //Question
-//        assertEquals(2, allPageQuestion.size());
-//        assertEquals(testQuestion.getTitle(), allPageQuestion.stream().findAny().get().getTitle());
-//        assertEquals(testQuestion.getContent(), allPageQuestion.stream().findAny().get().getContent());
-//        assertEquals(newUser, allPageQuestion.stream().findAny().get().getUser());
-//    }
+    @Test
+    @DisplayName("질문 페이징 조회")
+    public void findPagingQuestionTest(){
+        // given-----------------------------------------------------------------------------------------
+        //Question
+        questionRepository.save(testQuestion);
+        String title2 = "testTitle2";
+        String content2 = "testContent2";
+        Question testQuestion2 = Question.builder()
+                .title(title2)
+                .content(content2)
+                .build();
+        testQuestion2.setUser(newUser);
+        questionRepository.save(testQuestion2);
+
+        List<Question> list1 = questionRepository.findAll();
+        list1 = list1.stream()
+                .sorted(
+                        Comparator.comparing(Question::getCreatedAt)
+                                .thenComparing(Question::getQuestionId)
+                                .reversed())
+                .collect(Collectors.toList());
+
+        // when------------------------------------------------------------------------------------------
+        List<Question> list2 = questionRepository.findAllByOrderByCreatedAtDescQuestionIdDesc(PageRequest.of(0, 10)).toList();
+
+        // then------------------------------------------------------------------------------------------
+        for (int i = 0; i < list1.size(); i++) {
+            assertEquals(list1.get(i).getQuestionId(), list2.get(i).getQuestionId());
+        }
+    }
+
+    @Test
+    @DisplayName("검색어로 질문 페이징 조회")
+    public void findPagingQuestionByTitleContentTest() {
+        // given-----------------------------------------------------------------------------------------
+        // static testQuestion 사용
+        questionRepository.save(testQuestion);
+
+        // when------------------------------------------------------------------------------------------
+        // testQuestion title로조회
+        List<Question> findQuestionByTitle = questionRepository.findAllByTitleContainingIgnoreCaseOrContentContainingIgnoreCaseOrderByCreatedAtDescQuestionIdDesc("testTitle", null, PageRequest.of(0, 10)).toList();
+        // testQuestion content로조회
+        List<Question> findQuestionByConent = questionRepository.findAllByTitleContainingIgnoreCaseOrContentContainingIgnoreCaseOrderByCreatedAtDescQuestionIdDesc(null,"testContent", PageRequest.of(0, 10)).toList();
+
+
+        // then------------------------------------------------------------------------------------------
+        // testQuestion title로조회
+        assertEquals(1, findQuestionByTitle.size());
+        assertEquals(testQuestion.getTitle(), findQuestionByTitle.stream().findAny().get().getTitle());
+        assertEquals(testQuestion.getContent(), findQuestionByTitle.stream().findAny().get().getContent());
+        assertEquals(newUser, findQuestionByTitle.stream().findAny().get().getUser());
+        // testQuestion content로조회
+        assertEquals(1, findQuestionByConent.size());
+        assertEquals(testQuestion.getTitle(), findQuestionByConent.stream().findAny().get().getTitle());
+        assertEquals(testQuestion.getContent(), findQuestionByConent.stream().findAny().get().getContent());
+        assertEquals(newUser, findQuestionByConent.stream().findAny().get().getUser());
+    }
 
     @Test
     @DisplayName("질문 수정")
@@ -207,8 +223,8 @@ public class QuestionRepositoryTest {
         Question saveQuestion = questionRepository.save(testQuestion);
 
         // when------------------------------------------------------------------------------------------
+        saveQuestion.delete();
         questionRepository.delete(saveQuestion);
-        em.flush();
 
         // then------------------------------------------------------------------------------------------
         //Question

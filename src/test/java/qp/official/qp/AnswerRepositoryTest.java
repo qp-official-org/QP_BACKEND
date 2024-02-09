@@ -5,15 +5,19 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.PageRequest;
 import qp.official.qp.domain.Answer;
 import qp.official.qp.domain.Question;
 import qp.official.qp.domain.User;
 import qp.official.qp.domain.enums.Category;
+import qp.official.qp.domain.enums.Role;
 import qp.official.qp.repository.*;
 import qp.official.qp.web.dto.AnswerRequestDTO;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertFalse;
@@ -34,12 +38,11 @@ public class AnswerRepositoryTest {
         this.answerRepository = answerRepository;
         this.userRepository = userRepository;
         this.questionRepository = questionRepository;
-    }
+    }{}
 
     private static User newUser;
     private static Question testQuestion;
     private static Answer testParentAnswer;
-    private static Answer testChildAnswer;
 
     @BeforeEach
     void setup() {
@@ -52,6 +55,7 @@ public class AnswerRepositoryTest {
                 .nickname(nickname)
                 .point(point)
                 .questionList(new ArrayList<>())
+                .role(Role.EXPERT)
                 .build();
         userRepository.save(newUser);
 
@@ -73,25 +77,12 @@ public class AnswerRepositoryTest {
                 .title(parentAnswerTitle)
                 .content(parentAnswerContent)
                 .category(parentAnswerCategory)
+                .children(new ArrayList<>())
                 .answerGroup(null)
                 .build();
         testParentAnswer.setUser(newUser);
         testParentAnswer.setQuestion(testQuestion);
-
-        //ChildAnswer
-        String childnswerTitle = "testChildAnswerTitle";
-        String childAnswerContent = "testChildAnswerContent";
-        Category childAnswerCategory = Category.CHILD;
-        testChildAnswer = Answer.builder()
-                .title(childnswerTitle)
-                .content(childAnswerContent)
-                .category(childAnswerCategory)
-                .answerGroup(testParentAnswer.getAnswerId())
-                .build();
-        testChildAnswer.setUser(newUser);
-        testChildAnswer.setQuestion(testQuestion);
-        testChildAnswer.setParent(testParentAnswer);
-        //testParentAnswer.setChildren(testChildAnswer);
+        //answerRepository.save(testParentAnswer);
     }
 
     //AnswerRepository에 저장 되는지 확인
@@ -134,38 +125,97 @@ public class AnswerRepositoryTest {
         assertEquals(testQuestion, allAnswer.stream().findAny().get().getQuestion());
     }
 
-//    @Test
-//    @DisplayName("질문 페이징 조회") // 1. 검색어로 조회 2. 검색어 없이 모두 조회
-//    public void findQuestionByPagingTest(){
-//        Question saveQuestion = questionRepository.save(testQuestion);
-//        System.out.println(testQuestion.getCreatedAt() + "???");
-//
-//        // given-----------------------------------------------------------------------------------------
-//        //Question
-//        String title = "testTitle2";
-//        String content = "testContent2";
-//        Question testQuestion2 = Question.builder()
-//                .title(title)
-//                .content(content)
-//                .build();
-//        testQuestion2.setUser(newUser);
-//
-//        //Hashtag
-//        String hashtag = "testHashtag2";
-//        testHashtag = Hashtag.builder()
-//                .hashtag(hashtag)
-//                .questionHashTagList(new ArrayList<>())
-//                .build();
-//        hashtagRepository.save(testHashtag);
-//
-//        //QuestionHashTag
-//        testQuestionHashTag = QuestionHashTag.builder()
-//                .build();
-//
-//        testQuestionHashTag.setQuestion(testQuestion2);
-//        testQuestionHashTag.setHashtag(testHashtag);
-//
-//    }
+    @Test
+    @DisplayName("특정 질문의 부모 답변 페이징 조회")
+    public void findPagingParentAnswerTest(){
+        // given-----------------------------------------------------------------------------------------
+        //Question
+        answerRepository.save(testParentAnswer);
+        String parentAnswerTitle2 = "testParentAnswerTitle2";
+        String parentAnswerContent2 = "testParnetAnswerContent2";
+        Category parentAnswerCategory = Category.PARENT;
+        Answer testParentAnswer2 = Answer.builder()
+                .title(parentAnswerTitle2)
+                .content(parentAnswerContent2)
+                .category(parentAnswerCategory)
+                .children(new ArrayList<>())
+                .answerGroup(null)
+                .build();
+        testParentAnswer2.setUser(newUser);
+        testParentAnswer2.setQuestion(testQuestion);
+        answerRepository.save(testParentAnswer2);
+
+        List<Answer> list1 = answerRepository.findAll();
+        list1 = list1.stream()
+                .sorted(
+                        Comparator.comparing(Answer::getCreatedAt)
+                                .thenComparing(Answer::getAnswerId)
+                                .reversed())
+                .collect(Collectors.toList());
+
+        // when------------------------------------------------------------------------------------------
+        List<Answer> list2 = answerRepository.findByQuestionAndCategoryOrderByCreatedAtDescAnswerIdDesc(testQuestion, Category.PARENT, PageRequest.of(0, 10)).toList();
+
+        // then------------------------------------------------------------------------------------------
+        for (int i = 0; i < list1.size(); i++) {
+            assertEquals(list1.get(i).getAnswerId(), list2.get(i).getAnswerId());
+        }
+    }
+
+    @Test
+    @DisplayName("부모 답변의 자식 답변 페이징 조회")
+    public void findPagingChildAnswerTest(){
+        // given-----------------------------------------------------------------------------------------
+        answerRepository.save(testParentAnswer);
+        //ChildAnswer
+        String childnswerTitle = "testChildAnswerTitle";
+        String childAnswerContent = "testChildAnswerContent";
+        Category childAnswerCategory = Category.CHILD;
+        Answer testChildAnswer = Answer.builder()
+                .title(childnswerTitle)
+                .content(childAnswerContent)
+                .category(childAnswerCategory)
+                .children(new ArrayList<>())
+                .answerGroup(testParentAnswer.getAnswerId())
+                .build();
+        testChildAnswer.setUser(newUser);
+        testChildAnswer.setQuestion(testQuestion);
+        testChildAnswer.setParent(testParentAnswer);
+        testParentAnswer.setChildren(testChildAnswer);
+
+        //ChildAnswer2
+        String childnswerTitle2 = "testChildAnswerTitle2";
+        String childAnswerContent2 = "testChildAnswerContent2";
+        Category childAnswerCategory2 = Category.CHILD;
+        Answer testChildAnswer2 = Answer.builder()
+                .title(childnswerTitle2)
+                .content(childAnswerContent2)
+                .category(childAnswerCategory2)
+                .children(new ArrayList<>())
+                .answerGroup(testParentAnswer.getAnswerId())
+                .build();
+        testChildAnswer2.setUser(newUser);
+        testChildAnswer2.setQuestion(testQuestion);
+        testChildAnswer2.setParent(testParentAnswer);
+        testParentAnswer.setChildren(testChildAnswer2);
+
+        List<Answer> list1 = answerRepository.findAll();
+        list1 = list1.stream()
+                .filter(i -> i.getCategory().equals(Category.CHILD))
+                .sorted(
+                        Comparator.comparing(Answer::getCreatedAt)
+                                .thenComparing(Answer::getAnswerId)
+                                .reversed())
+                .collect(Collectors.toList());
+
+        // when------------------------------------------------------------------------------------------
+        List<Answer> list2 = answerRepository.findByQuestionAndCategoryOrderByCreatedAtDescAnswerIdDesc(testQuestion, Category.CHILD, PageRequest.of(0, 10)).toList();
+
+        // then------------------------------------------------------------------------------------------
+        for (int i = 0; i < list1.size(); i++) {
+            assertEquals(list1.get(i).getAnswerId(), list2.get(i).getAnswerId());
+        }
+    }
 
     @Test
     @DisplayName("답변 수정")
@@ -199,16 +249,49 @@ public class AnswerRepositoryTest {
     public void deleteQuestionTest() {
         // given-----------------------------------------------------------------------------------------
         // static testParentAnswer 사용
-        //AnswerRepository에 저장
+        //ChildAnswer
+        String childnswerTitle = "testChildAnswerTitle";
+        String childAnswerContent = "testChildAnswerContent";
+        Category childAnswerCategory = Category.CHILD;
+        Answer testChildAnswer = Answer.builder()
+                .title(childnswerTitle)
+                .content(childAnswerContent)
+                .category(childAnswerCategory)
+                .children(new ArrayList<>())
+                .answerGroup(testParentAnswer.getAnswerId())
+                .build();
+        testChildAnswer.setUser(newUser);
+        testChildAnswer.setQuestion(testQuestion);
+        testChildAnswer.setParent(testParentAnswer);
+        testParentAnswer.setChildren(testChildAnswer);
+        //AnswerRepository에 부모답변과 자식답변 저장
         Answer saveParentAnswer = answerRepository.save(testParentAnswer);
-        //Answer saveChildAnswer = answerRepository.save(testChildAnswer); // 자기 참조?
+        Answer saveChildAnswer = answerRepository.save(testChildAnswer);
 
         // when------------------------------------------------------------------------------------------
+        //부모답변 삭제
         answerRepository.delete(saveParentAnswer);
 
         // then------------------------------------------------------------------------------------------
-        //Question
+        //부모답변과 자식답변 모두 삭제되는 확인
         assertFalse(answerRepository.existsById(saveParentAnswer.getAnswerId()));
-        //assertFalse(answerRepository.existsById(saveChildAnswer.getAnswerId())); // 자기 참조?
+        assertFalse(answerRepository.existsById(saveChildAnswer.getAnswerId()));
+    }
+
+    @Test
+    @DisplayName("전문가가 작성한 답변 개수 조회")
+    public void findAnswerCountByExpertTest() {
+        // given-----------------------------------------------------------------------------------------
+        // static testParentAnswer 사용
+        //AnswerRepository에 부모답변 저장
+        Answer saveParentAnswer = answerRepository.save(testParentAnswer);
+
+        // when------------------------------------------------------------------------------------------
+        // 전문가가 작성한 답변 개수 조회
+        Integer count = answerRepository.countByQuestionAndUserRole(testQuestion, Role.EXPERT);
+        System.out.println("count : " + count);
+
+        // then------------------------------------------------------------------------------------------
+        assertEquals(1, count);
     }
 }
