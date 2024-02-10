@@ -49,8 +49,6 @@ public class AnswerCommandServiceImpl implements AnswerCommandService {
         }
         User user = userRepository.findById(request.getUserId()).get();
 
-        answer.setUser(user);
-        answer.setQuestion(question);
         Answer savedAnswer = answerRepository.save(answer);
 
         // 연관관계 설정

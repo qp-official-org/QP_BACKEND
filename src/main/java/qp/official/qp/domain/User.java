@@ -86,5 +86,6 @@ public class User extends BaseEntity {
     }
     public void addAnswer(Answer answer){
         this.answerList.add(answer);
+        answer.setUser(this);
     }
 }
