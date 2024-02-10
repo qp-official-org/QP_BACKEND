@@ -59,11 +59,12 @@ class AnswerQueryServiceImplTest {
 
         // 페이지 객체 생성
         Page<Answer> expectedPage = new PageImpl<>(expectedAnswerList);
+        PageRequest pageRequest = PageRequest.of(page, size);
 
         // questionRepository.findById
         when(questionRepository.findById(questionId)).thenReturn(Optional.of(expectedQuestion));
 
-        PageRequest pageRequest = PageRequest.of(page, size);
+        // answerRepository.findByQuestionAndCategoryOrderByCreatedAtDescAnswerIdDesc
         when(answerRepository.findByQuestionAndCategoryOrderByCreatedAtDescAnswerIdDesc(expectedQuestion, Category.PARENT, pageRequest)).thenReturn(expectedPage);
 
         // when
@@ -79,16 +80,63 @@ class AnswerQueryServiceImplTest {
         assertEquals(expectedPage.getTotalPages(), answers.getTotalPages());
         // 전체 요소 수 비교
         assertEquals(expectedPage.getTotalElements(), answers.getTotalElements());
-
     }
 
     @Test
     void getChildrenAnswersByParentAnswerId(){
         // given
 
+        // given
+        Long parentAnswerId = 1L;
+        int page = 0;
+        int size = 10;
+
+        String questionTitle = "test";
+
+        // 질문 객체 생성
+        Answer parentAnswer = Answer.builder()
+            .answerId(parentAnswerId)
+            .title(questionTitle)
+            .children(new ArrayList<>())
+            .build();
+
+        // 예상 답변 리스트 생성
+        int expectedChildAnswerListSize = 3;
+
+        List<Answer> parentAnswerList = new ArrayList<>();
+
+        for (int i = 1; i <= expectedChildAnswerListSize; i++) {
+            parentAnswerList.add(Answer.builder()
+                .answerId((long) i)
+                .title("Test" + i)
+                .category(Category.CHILD)
+                .parent(parentAnswer)
+                .answerGroup(parentAnswerId)
+                .build());
+        }
+        // 페이지 객체 생성
+        Page<Answer> expectedPage = new PageImpl<>(parentAnswerList);
+        PageRequest pageRequest = PageRequest.of(page, size);
+
+        // questionRepository.findById
+        when(answerRepository.findById(parentAnswerId)).thenReturn(Optional.ofNullable(parentAnswer));
+
+        // answerRepository.findByAnswerGroupOrderByCreatedAtDescAnswerIdDesc
+        when(answerRepository.findByAnswerGroupOrderByCreatedAtDescAnswerIdDesc(parentAnswerId, pageRequest)).thenReturn(expectedPage);
+
         // when
+        Page<Answer> answers = answerQueryService.getChildrenAnswersByParentAnswerId(parentAnswerId, page, size);
 
         // then
+
+        // 사이즈 비교
+        assertEquals(expectedChildAnswerListSize, answers.getSize());
+        // 페이지 내용 비교
+        assertEquals(parentAnswerList, answers.getContent());
+        // 전체 페이지 비교
+        assertEquals(expectedPage.getTotalPages(), answers.getTotalPages());
+        // 전체 요소 수 비교
+        assertEquals(expectedPage.getTotalElements(), answers.getTotalElements());
     }
 
 }
