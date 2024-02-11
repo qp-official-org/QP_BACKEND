@@ -3,22 +3,24 @@ package qp.official.qp.service.ImageService;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.ListObjectsV2Result;
+import com.amazonaws.services.s3.model.S3ObjectSummary;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -131,6 +133,43 @@ class ImageCommandServiceImplTest {
         verify(amazonS3Client, times(1)).deleteObject(bucket, expectFileName);
 
     }
+
+    @Test
+    void deleteAllImages() throws IOException {
+        // given
+        String bucket = "test";
+
+        List<S3ObjectSummary> objectSummaries = new ArrayList<>();
+        int expectObjectSummariesSize = 3;
+
+        for (int i = 1; i <= expectObjectSummariesSize; i++){
+            S3ObjectSummary s3ObjectSummary = new S3ObjectSummary();
+            s3ObjectSummary.setKey("qp/image" + i + ".jpg");
+            objectSummaries.add(s3ObjectSummary);
+        }
+
+        ListObjectsV2Result result = mock(ListObjectsV2Result.class);
+
+        // amazonS3Client.listObjectsV2
+        when(amazonS3Client.listObjectsV2(bucket)).thenReturn(result);
+
+        // result.getObjectSummaries()
+        when(result.getObjectSummaries()).thenReturn(objectSummaries);
+
+        // when
+        imageCommandService.deleteAllImages();
+
+        // then
+
+        // S3 버킷 이미지 삭제 확인
+        verify(amazonS3Client, times(1)).deleteObject(bucket, "qp/image1.jpg");
+        verify(amazonS3Client, times(1)).deleteObject(bucket, "qp/image2.jpg");
+
+        // DB 이미지 삭제 확인
+        verify(imageRepository, times(1)).deleteAll();
+
+    }
+
 
 
 
