@@ -1,4 +1,4 @@
-package qp.official.qp;
+package qp.official.qp.repository;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
