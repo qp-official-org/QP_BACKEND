@@ -85,11 +85,13 @@ public class User extends BaseEntity {
                 .toLocalDateTime();
     }
 
-    public void addAnswer(Answer answer){
+    public void addAnswer(Answer answer) {
         this.answerList.add(answer);
         answer.setUser(this);
+    }
   
     public void updateStatus(UserStatus status) {
         this.status = status;
     }
+
 }
