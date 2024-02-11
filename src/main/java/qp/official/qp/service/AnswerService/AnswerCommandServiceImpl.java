@@ -48,9 +48,14 @@ public class AnswerCommandServiceImpl implements AnswerCommandService {
             parent.setChildren(answer);
         }
         User user = userRepository.findById(request.getUserId()).get();
-        answer.setUser(user);
-        answer.setQuestion(question);
-        return answerRepository.save(answer);
+
+        Answer savedAnswer = answerRepository.save(answer);
+
+        // 연관관계 설정
+        question.addAnswer(savedAnswer);
+        user.addAnswer(savedAnswer);
+
+        return savedAnswer;
     }
 
     @Override
