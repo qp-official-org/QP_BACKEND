@@ -24,7 +24,7 @@ public class AnswerRequestDTO {
         String title;
         @NotBlank
         String content;
-        @NotBlank
+        @NotNull(message = "카테고리는 'PARENT', 'CHILD' 중 하나여야 합니다.")
         Category category;
         Long answerGroup;
     }

@@ -105,12 +105,21 @@ public class UserRestController {
         );
     }
 
-    @PatchMapping("/delete")
-    @Operation(summary = "유저 삭제 API", description = "현재 로그인 한 유저의 상태가 DELETED로 변경됩니다.")
-    public ApiResponse<UserResponseDTO.deleteUserDTO> delete() {
+    @PatchMapping("/delete/{userId}")
+    @Operation(summary = "유저 삭제 API"
+            , description = "현재 로그인 한 유저의 상태가 DELETED로 변경됩니다."
+            , security = @SecurityRequirement(name = "accessToken")
+    )
+    public ApiResponse<UserResponseDTO.deleteUserDTO> delete(
+            @PathVariable @ExistUser Long userId
+    ) {
+        // accessToken으로 유효한 유저인지 인가
+        tokenService.isValidToken(userId);
+
+        User user = userService.deleteUser(userId);
         return ApiResponse.onSuccess(
                 SuccessStatus.User_OK,
-                UserConverter.toUserDeleteDTO()
+                UserConverter.toUserDeleteDTO(user)
         );
     }
 
