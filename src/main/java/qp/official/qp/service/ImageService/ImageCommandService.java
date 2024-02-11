@@ -6,7 +6,6 @@ import qp.official.qp.domain.Image;
 
 public interface ImageCommandService {
 
-     String upload(MultipartFile multipartFile) throws IOException;
 
      Image saveImage(MultipartFile multipartFile) throws IOException;
 
