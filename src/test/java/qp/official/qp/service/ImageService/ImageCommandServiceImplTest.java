@@ -1,8 +1,14 @@
 package qp.official.qp.service.ImageService;
 
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3Client;
 import java.io.IOException;
 import java.net.URL;
@@ -12,6 +18,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -28,6 +35,8 @@ class ImageCommandServiceImplTest {
     private ImageRepository imageRepository;
     @Mock
     private AmazonS3Client amazonS3Client;
+    @Mock
+    private ImageQueryServiceImpl imageQueryService;
     @InjectMocks
     private ImageCommandServiceImpl imageCommandService;
 
@@ -93,6 +102,36 @@ class ImageCommandServiceImplTest {
         // when & then
          assertThrows(ImageHandler.class, () -> imageCommandService.saveImage(multipartFile), ErrorStatus.IMAGE_ALREADY_EXISTS.getMessage());
     }
+
+    @Test
+    void deleteImage() throws IOException {
+        // given
+        Long imageId = 1L;
+        String fileName = "test_image.jpg";
+        String bucket = "test";
+
+        String expectUrl = "https://example.com/qp" + fileName;
+        String expectFileName = "qp/" + fileName;
+
+        Image expectImage = Image.builder()
+            .imageId(imageId)
+            .url(expectUrl)
+            .fileName(fileName)
+            .build();
+
+        // imageQueryService.getImageByUrl
+        when(imageQueryService.getImageByUrl(any())).thenReturn(expectImage);
+
+        // when
+        imageCommandService.deleteImage(expectUrl);
+
+        // then
+        verify(imageQueryService, times(1)).getImageByUrl(expectUrl);
+        verify(imageRepository, times(1)).deleteById(expectImage.getImageId());
+        verify(amazonS3Client, times(1)).deleteObject(bucket, expectFileName);
+
+    }
+
 
 
 
