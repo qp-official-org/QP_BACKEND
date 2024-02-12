@@ -37,10 +37,11 @@ public class UserConverter {
                 .build();
     }
 
-    public static UserResponseDTO.deleteUserDTO toUserDeleteDTO() {
+    public static UserResponseDTO.deleteUserDTO toUserDeleteDTO(User user) {
         return UserResponseDTO.deleteUserDTO.builder()
-                .userId(1L)
-                .status(UserStatus.DELETED)
+                .userId(user.getUserId())
+                .status(user.getStatus())
+                .updatedAt(user.getUpdatedAt())
                 .build();
     }
 
