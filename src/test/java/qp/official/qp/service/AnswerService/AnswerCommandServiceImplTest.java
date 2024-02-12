@@ -272,7 +272,7 @@ class AnswerCommandServiceImplTest {
     }
 
     @Test
-    void updateQuestion() {
+    void updateAnswer() {
         // given
         Long answerId = 1L;
         Long userId = 1L;
@@ -303,8 +303,8 @@ class AnswerCommandServiceImplTest {
         when(answerRepository.findById(answerId)).thenReturn(Optional.of(originalAnswer));
 
         // when
-        // 질문 업데이트
-        Answer updatedAnswer = answerCommandService.updateQuestion(answerId, request);
+        // 답변 업데이트
+        Answer updatedAnswer = answerCommandService.updateAnswer(answerId, request);
 
         // then
         // answer 업데이트 확인
