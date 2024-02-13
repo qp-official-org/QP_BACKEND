@@ -21,17 +21,21 @@ public class ExistQuestionReportValidator implements ConstraintValidator<ExistQu
 
     @Override
     public boolean isValid(Long reportId, ConstraintValidatorContext context) {
+        ErrorStatus errorStatus;
+
+        boolean isValid;
+
         if (reportId == null) {
-            return true;
+            errorStatus = ErrorStatus.QUESTIONREPORT_ID_NULL;
+            isValid = false;
+        } else {
+            errorStatus = ErrorStatus.QUESTIONREPORT_NOT_FOUND;
+            isValid = questionReportRepository.findById(reportId).isPresent();
         }
 
-        boolean isValid = true;
-
-        boolean isExist = questionReportRepository.findById(reportId).isPresent();
-        if (!isExist) {
-            isValid = false;
+        if (!isValid) {
             context.disableDefaultConstraintViolation();
-            context.buildConstraintViolationWithTemplate(ErrorStatus.QUESTIONREPORT_NOT_FOUND.toString()).addConstraintViolation();
+            context.buildConstraintViolationWithTemplate(errorStatus.toString()).addConstraintViolation();
         }
 
         return isValid;
