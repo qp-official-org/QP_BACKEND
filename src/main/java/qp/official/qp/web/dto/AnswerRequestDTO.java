@@ -17,7 +17,6 @@ public class AnswerRequestDTO {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class AnswerCreateDTO {
-        @NotNull
         @ExistUser
         Long userId;
         @NotBlank
@@ -34,7 +33,6 @@ public class AnswerRequestDTO {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class AnswerUpdateDTO {
-        @NotNull
         @ExistUser
         Long userId;
         @NotBlank

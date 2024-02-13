@@ -21,7 +21,6 @@ public class UserRequestDTO {
      */
     @Getter
     public static class AutoLoginRequestDTO {
-        @NotNull
         @ExistUser
         private Long userId;
     }

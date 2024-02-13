@@ -20,7 +20,6 @@ public class QuestionRequestDTO {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class CreateDTO {
-        @NotNull
         @ExistUser
         Long userId;
 
@@ -42,7 +41,6 @@ public class QuestionRequestDTO {
     @Getter
     @Builder
     public static class UpdateDTO {
-        @NotNull
         @ExistUser
         Long userId;
 
