@@ -10,7 +10,6 @@ public class AnswerReportRequestDTO {
 
     @Getter
     public static class AnswerReportDTO{
-        @NotNull
         @ExistUser
         Long userId;
         @NotBlank
