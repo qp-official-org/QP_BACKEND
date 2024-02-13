@@ -1,5 +1,6 @@
 package qp.official.qp.web.dto;
 
+import lombok.Builder;
 
 import javax.validation.constraints.*;
 

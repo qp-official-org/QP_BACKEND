@@ -27,5 +27,6 @@ public class Hashtag extends BaseEntity {
     private String hashtag;
 
     @OneToMany(mappedBy = "hashtag")
+    @Builder.Default
     private List<QuestionHashTag> questionHashTagList = new ArrayList<>();
 }

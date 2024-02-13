@@ -129,7 +129,7 @@ public class AnswerController {
         return ApiResponse.onSuccess(
                 SuccessStatus.Answer_OK,
                 AnswerConverter.toUpdateResultDTO(
-                        answerCommandService.updateQuestion(answerId, request)
+                        answerCommandService.updateAnswer(answerId, request)
                 )
         );
     }
