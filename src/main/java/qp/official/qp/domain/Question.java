@@ -8,6 +8,7 @@ import qp.official.qp.domain.mapping.QuestionHashTag;
 import qp.official.qp.web.dto.QuestionRequestDTO;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
