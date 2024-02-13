@@ -32,6 +32,7 @@ import java.util.Optional;
 public class QuestionController {
     private final QuestionCommandService questionCommandService;
     private final QuestionQueryService questionQueryService;
+    private final TokenService tokenService;
 
     // 질문 작성
     @PostMapping
