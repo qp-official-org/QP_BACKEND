@@ -1,6 +1,9 @@
 package qp.official.qp.web.controller;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -56,7 +59,7 @@ class ImageControllerTest {
     void uploadImage() throws Exception {
         // given
         Long imageId = 1L;
-        String fileName = "test_image.jpg";
+        String fileName = "test_image.png";
         String testUrl = "https://example.com/qp/test";
 
         // request : multipartFile 생성
@@ -74,23 +77,47 @@ class ImageControllerTest {
 
         // when
         // API 호출
-        ResultActions actions = mockMvc.perform(MockMvcRequestBuilders.multipart("/images")
+        ResultActions action = mockMvc.perform(MockMvcRequestBuilders.multipart("/images")
                 .file(multipartFile)
         );
 
         // then
         // API 호출 결과 코드 확인
-        actions.andExpect(status().isOk());
+        action.andExpect(status().isOk());
 
         // API 호출 결과 변환
         ApiResponse<ImageResponseDTO.ImageCreateResultDTO> response = objectMapper.readValue(
-            actions.andReturn().getResponse().getContentAsString(),
+            action.andReturn().getResponse().getContentAsString(),
             new TypeReference<>() {
             }
             );
 
         // 검증
         assertEquals(testUrl, response.getResult().getUrl());
+
+    }
+    @Test
+    void deleteImage() throws Exception {
+        // given
+        String testUrl = "https://example.com/qp/test";
+
+        // request 객체 생성
+        ImageRequestDTO.ImageDTO request = ImageRequestDTO.ImageDTO.builder()
+            .url(testUrl)
+            .build();
+
+        // when
+        String body = objectMapper.writeValueAsString(request);
+        ResultActions action = mockMvc.perform(MockMvcRequestBuilders.delete("/images")
+            .contentType("application/json")
+            .content(body));
+
+        // then
+        // API 호출 결과 코드 확인
+        action.andExpect(status().isOk());
+
+        // 검증
+        verify(imageCommandService, times(1)).deleteImage(testUrl);
 
     }
 
