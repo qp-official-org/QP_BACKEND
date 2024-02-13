@@ -2,6 +2,7 @@ package qp.official.qp.web.controller;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -11,6 +12,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -56,6 +58,7 @@ class ImageControllerTest {
     }
 
     @Test
+    @DisplayName("uploadImage 테스트 ")
     void uploadImage() throws Exception {
         // given
         Long imageId = 1L;
@@ -97,6 +100,7 @@ class ImageControllerTest {
 
     }
     @Test
+    @DisplayName("deleteImage 테스트")
     void deleteImage() throws Exception {
         // given
         String testUrl = "https://example.com/qp/test";
@@ -119,6 +123,18 @@ class ImageControllerTest {
         // 검증
         verify(imageCommandService, times(1)).deleteImage(testUrl);
 
+    }
+
+    @Test
+    @DisplayName("deleteAllImages 테스트")
+    void deleteAllImages() throws Exception {
+        doNothing().when(imageCommandService).deleteAllImages();
+
+        ResultActions action = mockMvc.perform(MockMvcRequestBuilders.delete("/images/reset-S3"));
+
+        action.andExpect(status().isOk());
+
+        verify(imageCommandService, times(1)).deleteAllImages();
     }
 
 }
