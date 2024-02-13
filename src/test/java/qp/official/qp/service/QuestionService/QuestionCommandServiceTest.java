@@ -5,24 +5,21 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import qp.official.qp.converter.QuestionHashtagConverter;
 import qp.official.qp.domain.Hashtag;
 import qp.official.qp.domain.Question;
 import qp.official.qp.domain.User;
-import qp.official.qp.domain.mapping.QuestionHashTag;
 import qp.official.qp.repository.HashtagRepository;
 import qp.official.qp.repository.QuestionHashTagRepository;
 import qp.official.qp.repository.QuestionRepository;
 import qp.official.qp.repository.UserRepository;
 import qp.official.qp.web.dto.QuestionRequestDTO;
-import qp.official.qp.web.dto.UserRequestDTO;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -112,5 +109,81 @@ class QuestionCommandServiceTest {
             assertEquals(question.getQuestionHashTagList().get(i).getHashtag().getHashtagId(), hashtags.get(i).getHashtagId());
         }
     }
+
+    @Test
+    void updateQuestion() {
+        //when
+        Long questionId = 1L;
+        Long userId = 1L;
+        String updateTitle = "testUpdateTitle";
+        String updateContent = "testUpdateContent";
+
+        Question expectQuestion = Question.builder()
+                .questionId(questionId)
+                .title(updateTitle)
+                .content(updateContent)
+                .questionHashTagList(new ArrayList<>())
+                .build();
+
+        User testUser = User.builder()
+                .userId(userId)
+                .questionList(new ArrayList<>())
+                .build();
+
+        expectQuestion.setUser(testUser);
+
+        when(questionRepository.findById(questionId)).thenReturn(Optional.of(expectQuestion));
+
+        //given
+        QuestionRequestDTO.UpdateDTO request = QuestionRequestDTO.UpdateDTO.builder()
+                .userId(userId)
+                .title(updateTitle)
+                .content(updateContent)
+                .build();
+
+        Question question = questionCommandService.updateQuestion(questionId, request);
+
+        //then
+        // verify
+        assertEquals(question.getQuestionId(), questionId);
+        assertEquals(question.getTitle(), updateTitle);
+        assertEquals(question.getContent(), updateContent);
+
+        // 연관관계 검증
+        assertEquals(question.getUser().getUserId(), userId);
+        assertEquals(question.getUser().getQuestionList().get(0).getQuestionId(), questionId);
+
+    }
+
+    @Test
+    void deleteQuestion() {
+        // when
+        // 질문 정보
+        Long questionId = 1L;
+        String title = "testTitle";
+        String content = "testContent";
+
+        //예상 질문 객체 생성
+        // given
+        Question expectQuestion = Question.builder()
+                .questionId(questionId)
+                .title(title)
+                .content(content)
+                .questionHashTagList(new ArrayList<>())
+                .build();
+
+        when(questionRepository.findById(questionId)).thenReturn(Optional.of(expectQuestion));
+
+        //질문 삭제
+        questionCommandService.deleteQuestion(questionId);
+
+        //verify
+        verify(questionRepository).delete(expectQuestion);
+
+    }
+
+
+
+
 
 }
