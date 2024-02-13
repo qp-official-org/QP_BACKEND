@@ -25,13 +25,17 @@ public enum ErrorStatus implements BaseErrorCode {
 
     // 질문 관려 에러 2000
     QUESTION_NOT_FOUND(HttpStatus.NOT_FOUND, "QUESTION_2001", "찾고있는 질문글이 없습니다."),
+    QUESTION_ID_NULL(HttpStatus.BAD_REQUEST, "USER_2002", "질문 아이디는 필수 입니다."),
 
     // 답변 관련 에러 3000
     ANSWER_NOT_FOUND(HttpStatus.NOT_FOUND, "ANSWER_3001", "찾고있는 답변이 없습니다."),
+    ANSWER_ID_NULL(HttpStatus.BAD_REQUEST, "USER_3002", "답변 아이디는 필수 입니다."),
 
     // 신고 관련 에러 4000
     ANSWERREPORT_NOT_FOUND(HttpStatus.NOT_FOUND, "ANSWER_4001", "찾고있는 답변신고가 없습니다."),
     QUESTIONREPORT_NOT_FOUND(HttpStatus.NOT_FOUND, "QUESTION_4002", "찾고있는 질문신고가 없습니다."),
+    ANSWERREPORT_ID_NULL(HttpStatus.BAD_REQUEST, "USER_4003", "답변신고 아이디는 필수 입니다."),
+    QUESTIONREPORT_ID_NULL(HttpStatus.BAD_REQUEST, "USER_4004", "질문신고 아이디는 필수 입니다."),
 
     // 이미지 관련 에러 5000
     IMAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "IMAGE_5001", "찾고 있는 이미지가 없습니다."),
@@ -39,9 +43,10 @@ public enum ErrorStatus implements BaseErrorCode {
 
     // 해시태그 관련 에러 6000
     HASHTAG_BAD_REQUEST(HttpStatus.BAD_REQUEST, "HASHTAG_6001", "해시태그 요청이 비어있습니다."),
-    HASHTAG_NOT_FOUND(HttpStatus.NOT_FOUND, "HASHTAG_6001", "찾고있는 해시태그가 없습니다."),
-    HASHTAG_ALREADY_EXISTS(HttpStatus.CONFLICT, "HASHTAG_6002", "이미 존재하는 해시태그입니다."),
-    HASHTAG_NOT_EXIST(HttpStatus.BAD_REQUEST, "HASHTAG_6003", "해당 해시태그가 존재하지 않습니다."),
+    HASHTAG_NOT_FOUND(HttpStatus.NOT_FOUND, "HASHTAG_6002", "찾고있는 해시태그가 없습니다."),
+    HASHTAG_ALREADY_EXISTS(HttpStatus.CONFLICT, "HASHTAG_6003", "이미 존재하는 해시태그입니다."),
+    HASHTAG_NOT_EXIST(HttpStatus.BAD_REQUEST, "HASHTAG_6004", "해당 해시태그가 존재하지 않습니다."),
+    HASHTAG_ID_NULL(HttpStatus.BAD_REQUEST, "USER_6005", "해시태그 아이디는 필수 입니다."),
 
     // 답변 좋아요 관련 에러 7000
 

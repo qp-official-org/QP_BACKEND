@@ -22,27 +22,25 @@ public class ExistHashTagValidator implements ConstraintValidator<ExistHashTag, 
 
     @Override
     public boolean isValid(List<Long> hashtagList, ConstraintValidatorContext context) {
+        ErrorStatus errorStatus;
 
         boolean isValid = true;
 
         if (hashtagList == null) {
-            return true;
+            errorStatus = ErrorStatus.HASHTAG_ID_NULL;
+            isValid = false;
+        } else {
+            errorStatus = ErrorStatus.HASHTAG_NOT_FOUND;
+            for (Long hashtagId : hashtagList) {
+                // 존재 하는지 확인
+                isValid = hashtagRepository.findById(hashtagId).isPresent();
+                if(!isValid) break;
+            }
         }
 
-        for (Long hashtagId : hashtagList) {
-
-            // 존재 하는지 확인
-            boolean isExist = hashtagRepository.findById(hashtagId).isPresent();
-
-            // 존재하지 않으면 false
-            if (!isExist) {
-                isValid = false;
-
-                context.disableDefaultConstraintViolation();
-                context.buildConstraintViolationWithTemplate(ErrorStatus.HASHTAG_NOT_FOUND.toString()).addConstraintViolation();
-
-                break;
-            }
+        if (!isValid) {
+            context.disableDefaultConstraintViolation();
+            context.buildConstraintViolationWithTemplate(errorStatus.toString()).addConstraintViolation();
         }
 
         return isValid;

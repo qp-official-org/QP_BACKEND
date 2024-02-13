@@ -22,17 +22,22 @@ public class ExistQuestionValidator implements ConstraintValidator<ExistQuestion
 
     @Override
     public boolean isValid(Long questionId, ConstraintValidatorContext context) {
+        ErrorStatus errorStatus;
+        boolean isValid;
+
         // null check
         if (questionId == null) {
-            return true;
+            errorStatus = ErrorStatus.QUESTION_ID_NULL;
+            isValid = false;
+        } else {
+            errorStatus = ErrorStatus.QUESTION_NOT_FOUND;
+            // isExist Question
+            isValid = questionRepository.findById(questionId).isPresent();
         }
-
-        // isExist Question
-        boolean isValid = questionRepository.findById(questionId).isPresent();
 
         if (!isValid) {
             context.disableDefaultConstraintViolation();
-            context.buildConstraintViolationWithTemplate(ErrorStatus.QUESTION_NOT_FOUND.toString()).addConstraintViolation();
+            context.buildConstraintViolationWithTemplate(errorStatus.toString()).addConstraintViolation();
         }
 
         return isValid;
