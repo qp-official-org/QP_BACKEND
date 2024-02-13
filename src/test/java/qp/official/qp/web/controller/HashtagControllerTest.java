@@ -2,6 +2,8 @@ package qp.official.qp.web.controller;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -144,6 +146,38 @@ class HashtagControllerTest {
         );
 
         // 검증
+        assertEquals(hashtagId, response.getResult().getHashtagId());
+        assertEquals(hashtag, response.getResult().getHashtag());
+    }
+
+    @Test
+    void deleteHashtag() throws Exception {
+        // given
+        Long hashtagId = 1L;
+        String hashtag = "test";
+
+        Hashtag hashtagResponse = Hashtag.builder()
+            .hashtagId(hashtagId)
+            .hashtag(hashtag)
+            .questionHashTagList(new ArrayList<>())
+            .build();
+
+        when(hashtagQueryService.deleteHashtag(any(Long.class))).thenReturn(hashtagResponse);
+
+        // when
+        ResultActions action = mockMvc.perform(MockMvcRequestBuilders.delete("/hashtag/{hashtagId}", hashtagId));
+
+        // then
+        action.andExpect(status().isOk());
+
+        ApiResponse<HashtagResponseDTO.HashtagReturnDTO> response = objectMapper.readValue(
+            action.andReturn().getResponse().getContentAsString(),
+            new TypeReference<>(){
+
+            }
+        );
+        verify(hashtagQueryService, times(1)).deleteHashtag(hashtagId);
+
         assertEquals(hashtagId, response.getResult().getHashtagId());
         assertEquals(hashtag, response.getResult().getHashtag());
     }
