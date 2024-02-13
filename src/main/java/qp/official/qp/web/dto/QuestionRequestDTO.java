@@ -40,6 +40,7 @@ public class QuestionRequestDTO {
     }
 
     @Getter
+    @Builder
     public static class UpdateDTO {
         @NotNull
         @ExistUser
