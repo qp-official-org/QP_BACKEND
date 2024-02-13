@@ -37,21 +37,6 @@ public class ImageCommandServiceImpl implements ImageCommandService {
     private String bucket;
 
     @Override
-    public String upload(MultipartFile multipartFile) throws IOException {
-        File uploadFile = convert(multipartFile).orElseThrow(() -> new IllegalArgumentException("파일 전환 실패"));
-        String fileName = "qp/" + uploadFile.getName();
-
-        // 해당 파일 이름과 동일한 이름을 가진 이미지가 존재 하면, 에러 발생
-        if (imageRepository.existsByFileName(uploadFile.getName())){
-            removeLocalFile(uploadFile);
-            throw new ImageHandler(ErrorStatus.IMAGE_ALREADY_EXISTS);
-        }
-        String url = putImage(uploadFile, fileName);
-        removeLocalFile(uploadFile);
-        return url;
-    }
-
-    @Override
     public Image saveImage(MultipartFile multipartFile) throws IOException {
         if (!multipartFile.isEmpty()){
             String url = upload(multipartFile);
@@ -90,6 +75,20 @@ public class ImageCommandServiceImpl implements ImageCommandService {
         }catch (SdkClientException e){
             throw new IOException("이미지 삭제 중 오류가 발생 했습니다.", e);
         }
+    }
+
+    private String upload(MultipartFile multipartFile) throws IOException {
+        File uploadFile = convert(multipartFile).orElseThrow(() -> new IllegalArgumentException("파일 전환 실패"));
+        String fileName = "qp/" + uploadFile.getName();
+
+        // 해당 파일 이름과 동일한 이름을 가진 이미지가 존재 하면, 에러 발생
+        if (imageRepository.existsByFileName(uploadFile.getName())){
+            removeLocalFile(uploadFile);
+            throw new ImageHandler(ErrorStatus.IMAGE_ALREADY_EXISTS);
+        }
+        String url = putImage(uploadFile, fileName);
+        removeLocalFile(uploadFile);
+        return url;
     }
 
     private static boolean isDefaultValue(S3ObjectSummary s3Object) {
