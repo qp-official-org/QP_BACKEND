@@ -40,7 +40,6 @@ public class QuestionRequestDTO {
         List<Long> hashtag;
     }
 
-    @Builder
     @Getter
     @Builder
     public static class UpdateDTO {
