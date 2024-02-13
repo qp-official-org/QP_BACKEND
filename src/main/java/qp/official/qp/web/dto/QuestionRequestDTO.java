@@ -41,8 +41,8 @@ public class QuestionRequestDTO {
 
     @Getter
     @Builder
-    @NoArgsConstructor
     @AllArgsConstructor
+    @NoArgsConstructor
     public static class UpdateDTO {
         @ExistUser
         Long userId;
