@@ -39,6 +39,7 @@ public class QuestionRequestDTO {
     }
 
     @Getter
+    @Builder
     public static class UpdateDTO {
         @ExistUser
         Long userId;
