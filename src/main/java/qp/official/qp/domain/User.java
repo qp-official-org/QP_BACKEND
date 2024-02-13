@@ -19,6 +19,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@Table(name = "users")
 @Builder
 @DynamicUpdate
 @DynamicInsert
@@ -40,14 +41,14 @@ public class User extends BaseEntity {
     private String email;
 
     @Enumerated(EnumType.STRING)
-    @Column
+    @Column(columnDefinition = "VARCHAR(10) DEFAULT 'DEFAULT'")
     private Gender gender;
 
     @ColumnDefault("0")
     private Long point;
 
     @Enumerated(EnumType.STRING)
-    @Column
+    @Column(columnDefinition = "VARCHAR(10) DEFAULT 'USER'")
     private Role role;
 
     @Enumerated(EnumType.STRING)
@@ -83,4 +84,14 @@ public class User extends BaseEntity {
                 .atZone(ZoneId.systemDefault())
                 .toLocalDateTime();
     }
+
+    public void addAnswer(Answer answer) {
+        this.answerList.add(answer);
+        answer.setUser(this);
+    }
+  
+    public void updateStatus(UserStatus status) {
+        this.status = status;
+    }
+
 }

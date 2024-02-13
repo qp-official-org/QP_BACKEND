@@ -8,6 +8,7 @@ import qp.official.qp.domain.mapping.QuestionHashTag;
 import qp.official.qp.web.dto.QuestionRequestDTO;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,8 +61,41 @@ public class Question extends BaseEntity {
         user.getQuestionList().add(this);
     }
 
+    public void addAnswer(Answer answer){
+        this.answers.add(answer);
+        answer.setQuestion(this);
+    }
+
     public void update(QuestionRequestDTO.UpdateDTO request){
         this.title = request.getTitle();
         this.content = request.getContent();
+    }
+
+    public void addHashTag(Hashtag hashtag) {
+        QuestionHashTag questionHashTag = QuestionHashTag.builder()
+                .question(this)
+                .hashtag(hashtag)
+                .build();
+
+        this.questionHashTagList.add(questionHashTag);
+    }
+
+    public void addAllHashTag(List<Hashtag> hashtagList) {
+        for (Hashtag hashtag : hashtagList) {
+            addHashTag(hashtag);
+        }
+    }
+
+    public void removeHashTag(Hashtag hashtag) {
+        this.questionHashTagList.removeIf(questionHashTag -> questionHashTag.getHashtag().equals(hashtag));
+    }
+
+    public void removeAllHashTag() {
+        this.questionHashTagList.clear();
+    }
+
+    public void delete() {
+        this.user.getQuestionList().remove(this);
+        this.getQuestionHashTagList().forEach(questionHashTag -> questionHashTag.getHashtag().getQuestionHashTagList().remove(questionHashTag));
     }
 }

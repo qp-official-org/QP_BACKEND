@@ -1,6 +1,7 @@
 package qp.official.qp.converter;
 
 import qp.official.qp.domain.Hashtag;
+import qp.official.qp.domain.Question;
 import qp.official.qp.domain.mapping.QuestionHashTag;
 
 import java.util.List;

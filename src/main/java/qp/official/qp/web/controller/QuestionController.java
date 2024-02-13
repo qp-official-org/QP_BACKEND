@@ -32,6 +32,7 @@ import java.util.Optional;
 public class QuestionController {
     private final QuestionCommandService questionCommandService;
     private final QuestionQueryService questionQueryService;
+    private final TokenService tokenService;
 
     // 질문 작성
     @PostMapping
@@ -44,6 +45,7 @@ public class QuestionController {
             @RequestBody @Valid QuestionRequestDTO.CreateDTO request
     ) {
         // accessToken으로 유효한 유저인지 인가
+        tokenService.isValidToken(request.getUserId());
 
         return ApiResponse.onSuccess(
                 SuccessStatus.Question_OK,
@@ -92,10 +94,17 @@ public class QuestionController {
 
     // 질문 삭제
     @DeleteMapping("/{questionId}")
-    @Operation(summary = "질문 삭제 API", description = "path variable로 삭제할 questionId를 입력하세요.")
+    @Operation(
+            summary = "질문 삭제 API"
+            , description = "path variable로 삭제할 questionId를 입력하세요."
+            , security = @SecurityRequirement(name = "accessToken")
+    )
     public ApiResponse<?> deleteQuestion(
             @ExistQuestion @PathVariable Long questionId,
             @RequestParam("userId") @ExistUser Long userId) {
+
+        // accessToken으로 유효한 유저인지 인가
+        tokenService.isValidToken(userId);
 
         questionCommandService.deleteQuestion(questionId);
         return ApiResponse.onSuccess(
@@ -107,10 +116,18 @@ public class QuestionController {
 
     // 질문 수정
     @PatchMapping("/{questionId}")
-    @Operation(summary = "질문 수정 API", description = "path variable로 questionId를 입력하고, Reauest Body에 수정할 title과 content를 입력하세요.")
+    @Operation(
+            summary = "질문 수정 API"
+            , description = "path variable로 questionId를 입력하고, Reauest Body에 수정할 title과 content를 입력하세요."
+            , security = @SecurityRequirement(name = "accessToken")
+    )
     public ApiResponse<QuestionResponseDTO.QuestionUpdateResultDTO> updateQuestion(
             @RequestBody @Valid QuestionRequestDTO.UpdateDTO request,
-            @ExistQuestion @PathVariable Long questionId) {
+            @ExistQuestion @PathVariable Long questionId
+
+    ) {
+        // accessToken으로 유효한 유저인지 인가
+        tokenService.isValidToken(request.getUserId());
 
         return ApiResponse.onSuccess(
                 SuccessStatus.Question_OK,

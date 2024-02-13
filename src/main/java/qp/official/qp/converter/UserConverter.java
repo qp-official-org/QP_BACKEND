@@ -21,7 +21,7 @@ public class UserConverter {
     public static UserResponseDTO.GetUserInfoDTO toUserGetInfoDTO(User user) {
         return UserResponseDTO.GetUserInfoDTO.builder()
                 .nickname(user.getNickname())
-                .profile_image(user.getProfileImage())
+                .profileImage(user.getProfileImage())
                 .email(user.getEmail())
                 .gender(user.getGender())
                 .point(user.getPoint())
@@ -32,15 +32,16 @@ public class UserConverter {
         return UserResponseDTO.UpdateUserInfoDTO.builder()
                 .userId(user.getUserId())
                 .nickname(user.getNickname())
-                .profile_image(user.getProfileImage())
+                .profileImage(user.getProfileImage())
                 .updatedAt(user.getUpdatedAt())
                 .build();
     }
 
-    public static UserResponseDTO.deleteUserDTO toUserDeleteDTO() {
+    public static UserResponseDTO.deleteUserDTO toUserDeleteDTO(User user) {
         return UserResponseDTO.deleteUserDTO.builder()
-                .userId(1L)
-                .status(UserStatus.DELETED)
+                .userId(user.getUserId())
+                .status(user.getStatus())
+                .updatedAt(user.getUpdatedAt())
                 .build();
     }
 

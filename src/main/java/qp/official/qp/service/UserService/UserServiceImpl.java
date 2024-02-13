@@ -2,13 +2,8 @@ package qp.official.qp.service.UserService;
 
 
 import com.google.gson.Gson;
-import java.io.BufferedWriter;
-import java.io.OutputStreamWriter;
-import java.text.ParseException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.springframework.stereotype.Service;
 import qp.official.qp.apiPayload.code.status.ErrorStatus;
 import qp.official.qp.apiPayload.exception.handler.UserHandler;
@@ -16,6 +11,7 @@ import qp.official.qp.converter.UserConverter;
 import qp.official.qp.domain.User;
 import qp.official.qp.domain.enums.Gender;
 import qp.official.qp.domain.enums.Role;
+import qp.official.qp.domain.enums.UserStatus;
 import qp.official.qp.repository.UserRepository;
 import qp.official.qp.web.dto.UserAuthDTO.KaKaoUserInfoDTO;
 import qp.official.qp.web.dto.UserRequestDTO;
@@ -58,8 +54,18 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public User updateUserInfo(Long userId, UserRequestDTO.UpdateUserInfoRequestDTO requestDTO) {
         User user = userRepository.findById(userId).get();
-        user.updateNickname(requestDTO.getNickname());
-        user.updateProfileImage(requestDTO.getProfile_image());
+
+        String updateNickname = requestDTO.getNickname();
+        String updateProfileImage = requestDTO.getProfileImage();
+
+        if (updateNickname != null && !updateNickname.isEmpty()){
+            user.updateNickname(requestDTO.getNickname());
+        }
+
+        if (updateProfileImage != null && !updateProfileImage.isEmpty()){
+            user.updateProfileImage(requestDTO.getProfileImage());
+        }
+
         return user;
     }
 
@@ -121,6 +127,14 @@ public class UserServiceImpl implements UserService {
         }
 
         return gson.fromJson(res.toString(), KaKaoUserInfoDTO.class);
+    }
+
+    @Override
+    public User deleteUser(Long userId){
+        User user = userRepository.findById(userId).get();
+        user.updateStatus(UserStatus.DELETED);
+        userRepository.save(user);
+        return user;
     }
 
 }

@@ -67,7 +67,8 @@ public class Answer extends BaseEntity {
         this.children.add(children);
     }
 
-    public void setQuestion(Question question){this.question = question;}
+    public void setQuestion(Question question){
+        this.question = question;}
 
     // user와 양방향 매핑하기
     public void setUser(User user){

@@ -4,6 +4,7 @@ import lombok.Getter;
 import qp.official.qp.validation.annotation.ExistUser;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 public class AnswerReportRequestDTO {
 

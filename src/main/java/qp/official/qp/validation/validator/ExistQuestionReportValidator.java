@@ -13,6 +13,7 @@ import javax.validation.ConstraintValidatorContext;
 @RequiredArgsConstructor
 public class ExistQuestionReportValidator implements ConstraintValidator<ExistQuestionReport, Long> {
     private final QuestionReportRepository questionReportRepository;
+
     @Override
     public void initialize(ExistQuestionReport constraintAnnotation) {
         ConstraintValidator.super.initialize(constraintAnnotation);
@@ -20,14 +21,21 @@ public class ExistQuestionReportValidator implements ConstraintValidator<ExistQu
 
     @Override
     public boolean isValid(Long reportId, ConstraintValidatorContext context) {
+        ErrorStatus errorStatus;
 
-        boolean isValid = true;
+        boolean isValid;
 
-        boolean isExist = questionReportRepository.findById(reportId).isPresent();
-        if (!isExist) {
+        if (reportId == null) {
+            errorStatus = ErrorStatus.QUESTIONREPORT_ID_NULL;
             isValid = false;
+        } else {
+            errorStatus = ErrorStatus.QUESTIONREPORT_NOT_FOUND;
+            isValid = questionReportRepository.findById(reportId).isPresent();
+        }
+
+        if (!isValid) {
             context.disableDefaultConstraintViolation();
-            context.buildConstraintViolationWithTemplate(ErrorStatus.QUESTIONREPORT_NOT_FOUND.toString()).addConstraintViolation();
+            context.buildConstraintViolationWithTemplate(errorStatus.toString()).addConstraintViolation();
         }
 
         return isValid;

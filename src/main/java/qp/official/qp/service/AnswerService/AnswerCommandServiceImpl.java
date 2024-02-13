@@ -48,9 +48,14 @@ public class AnswerCommandServiceImpl implements AnswerCommandService {
             parent.setChildren(answer);
         }
         User user = userRepository.findById(request.getUserId()).get();
-        answer.setUser(user);
-        answer.setQuestion(question);
-        return answerRepository.save(answer);
+
+        Answer savedAnswer = answerRepository.save(answer);
+
+        // 연관관계 설정
+        question.addAnswer(savedAnswer);
+        user.addAnswer(savedAnswer);
+
+        return savedAnswer;
     }
 
     @Override
@@ -77,7 +82,7 @@ public class AnswerCommandServiceImpl implements AnswerCommandService {
     }
 
     @Override
-    public Answer updateQuestion(Long answerId, AnswerRequestDTO.AnswerUpdateDTO request){
+    public Answer updateAnswer(Long answerId, AnswerRequestDTO.AnswerUpdateDTO request){
         Answer updateAnswer = answerRepository.findById(answerId).get();
         updateAnswer.update(request);
 

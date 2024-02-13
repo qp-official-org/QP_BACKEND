@@ -43,9 +43,8 @@ public class UserResponseDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class GetUserInfoDTO {
-        String name;
         String nickname;
-        String profile_image;
+        String profileImage;
         String email;
         Gender gender;
         Long point;
@@ -61,7 +60,7 @@ public class UserResponseDTO {
     public static class UpdateUserInfoDTO {
         Long userId;
         String nickname;
-        String profile_image;
+        String profileImage;
         LocalDateTime updatedAt;
     }
 
