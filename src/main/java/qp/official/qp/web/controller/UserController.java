@@ -26,7 +26,7 @@ import java.io.IOException;
 @CrossOrigin
 @RequestMapping("/users")
 @Slf4j
-public class UserRestController {
+public class UserController {
 
     private final UserService userService;
     private final TokenService tokenService;
