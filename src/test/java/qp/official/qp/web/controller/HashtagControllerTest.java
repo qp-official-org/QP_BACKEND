@@ -103,4 +103,49 @@ class HashtagControllerTest {
         assertEquals(hashtagId, response.getResult().getHashtagId());
     }
 
+    @Test
+    void findHashtag() throws Exception {
+        // given
+        Long hashtagId = 1L;
+        String hashtag = "test";
+
+        HashtagRequestDTO.HashtagDTO request = HashtagRequestDTO.HashtagDTO.builder()
+            .hashtag(hashtag)
+            .build();
+
+        Hashtag hashtagResponse = Hashtag.builder()
+            .hashtagId(hashtagId)
+            .hashtag(hashtag)
+            .questionHashTagList(new ArrayList<>())
+            .build();
+
+        // hashtagCommandService.findHashtag
+        when(hashtagCommandService.findHashtag(any(HashtagDTO.class))).thenReturn(hashtagResponse);
+        // ExistHashTag 어노테이션 통과 위한 설정
+        when(hashtagRepository.findById(any(Long.class))).thenReturn(Optional.of(Hashtag.builder()
+            .build()));
+
+        // when
+        String body = objectMapper.writeValueAsString(request);
+
+        ResultActions action = mockMvc.perform(MockMvcRequestBuilders.get("/hashtag/")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(body));
+
+        // then
+        // API 호출 결과가 200 OK 확인
+        action.andExpect(status().isOk());
+
+        // API 호출 결과를 ApiResponse 객체 변환
+        ApiResponse<HashtagResponseDTO.HashtagReturnDTO> response = objectMapper.readValue(
+            action.andReturn().getResponse().getContentAsString(),
+            new TypeReference<>() {
+            }
+        );
+
+        // 검증
+        assertEquals(hashtagId, response.getResult().getHashtagId());
+        assertEquals(hashtag, response.getResult().getHashtag());
+    }
+
 }
