@@ -50,6 +50,7 @@ public class UserResponseDTO {
         Gender gender;
         Role role;
         Long point;
+        LocalDateTime createdAt;
     }
 
     /**
