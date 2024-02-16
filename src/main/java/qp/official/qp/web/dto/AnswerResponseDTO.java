@@ -40,6 +40,7 @@ public class AnswerResponseDTO {
     public static class ParentAnswerPreviewDTO {
         Long answerId;
         Long userId;
+        String nickname;
         String title;
         String content;
         Category category;
@@ -67,6 +68,7 @@ public class AnswerResponseDTO {
     public static class ChildAnswerPreviewDTO {
         Long answerId;
         Long userId;
+        String nickname;
         String title;
         String content;
         Category category;
