@@ -64,12 +64,13 @@ public class UserConverter {
     public static UserResponseDTO.UserSignUpResultDTO toUserSignUpResultDTO(TokenResponseDTO response, User user) {
         return UserResponseDTO.UserSignUpResultDTO.builder()
                 .userId(user.getUserId())
+                .isNew(user.getIsNew())
                 .accessToken(response.getAccessToken())
                 .refreshToken(response.getRefreshToken())
                 .build();
     }
 
-    public static User toUserDTO(String email, String nickname) {
+    public static User toUser(String email, String nickname) {
         return User.builder()
                 .gender(Gender.DEFAULT)
                 .profileImage("https://qp-backend-bucket.s3.ap-northeast-2.amazonaws.com/qp/icon.png")

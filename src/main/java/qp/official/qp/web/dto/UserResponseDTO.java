@@ -19,7 +19,7 @@ public class UserResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class JoinResultDTO{
+    public static class JoinResultDTO {
         Long userId;
         LocalDateTime createdAt;
     }
@@ -28,8 +28,9 @@ public class UserResponseDTO {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class UserSignUpResultDTO{
+    public static class UserSignUpResultDTO {
         Long userId;
+        Boolean isNew;
         String accessToken;
         String refreshToken;
     }
