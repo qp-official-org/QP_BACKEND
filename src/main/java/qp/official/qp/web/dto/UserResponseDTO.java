@@ -48,6 +48,7 @@ public class UserResponseDTO {
         String profileImage;
         String email;
         Gender gender;
+        Role role;
         Long point;
     }
 

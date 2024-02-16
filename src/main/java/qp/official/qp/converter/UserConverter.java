@@ -23,6 +23,7 @@ public class UserConverter {
                 .nickname(user.getNickname())
                 .profileImage(user.getProfileImage())
                 .email(user.getEmail())
+                .role(user.getRole())
                 .gender(user.getGender())
                 .point(user.getPoint())
                 .build();
