@@ -1,13 +1,14 @@
 package qp.official.qp.repository;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.dao.DataIntegrityViolationException;
 import qp.official.qp.domain.User;
+
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 class UserRepositoryTest {
@@ -48,10 +49,10 @@ class UserRepositoryTest {
         userRepository.save(user);
 
         // when
-        User findUser = userRepository.findByEmail(email);
+        Optional<User> findUser = userRepository.findByEmail(email);
 
         // then
-        assertEquals(findUser, user);
+        assertEquals(findUser.orElse(null), user);
     }
     @Test
     @DisplayName("findByEmail 메소드에 존재하지 않는 이메일 주소를 전달했을 때")
@@ -60,10 +61,10 @@ class UserRepositoryTest {
         String email = "nonexistent@test.com";
 
         // when
-        User findUser = userRepository.findByEmail(email);
+        Optional<User> findUser = userRepository.findByEmail(email);
 
         // then
-        assertNull(findUser);
+        assertNull(findUser.orElse(null));
     }
 
     @Test

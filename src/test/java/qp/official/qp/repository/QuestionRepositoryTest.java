@@ -5,16 +5,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.data.domain.Page;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageRequest;
+import qp.official.qp.config.JpaEnversConfiguration;
 import qp.official.qp.domain.Hashtag;
 import qp.official.qp.domain.Question;
 import qp.official.qp.domain.User;
 import qp.official.qp.domain.mapping.QuestionHashTag;
-import qp.official.qp.repository.HashtagRepository;
-import qp.official.qp.repository.QuestionHashTagRepository;
-import qp.official.qp.repository.QuestionRepository;
-import qp.official.qp.repository.UserRepository;
 import qp.official.qp.web.dto.QuestionRequestDTO;
 
 import javax.persistence.EntityManager;
@@ -28,10 +25,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 @DataJpaTest
+@Import(JpaEnversConfiguration.class)
 public class QuestionRepositoryTest {
     private final QuestionRepository questionRepository;
     private final UserRepository userRepository;
-    private final QuestionHashTagRepository questionHashTagRepository;
     private final HashtagRepository hashtagRepository;
     private final EntityManager em;
 
@@ -39,13 +36,11 @@ public class QuestionRepositoryTest {
     public QuestionRepositoryTest(
             QuestionRepository questionRepository,
             UserRepository userRepository,
-            QuestionHashTagRepository questionHashTagRepository,
             HashtagRepository hashtagRepository,
             EntityManager em
     ) {
         this.questionRepository = questionRepository;
         this.userRepository = userRepository;
-        this.questionHashTagRepository = questionHashTagRepository;
         this.hashtagRepository = hashtagRepository;
         this.em = em;
     }
