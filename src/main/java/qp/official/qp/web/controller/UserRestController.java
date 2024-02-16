@@ -50,7 +50,8 @@ public class UserRestController {
     @GetMapping("/{userId}")
     @Operation(
             summary = "유저 정보 조회 API"
-            , description = "Header에 accessToken 필요. path variable로 조회할 userId를 입력하세요."
+            , description = "# Header에 accessToken 필요. path variable로 조회할 userId를 입력하세요. \n" +
+            "## 유저의 ROLE 은 USER, ADMIN, CHILD, EXPERT 가 있습니다."
             , security = @SecurityRequirement(name = "accessToken")
     )
     public ApiResponse<UserResponseDTO.GetUserInfoDTO> getUserInfo(
