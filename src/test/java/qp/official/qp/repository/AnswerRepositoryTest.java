@@ -5,7 +5,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageRequest;
+import qp.official.qp.config.JpaEnversConfiguration;
 import qp.official.qp.domain.Answer;
 import qp.official.qp.domain.Question;
 import qp.official.qp.domain.User;
@@ -24,6 +26,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DataJpaTest
+@Import(JpaEnversConfiguration.class)
 public class AnswerRepositoryTest {
     private final AnswerRepository answerRepository;
     private final UserRepository userRepository;
@@ -38,7 +41,7 @@ public class AnswerRepositoryTest {
         this.answerRepository = answerRepository;
         this.userRepository = userRepository;
         this.questionRepository = questionRepository;
-    }{}
+    }
 
     private static User newUser;
     private static Question testQuestion;

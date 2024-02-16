@@ -11,8 +11,8 @@ public class HashtagRequestDTO {
 
     @Builder
     @Getter
-    @NoArgsConstructor
     @AllArgsConstructor
+    @NoArgsConstructor
     public static class HashtagDTO{
         @NotBlank
         String hashtag;
