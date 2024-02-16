@@ -1,7 +1,6 @@
 package qp.official.qp.web.controller;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -10,20 +9,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.io.IOException;
-import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.web.multipart.MultipartFile;
 import qp.official.qp.apiPayload.ApiResponse;
 import qp.official.qp.domain.Image;
 import qp.official.qp.repository.ImageRepository;
@@ -31,7 +25,6 @@ import qp.official.qp.service.ImageService.ImageCommandServiceImpl;
 import qp.official.qp.service.ImageService.ImageQueryServiceImpl;
 import qp.official.qp.web.dto.ImageRequestDTO;
 import qp.official.qp.web.dto.ImageResponseDTO;
-import qp.official.qp.web.dto.ImageResponseDTO.ImageCreateResultDTO;
 
 @WebMvcTest(ImageController.class)
 class ImageControllerTest {

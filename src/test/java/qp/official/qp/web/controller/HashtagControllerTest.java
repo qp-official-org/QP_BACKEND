@@ -7,10 +7,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
@@ -18,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -26,12 +23,10 @@ import qp.official.qp.apiPayload.ApiResponse;
 import qp.official.qp.domain.Hashtag;
 import qp.official.qp.repository.HashtagRepository;
 import qp.official.qp.service.HashtagService.HashtagCommandServiceImpl;
-import qp.official.qp.service.HashtagService.HashtagQueryService;
 import qp.official.qp.service.HashtagService.HashtagQueryServiceImpl;
 import qp.official.qp.web.dto.HashtagRequestDTO;
 import qp.official.qp.web.dto.HashtagRequestDTO.HashtagDTO;
 import qp.official.qp.web.dto.HashtagResponseDTO;
-import qp.official.qp.web.dto.HashtagResponseDTO.HashtagReturnDTO;
 
 @WebMvcTest(HashtagController.class)
 class HashtagControllerTest {
