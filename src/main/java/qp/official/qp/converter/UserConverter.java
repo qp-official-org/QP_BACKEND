@@ -10,14 +10,6 @@ import qp.official.qp.web.dto.UserResponseDTO;
 
 public class UserConverter {
 
-
-    public static UserResponseDTO.JoinResultDTO createTestUser(User user) {
-        return UserResponseDTO.JoinResultDTO.builder()
-                .userId(user.getUserId())
-                .createdAt(user.getCreatedAt())
-                .build();
-    }
-
     public static UserResponseDTO.GetUserInfoDTO toUserGetInfoDTO(User user) {
         return UserResponseDTO.GetUserInfoDTO.builder()
                 .nickname(user.getNickname())
