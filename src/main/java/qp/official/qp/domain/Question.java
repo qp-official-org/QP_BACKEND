@@ -58,15 +58,14 @@ public class Question extends BaseEntity {
         }
 
         this.user = user;
-        user.getQuestionList().add(this);
+
+        // 양방향 관계를 설정
+        if (user != null) {
+            user.getQuestionList().add(this);
+        }
     }
 
-    public void addAnswer(Answer answer){
-        this.answers.add(answer);
-        answer.setQuestion(this);
-    }
-
-    public void update(QuestionRequestDTO.UpdateDTO request){
+    public void update(QuestionRequestDTO.UpdateDTO request) {
         this.title = request.getTitle();
         this.content = request.getContent();
     }
@@ -84,14 +83,6 @@ public class Question extends BaseEntity {
         for (Hashtag hashtag : hashtagList) {
             addHashTag(hashtag);
         }
-    }
-
-    public void removeHashTag(Hashtag hashtag) {
-        this.questionHashTagList.removeIf(questionHashTag -> questionHashTag.getHashtag().equals(hashtag));
-    }
-
-    public void removeAllHashTag() {
-        this.questionHashTagList.clear();
     }
 
     public void delete() {

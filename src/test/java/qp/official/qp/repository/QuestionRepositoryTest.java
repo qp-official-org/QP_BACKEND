@@ -138,8 +138,7 @@ public class QuestionRepositoryTest {
         testQuestion2.setUser(newUser);
         questionRepository.save(testQuestion2);
 
-        List<Question> list1 = questionRepository.findAll();
-        list1 = list1.stream()
+        List<Question> list1 = questionRepository.findAll().stream()
                 .sorted(
                         Comparator.comparing(Question::getCreatedAt)
                                 .thenComparing(Question::getQuestionId)
