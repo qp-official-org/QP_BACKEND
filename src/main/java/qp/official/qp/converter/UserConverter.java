@@ -26,7 +26,6 @@ public class UserConverter {
                 .role(user.getRole())
                 .gender(user.getGender())
                 .point(user.getPoint())
-                .createdAt(user.getCreatedAt())
                 .build();
     }
 
