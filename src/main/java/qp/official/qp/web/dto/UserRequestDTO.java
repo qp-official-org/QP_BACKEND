@@ -12,6 +12,9 @@ public class UserRequestDTO {
      * 유저 정보 수정
      */
     @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class UpdateUserInfoRequestDTO {
         private String nickname;
         private String profileImage;
@@ -20,6 +23,9 @@ public class UserRequestDTO {
      * 자동 로그인
      */
     @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class AutoLoginRequestDTO {
         @ExistUser
         private Long userId;
