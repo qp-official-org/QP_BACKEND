@@ -4,6 +4,8 @@ import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import qp.official.qp.domain.common.BaseEntity;
+import qp.official.qp.domain.enums.ChildStatus;
+import qp.official.qp.domain.enums.Role;
 import qp.official.qp.domain.mapping.QuestionHashTag;
 import qp.official.qp.web.dto.QuestionRequestDTO;
 
@@ -33,6 +35,10 @@ public class Question extends BaseEntity {
 
     @Builder.Default
     private Long hit = 0L;
+
+    @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "VARCHAR(15)")
+    private ChildStatus childStatus;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
