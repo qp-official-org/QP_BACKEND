@@ -26,6 +26,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import java.util.List;
 import java.util.Optional;
+import qp.official.qp.web.dto.UserQuestionAlarmResponseDTO.UserQuestionAlarmDTO;
 import qp.official.qp.web.dto.UserQuestionAlarmResponseDTO.UserQuestionAlarmListResultDTO;
 
 @RestController
@@ -149,17 +150,41 @@ public class QuestionController {
         " ### 원하는 질문에 대해 알림을 설정한 유저 정보를 제공 하는 API 입니다."
         , security = @SecurityRequirement(name = "accessToken")
     )
-    public ApiResponse<UserQuestionAlarmListResultDTO> getAnswerAlarms(
+    public ApiResponse<UserQuestionAlarmListResultDTO> getQuestionAlarms(
         @Parameter(
             description = "알람 정보를 얻고 싶은 질문의 `questionId`를 `path variable`로 받습니다."
         )
-        @PathVariable @ExistAnswer Long questionId
+        @PathVariable @ExistQuestion Long questionId
     ){
         List<UserQuestionAlarm> userQuestionAlarms = questionQueryService.getUserQuestionAlarms(questionId);
         return ApiResponse.onSuccess(
-            SuccessStatus.Answer_OK,
+            SuccessStatus.Question_OK,
             QuestionConverter.toAlarmListResultDTO(questionId, userQuestionAlarms)
         );
     }
+    @PostMapping("/alarms/{questionId}/user/{userId}")
+    @Operation(
+        summary = "특정 질문에 대한 답변 알림 설정 API"
+        , description = "# Header에 accessToken 필요. `path variable`로 알림에 대한 정보를 설정 하려는 `questionId`을 입력 하세요. \n." +
+        " ### 알림 설정을 원하는 유저가 특정 질문에 대해 알림을 설정 하는 API 입니다."
+        , security = @SecurityRequirement(name = "accessToken")
+    )
+    public ApiResponse<UserQuestionAlarmDTO> setQuestionAlarms(
+        @Parameter(
+            description = "알람 정보를 설정할 `questionId`를 `path variable`로 받습니다."
+        )
+        @PathVariable @ExistQuestion Long questionId,
+        @Parameter(
+            description = "알람 정보를 설정할 `userId`를 `path variable`로 받습니다."
+        )
+        @PathVariable @ExistUser Long userId
+    ){
+        UserQuestionAlarm userQuestionAlarm = questionCommandService.saveQuestionAlarm(questionId, userId);
+        return ApiResponse.onSuccess(
+            SuccessStatus.Question_OK,
+            QuestionConverter.toUserQuestionAlarmDTO(userQuestionAlarm)
+        );
+    }
+
 
 }

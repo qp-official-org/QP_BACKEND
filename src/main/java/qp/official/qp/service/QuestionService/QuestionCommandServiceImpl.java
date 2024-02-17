@@ -3,6 +3,8 @@ package qp.official.qp.service.QuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import qp.official.qp.apiPayload.code.status.ErrorStatus;
+import qp.official.qp.apiPayload.exception.handler.QuestionHandler;
 import qp.official.qp.converter.QuestionConverter;
 import qp.official.qp.domain.Hashtag;
 import qp.official.qp.domain.Question;
@@ -67,9 +69,16 @@ public class QuestionCommandServiceImpl implements QuestionCommandService {
         questionRepository.delete(deleteQuestion);
     }
 
-    private void saveAnswerAlarm(Question question, User user) {
+    @Override
+    public UserQuestionAlarm saveQuestionAlarm(Long questionId, Long userId) {
+        User user = userRepository.findById(userId).get();
+        Question question = questionRepository.findById(questionId).get();
+
+        if (userQuestionAlarmRepository.existsByUserAndQuestion(user, question)){
+            throw new QuestionHandler(ErrorStatus.QUESTION_ALARM_ALREADY_EXISTS);
+        }
         UserQuestionAlarm userQuestionAlarm = QuestionConverter.toUserQuestionAlarm(question, user);
-        userQuestionAlarmRepository.save(userQuestionAlarm);
+        return userQuestionAlarmRepository.save(userQuestionAlarm);
     }
 
 }

@@ -5,6 +5,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import qp.official.qp.apiPayload.code.status.ErrorStatus;
+import qp.official.qp.apiPayload.exception.handler.QuestionHandler;
 import qp.official.qp.domain.Question;
 import qp.official.qp.domain.enums.Role;
 import qp.official.qp.domain.mapping.UserQuestionAlarm;
@@ -58,6 +60,9 @@ public class QuestionQueryServiceImpl implements QuestionQueryService {
     @Override
     public List<UserQuestionAlarm> getUserQuestionAlarms(Long questionId) {
         Question findQuestion = questionRepository.findById(questionId).get();
+        if (!userQuestionAlarmRepository.existsByQuestion(findQuestion)){
+            throw new QuestionHandler(ErrorStatus.QUESTION_ALARM_NOT_FOUND);
+        }
         return userQuestionAlarmRepository.findByQuestion(findQuestion);
     }
 

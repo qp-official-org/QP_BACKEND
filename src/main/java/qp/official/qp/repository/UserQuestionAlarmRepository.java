@@ -9,6 +9,8 @@ import qp.official.qp.domain.mapping.UserQuestionAlarm;
 public interface UserQuestionAlarmRepository extends JpaRepository<UserQuestionAlarm, Long> {
 
     List<UserQuestionAlarm> findByQuestion(Question question);
-    boolean existsByUser(User user);
+    boolean existsByUserAndQuestion(User user, Question question);
+
+    boolean existsByQuestion(Question question);
 
 }

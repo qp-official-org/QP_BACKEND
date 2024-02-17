@@ -112,7 +112,7 @@ public class QuestionConverter {
             .build();
     }
 
-    private static UserQuestionAlarmResponseDTO.UserQuestionAlarmDTO toUserQuestionAlarmDTO(UserQuestionAlarm userQuestionAlarm) {
+    public static UserQuestionAlarmResponseDTO.UserQuestionAlarmDTO toUserQuestionAlarmDTO(UserQuestionAlarm userQuestionAlarm) {
         return UserQuestionAlarmResponseDTO.UserQuestionAlarmDTO.builder()
             .userId(userQuestionAlarm.getUser().getUserId())
             .createdAt(userQuestionAlarm.getCreatedAt())

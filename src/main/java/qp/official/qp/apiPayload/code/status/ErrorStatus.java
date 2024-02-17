@@ -26,12 +26,12 @@ public enum ErrorStatus implements BaseErrorCode {
     // 질문 관려 에러 2000
     QUESTION_NOT_FOUND(HttpStatus.NOT_FOUND, "QUESTION_2001", "찾고있는 질문글이 없습니다."),
     QUESTION_ID_NULL(HttpStatus.BAD_REQUEST, "USER_2002", "질문 아이디는 필수 입니다."),
+    QUESTION_ALARM_NOT_FOUND(HttpStatus.NOT_FOUND, "QUESTION_3003", "해당 질문의 알람 정보가 존재 하지 않습니다."),
+    QUESTION_ALARM_ALREADY_EXISTS(HttpStatus.CONFLICT, "QUESTION_3004", "해당 질문에 대한 알람 설정이 이미 존재 하는 유저 입니다."),
 
     // 답변 관련 에러 3000
     ANSWER_NOT_FOUND(HttpStatus.NOT_FOUND, "ANSWER_3001", "찾고있는 답변이 없습니다."),
     ANSWER_ID_NULL(HttpStatus.BAD_REQUEST, "USER_3002", "답변 아이디는 필수 입니다."),
-    ANSWER_ALARM_NOT_FOUND(HttpStatus.NOT_FOUND, "ANSWER_3003", "해당 답변에 알람 정보가 존재 하지 않습니다."),
-    ANSWER_ALARM_ALREADY_EXISTS(HttpStatus.CONFLICT, "ANSWER_3004", "해당 유저는 답변에 대한 알람 설정이 이미 존재 합니다."),
 
     // 신고 관련 에러 4000
     ANSWERREPORT_NOT_FOUND(HttpStatus.NOT_FOUND, "ANSWER_4001", "찾고있는 답변신고가 없습니다."),
