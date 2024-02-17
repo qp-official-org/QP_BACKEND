@@ -191,5 +191,27 @@ public class QuestionController {
         );
     }
 
+    @GetMapping("/user/{userId}")
+    @Operation(
+        summary = "특정 유저가 작성한 모든 질문 조회 API"
+        , description = "# Header에 accessToken 필요. \n"
+        + "`path variable`로 질문을 조회 하려는 `userId`을 입력 하세요. \n"
+        , security = @SecurityRequirement(name = "accessToken")
+    )
+    public ApiResponse<QuestionResponseDTO.QuestionPreviewListDTO> getMyQuestion(
+        @PathVariable @ExistUser Long userId,
+        @RequestParam @Min(0) Integer page,
+        @RequestParam @Min(1) @Max(10) Integer size
+    ){
+        tokenService.isValidToken(userId);
 
+        Page<Question> questions = questionQueryService.getMyQuestions(userId, page, size);
+
+        List<Integer> expertCount = questionQueryService.findExpertCountByQuestion(questions);
+
+        return ApiResponse.onSuccess(
+            SuccessStatus.Question_OK,
+            QuestionConverter.toQuestionPreviewDTOList(questions, expertCount)
+        );
+    }
 }
