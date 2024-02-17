@@ -5,6 +5,7 @@ import qp.official.qp.domain.Question;
 
 import java.util.List;
 import java.util.Optional;
+import qp.official.qp.domain.mapping.UserQuestionAlarm;
 
 public interface QuestionQueryService {
     Question findById(Long questionId);
@@ -12,4 +13,5 @@ public interface QuestionQueryService {
     Page<Question> findAllBySearch(int page, int size, Optional<String> optSearch);
 
     List<Integer> findExpertCountByQuestion(Page<Question> questions);
+    List<UserQuestionAlarm> getUserQuestionAlarms(Long questionId);
 }
