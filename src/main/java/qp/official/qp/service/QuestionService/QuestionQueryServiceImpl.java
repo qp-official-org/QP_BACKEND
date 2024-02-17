@@ -5,14 +5,18 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import qp.official.qp.apiPayload.code.status.ErrorStatus;
+import qp.official.qp.apiPayload.exception.handler.QuestionHandler;
 import qp.official.qp.domain.Question;
 import qp.official.qp.domain.enums.Role;
+import qp.official.qp.domain.mapping.UserQuestionAlarm;
 import qp.official.qp.repository.AnswerRepository;
 import qp.official.qp.repository.QuestionRepository;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import qp.official.qp.repository.UserQuestionAlarmRepository;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +24,7 @@ import java.util.stream.Collectors;
 public class QuestionQueryServiceImpl implements QuestionQueryService {
     private final QuestionRepository questionRepository;
     private final AnswerRepository answerRepository;
+    private final UserQuestionAlarmRepository userQuestionAlarmRepository;
 
     @Override
     public Question findById(Long questionId) {
@@ -51,4 +56,14 @@ public class QuestionQueryServiceImpl implements QuestionQueryService {
                 question -> answerRepository.countByQuestionAndUserRole(question, Role.EXPERT)
         ).collect(Collectors.toList());
     }
+
+    @Override
+    public List<UserQuestionAlarm> getUserQuestionAlarms(Long questionId) {
+        Question findQuestion = questionRepository.findById(questionId).get();
+        if (!userQuestionAlarmRepository.existsByQuestion(findQuestion)){
+            throw new QuestionHandler(ErrorStatus.QUESTION_ALARM_NOT_FOUND);
+        }
+        return userQuestionAlarmRepository.findByQuestionOrderByCreatedAt(findQuestion);
+    }
+
 }

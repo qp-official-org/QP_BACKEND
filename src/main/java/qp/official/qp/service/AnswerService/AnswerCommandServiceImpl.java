@@ -34,6 +34,7 @@ public class AnswerCommandServiceImpl implements AnswerCommandService {
     private final UserRepository userRepository;
     private final AnswerLikesRepository answerLikesRepository;
 
+
     @Override
     public Answer createAnswer(AnswerCreateDTO request, Long questionId) {
         Answer answer = AnswerConverter.toAnswer(request);
@@ -46,7 +47,6 @@ public class AnswerCommandServiceImpl implements AnswerCommandService {
             answer.setParent(parent);
         }
         User user = userRepository.findById(request.getUserId()).get();
-
         Answer savedAnswer = answerRepository.save(answer);
 
         // 연관관계 설정
@@ -55,6 +55,7 @@ public class AnswerCommandServiceImpl implements AnswerCommandService {
 
         return savedAnswer;
     }
+
 
     @Override
     public AnswerLikeStatus addAndDeleteLikeToAnswer(Long userId, Long answerId) {
