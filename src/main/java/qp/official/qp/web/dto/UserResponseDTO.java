@@ -12,18 +12,6 @@ import java.time.LocalDateTime;
 
 public class UserResponseDTO {
 
-    /**
-     * 회원 가입
-     */
-    @Builder
-    @Getter
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class JoinResultDTO {
-        Long userId;
-        LocalDateTime createdAt;
-    }
-
     @Getter
     @Builder
     @NoArgsConstructor
