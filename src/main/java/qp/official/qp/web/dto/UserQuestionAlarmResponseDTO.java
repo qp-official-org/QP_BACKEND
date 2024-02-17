@@ -6,17 +6,16 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import qp.official.qp.domain.mapping.AnswerAlarm;
 
-public class AnswerAlarmResponseDTO {
+public class UserQuestionAlarmResponseDTO {
 
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
     @Getter
-    public static class AnswerAlarmListResultDTO{
-        Long answerId;
-        List<AnswerAlarmDTO> answerAlarms;
+    public static class UserQuestionAlarmListResultDTO{
+        Long questionId;
+        List<UserQuestionAlarmDTO> questionAlarms;
         Integer totalElements;
     }
 
@@ -24,7 +23,7 @@ public class AnswerAlarmResponseDTO {
     @AllArgsConstructor
     @NoArgsConstructor
     @Getter
-    public static class AnswerAlarmDTO{
+    public static class UserQuestionAlarmDTO{
         Long userId;
         LocalDateTime createdAt;
     }

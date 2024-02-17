@@ -4,14 +4,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import qp.official.qp.converter.QuestionConverter;
-import qp.official.qp.converter.QuestionHashtagConverter;
 import qp.official.qp.domain.Hashtag;
 import qp.official.qp.domain.Question;
 import qp.official.qp.domain.User;
-import qp.official.qp.domain.mapping.QuestionHashTag;
+import qp.official.qp.domain.mapping.UserQuestionAlarm;
 import qp.official.qp.repository.HashtagRepository;
 import qp.official.qp.repository.QuestionHashTagRepository;
 import qp.official.qp.repository.QuestionRepository;
+import qp.official.qp.repository.UserQuestionAlarmRepository;
 import qp.official.qp.repository.UserRepository;
 import qp.official.qp.web.dto.QuestionRequestDTO;
 
@@ -25,6 +25,7 @@ public class QuestionCommandServiceImpl implements QuestionCommandService {
     private final UserRepository userRepository;
     private final HashtagRepository hashtagRepository;
     private final QuestionHashTagRepository questionHashTagRepository;
+    private final UserQuestionAlarmRepository userQuestionAlarmRepository;
 
     @Override
     public Question createQuestion(QuestionRequestDTO.CreateDTO request) {
@@ -65,4 +66,10 @@ public class QuestionCommandServiceImpl implements QuestionCommandService {
         Question deleteQuestion = questionRepository.findById(questionId).get();
         questionRepository.delete(deleteQuestion);
     }
+
+    private void saveAnswerAlarm(Question question, User user) {
+        UserQuestionAlarm userQuestionAlarm = QuestionConverter.toUserQuestionAlarm(question, user);
+        userQuestionAlarmRepository.save(userQuestionAlarm);
+    }
+
 }

@@ -9,7 +9,6 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import qp.official.qp.domain.common.BaseEntity;
 import qp.official.qp.domain.enums.Category;
-import qp.official.qp.domain.mapping.AnswerAlarm;
 import qp.official.qp.domain.mapping.AnswerLikes;
 import qp.official.qp.web.dto.AnswerRequestDTO;
 

@@ -1,20 +1,14 @@
 package qp.official.qp.service.AnswerService;
 
-import java.util.List;
 import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import qp.official.qp.apiPayload.code.BaseErrorCode;
-import qp.official.qp.apiPayload.code.status.ErrorStatus;
-import qp.official.qp.apiPayload.exception.handler.AnswerHandler;
 import qp.official.qp.domain.Answer;
 import qp.official.qp.domain.Question;
 import qp.official.qp.domain.enums.Category;
-import qp.official.qp.domain.mapping.AnswerAlarm;
-import qp.official.qp.repository.AnswerAlarmRepository;
 import qp.official.qp.repository.AnswerRepository;
 import qp.official.qp.repository.QuestionRepository;
 
@@ -25,7 +19,6 @@ public class AnswerQueryServiceImpl implements AnswerQueryService {
 
     private final AnswerRepository answerRepository;
     private final QuestionRepository questionRepository;
-    private final AnswerAlarmRepository answerAlarmRepository;
 
     // 특정 질문의 부모 답변 페이징 조회
     @Override
@@ -41,12 +34,5 @@ public class AnswerQueryServiceImpl implements AnswerQueryService {
         Answer parent = answerRepository.findById(parentAnswerId).orElseThrow(() -> new NoSuchElementException("해당 하는 답변이 존재하지 않습니다."));
         PageRequest pageRequest = PageRequest.of(page, size);
         return answerRepository.findByAnswerGroupOrderByCreatedAtDescAnswerIdDesc(parent.getAnswerId(), pageRequest);
-    }
-
-    @Override
-    public List<AnswerAlarm> getAnswerAlarms(Long answerId) {
-        Answer findAnswer = answerRepository.findById(answerId).orElseThrow(() -> new AnswerHandler(
-            ErrorStatus.ANSWER_ALARM_NOT_FOUND));
-        return answerAlarmRepository.findByAnswer(findAnswer);
     }
 }

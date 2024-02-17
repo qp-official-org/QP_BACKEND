@@ -1,6 +1,7 @@
 package qp.official.qp.web.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -10,9 +11,11 @@ import qp.official.qp.apiPayload.ApiResponse;
 import qp.official.qp.apiPayload.code.status.SuccessStatus;
 import qp.official.qp.converter.QuestionConverter;
 import qp.official.qp.domain.Question;
+import qp.official.qp.domain.mapping.UserQuestionAlarm;
 import qp.official.qp.service.QuestionService.QuestionCommandService;
 import qp.official.qp.service.QuestionService.QuestionQueryService;
 import qp.official.qp.service.TokenService.TokenService;
+import qp.official.qp.validation.annotation.ExistAnswer;
 import qp.official.qp.validation.annotation.ExistQuestion;
 import qp.official.qp.validation.annotation.ExistUser;
 import qp.official.qp.web.dto.QuestionRequestDTO;
@@ -23,6 +26,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import java.util.List;
 import java.util.Optional;
+import qp.official.qp.web.dto.UserQuestionAlarmResponseDTO.UserQuestionAlarmListResultDTO;
 
 @RestController
 @RequiredArgsConstructor
@@ -134,6 +138,27 @@ public class QuestionController {
                 QuestionConverter.toQuestionUpdateReturnDTO(
                         questionCommandService.updateQuestion(questionId, request)
                 )
+        );
+    }
+
+
+    @GetMapping("/alarms/{questionId}")
+    @Operation(
+        summary = "특정 질문에 대한 답변 알림 조회 API"
+        , description = "# Header에 accessToken 필요. `path variable`로 알림에 대한 정보를 조회 하려는 `questionId`을 입력 하세요. \n." +
+        " ### 원하는 질문에 대해 알림을 설정한 유저 정보를 제공 하는 API 입니다."
+        , security = @SecurityRequirement(name = "accessToken")
+    )
+    public ApiResponse<UserQuestionAlarmListResultDTO> getAnswerAlarms(
+        @Parameter(
+            description = "알람 정보를 얻고 싶은 질문의 `questionId`를 `path variable`로 받습니다."
+        )
+        @PathVariable @ExistAnswer Long questionId
+    ){
+        List<UserQuestionAlarm> userQuestionAlarms = questionQueryService.getUserQuestionAlarms(questionId);
+        return ApiResponse.onSuccess(
+            SuccessStatus.Answer_OK,
+            QuestionConverter.toAlarmListResultDTO(questionId, userQuestionAlarms)
         );
     }
 
