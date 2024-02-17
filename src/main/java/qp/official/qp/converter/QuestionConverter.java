@@ -20,6 +20,7 @@ public class QuestionConverter {
         return Question.builder()
                 .title(request.getTitle())
                 .content(request.getContent())
+                .childStatus(request.getChildStatus())
                 .build();
     }
     public static QuestionResponseDTO.CreateResultDTO toCreateResultDTO(Question question) {
@@ -40,6 +41,7 @@ public class QuestionConverter {
                 .questionId(question.getQuestionId())
                 .title(question.getTitle())
                 .content(question.getContent())
+                .childStatus(question.getChildStatus())
                 .hashtags(HashtagConverter.toHashtagResultDTOList(hashtagList))
                 .createdAt(question.getCreatedAt())
                 .updatedAt(question.getUpdatedAt())
@@ -60,6 +62,7 @@ public class QuestionConverter {
                 .hit(question.getHit())
                 .answerCount(question.getAnswers().size())
                 .expertCount(expertCount)
+                .childStatus(question.getChildStatus())
                 .createdAt(question.getCreatedAt())
                 .updatedAt(question.getUpdatedAt())
                 .hashtags(HashtagConverter.toHashtagResultDTOList(hashtagList))

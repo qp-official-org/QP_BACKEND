@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import qp.official.qp.domain.enums.Category;
+import qp.official.qp.domain.enums.ChildStatus;
 import qp.official.qp.validation.annotation.ExistHashTag;
 import qp.official.qp.validation.annotation.ExistUser;
 
@@ -32,6 +34,9 @@ public class QuestionRequestDTO {
         @Size(min = 1, max = 1500)
         @NotBlank
         String content;
+
+        @NotNull(message = "어린이 활성여부는 'ACTIVE', 'INACTIVE' 중 하나여야 합니다.")
+        ChildStatus childStatus;
 
         @NotNull
         @Size(min = 0, max = 10)
