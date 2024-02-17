@@ -9,6 +9,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import qp.official.qp.domain.common.BaseEntity;
 import qp.official.qp.domain.enums.Category;
+import qp.official.qp.domain.mapping.AnswerAlarm;
 import qp.official.qp.domain.mapping.AnswerLikes;
 import qp.official.qp.web.dto.AnswerRequestDTO;
 
@@ -60,6 +61,9 @@ public class Answer extends BaseEntity {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "parent", cascade = CascadeType.ALL)
     private List<Answer> children = new ArrayList<>();
+
+    @OneToMany(mappedBy = "answer", cascade = CascadeType.ALL)
+    private List<AnswerAlarm> alarms = new ArrayList<>();
 
     public void setParent(Answer parent) {
         // 기존에 이미 등록되어 있던 관계를 제거
