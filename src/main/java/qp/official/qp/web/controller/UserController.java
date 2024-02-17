@@ -125,14 +125,19 @@ public class UserController {
     }
 
     @Operation(summary = "테스트 유저 생성", description =
-            "# Test User를 생성합니다. 다른 기능을 테스트 할때 이용 하세요"
+            "# Test User를 생성합니다. 다른 기능을 테스트 할때 이용 하세요 \n" +
+                    "새로운 유저의 token, refreshToken도 같이 반환합니다."
             , security = {@SecurityRequirement(name = "accessToken"), @SecurityRequirement(name = "refreshToken")}
     )
     @PostMapping("/test")
-    public ApiResponse<UserResponseDTO.JoinResultDTO> createTestUser() {
+    public ApiResponse<UserResponseDTO.UserSignUpResultDTO> createTestUser() {
+        User newTestUser = userService.createTestUser();
         return ApiResponse.onSuccess(
                 SuccessStatus.User_OK,
-                UserConverter.createTestUser(userService.createTestUser())
+                UserConverter.toUserSignUpResultDTO(
+                        tokenService.createToken(newTestUser.getUserId()),
+                        newTestUser
+                )
         );
     }
 
