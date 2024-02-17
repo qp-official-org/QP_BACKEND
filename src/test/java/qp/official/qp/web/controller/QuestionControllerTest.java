@@ -14,6 +14,7 @@ import qp.official.qp.apiPayload.ApiResponse;
 import qp.official.qp.domain.Hashtag;
 import qp.official.qp.domain.Question;
 import qp.official.qp.domain.User;
+import qp.official.qp.domain.enums.ChildStatus;
 import qp.official.qp.repository.HashtagRepository;
 import qp.official.qp.repository.UserRepository;
 import qp.official.qp.service.QuestionService.QuestionCommandService;
@@ -72,6 +73,7 @@ class QuestionControllerTest {
         // given
         String testTitle = "new title";
         String testContent = "new content";
+        ChildStatus testChildStatus = ChildStatus.ACTIVE;
 
         Long userId = 1L;
         Long questionId = 1L;
@@ -82,6 +84,7 @@ class QuestionControllerTest {
                 .userId(userId)
                 .title(testTitle)
                 .content(testContent)
+                .childStatus(testChildStatus)
                 .hashtag(new ArrayList<>())
                 .build();
 
@@ -91,6 +94,7 @@ class QuestionControllerTest {
                 .questionId(questionId)
                 .title(testTitle)
                 .content(testContent)
+                .childStatus(testChildStatus)
                 .answers(new ArrayList<>())
                 .build();
 
