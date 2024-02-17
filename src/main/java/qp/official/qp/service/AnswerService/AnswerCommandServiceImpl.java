@@ -34,6 +34,7 @@ public class AnswerCommandServiceImpl implements AnswerCommandService {
     private final UserRepository userRepository;
     private final AnswerLikesRepository answerLikesRepository;
 
+
     @Override
     public Answer createAnswer(AnswerCreateDTO request, Long questionId) {
         Answer answer = AnswerConverter.toAnswer(request);
@@ -43,20 +44,18 @@ public class AnswerCommandServiceImpl implements AnswerCommandService {
         if (Category.CHILD.equals(answer.getCategory())) {
             Answer parent = answerRepository.findById(request.getAnswerGroup())
                 .orElseThrow(() -> new NoSuchElementException("해당하는 답변이 존재하지 않습니다."));
-
             answer.setParent(parent);
-            parent.setChildren(answer);
         }
         User user = userRepository.findById(request.getUserId()).get();
-
         Answer savedAnswer = answerRepository.save(answer);
 
         // 연관관계 설정
-        question.addAnswer(savedAnswer);
-        user.addAnswer(savedAnswer);
+        savedAnswer.setQuestion(question);
+        savedAnswer.setUser(user);
 
         return savedAnswer;
     }
+
 
     @Override
     public AnswerLikeStatus addAndDeleteLikeToAnswer(Long userId, Long answerId) {

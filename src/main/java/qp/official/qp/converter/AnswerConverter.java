@@ -55,6 +55,8 @@ public class AnswerConverter {
                 answer.getAnswerId(),
                 answer.getUser().getUserId(),
                 answer.getUser().getNickname(),
+                answer.getUser().getRole(),
+                answer.getUser().getProfileImage(),
                 answer.getTitle(),
                 answer.getContent(),
                 answer.getCategory(),
@@ -84,6 +86,8 @@ public class AnswerConverter {
                 answer.getAnswerId(),
                 answer.getUser().getUserId(),
                 answer.getUser().getNickname(),
+                answer.getUser().getRole(),
+                answer.getUser().getProfileImage(),
                 answer.getTitle(),
                 answer.getContent(),
                 answer.getCategory(),
@@ -103,5 +107,7 @@ public class AnswerConverter {
                 .updatedAt(answer.getUpdatedAt())
                 .build();
     }
+
+
 
 }
