@@ -12,24 +12,13 @@ import java.time.LocalDateTime;
 
 public class UserResponseDTO {
 
-    /**
-     * 회원 가입
-     */
-    @Builder
-    @Getter
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class JoinResultDTO{
-        Long userId;
-        LocalDateTime createdAt;
-    }
-
     @Getter
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class UserSignUpResultDTO{
+    public static class UserSignUpResultDTO {
         Long userId;
+        Boolean isNew;
         String accessToken;
         String refreshToken;
     }
@@ -47,7 +36,9 @@ public class UserResponseDTO {
         String profileImage;
         String email;
         Gender gender;
+        Role role;
         Long point;
+        LocalDateTime createdAt;
     }
 
     /**

@@ -5,40 +5,46 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageRequest;
+import qp.official.qp.config.JpaEnversConfiguration;
 import qp.official.qp.domain.Answer;
 import qp.official.qp.domain.Question;
 import qp.official.qp.domain.User;
 import qp.official.qp.domain.enums.Category;
 import qp.official.qp.domain.enums.Role;
-import qp.official.qp.repository.*;
 import qp.official.qp.web.dto.AnswerRequestDTO;
 
+import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 @DataJpaTest
+@Import(JpaEnversConfiguration.class)
 public class AnswerRepositoryTest {
     private final AnswerRepository answerRepository;
     private final UserRepository userRepository;
     private final QuestionRepository questionRepository;
+    private final EntityManager em;
 
     @Autowired
     public AnswerRepositoryTest(
             AnswerRepository answerRepository,
             UserRepository userRepository,
-            QuestionRepository questionRepository
+            QuestionRepository questionRepository,
+            EntityManager em
     ) {
         this.answerRepository = answerRepository;
         this.userRepository = userRepository;
         this.questionRepository = questionRepository;
-    }{}
+        this.em = em;
+    }
 
     private static User newUser;
     private static Question testQuestion;
@@ -54,6 +60,7 @@ public class AnswerRepositoryTest {
                 .email(email)
                 .nickname(nickname)
                 .point(point)
+                .answerList(new ArrayList<>())
                 .questionList(new ArrayList<>())
                 .role(Role.EXPERT)
                 .build();
@@ -127,7 +134,7 @@ public class AnswerRepositoryTest {
 
     @Test
     @DisplayName("특정 질문의 부모 답변 페이징 조회")
-    public void findPagingParentAnswerTest(){
+    public void findPagingParentAnswerTest() {
         // given-----------------------------------------------------------------------------------------
         //Question
         answerRepository.save(testParentAnswer);
@@ -164,7 +171,7 @@ public class AnswerRepositoryTest {
 
     @Test
     @DisplayName("부모 답변의 자식 답변 페이징 조회")
-    public void findPagingChildAnswerTest(){
+    public void findPagingChildAnswerTest() {
         // given-----------------------------------------------------------------------------------------
         answerRepository.save(testParentAnswer);
         //ChildAnswer
@@ -181,7 +188,6 @@ public class AnswerRepositoryTest {
         testChildAnswer.setUser(newUser);
         testChildAnswer.setQuestion(testQuestion);
         testChildAnswer.setParent(testParentAnswer);
-        testParentAnswer.setChildren(testChildAnswer);
 
         //ChildAnswer2
         String childnswerTitle2 = "testChildAnswerTitle2";
@@ -197,7 +203,6 @@ public class AnswerRepositoryTest {
         testChildAnswer2.setUser(newUser);
         testChildAnswer2.setQuestion(testQuestion);
         testChildAnswer2.setParent(testParentAnswer);
-        testParentAnswer.setChildren(testChildAnswer2);
 
         List<Answer> list1 = answerRepository.findAll();
         list1 = list1.stream()
@@ -263,15 +268,15 @@ public class AnswerRepositoryTest {
         testChildAnswer.setUser(newUser);
         testChildAnswer.setQuestion(testQuestion);
         testChildAnswer.setParent(testParentAnswer);
-        testParentAnswer.setChildren(testChildAnswer);
+
         //AnswerRepository에 부모답변과 자식답변 저장
         Answer saveParentAnswer = answerRepository.save(testParentAnswer);
         Answer saveChildAnswer = answerRepository.save(testChildAnswer);
 
         // when------------------------------------------------------------------------------------------
         //부모답변 삭제
+        em.clear();
         answerRepository.delete(saveParentAnswer);
-
         // then------------------------------------------------------------------------------------------
         //부모답변과 자식답변 모두 삭제되는 확인
         assertFalse(answerRepository.existsById(saveParentAnswer.getAnswerId()));

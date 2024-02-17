@@ -54,6 +54,9 @@ public class AnswerConverter {
             .map(answer -> new ParentAnswerPreviewDTO(
                 answer.getAnswerId(),
                 answer.getUser().getUserId(),
+                answer.getUser().getNickname(),
+                answer.getUser().getRole(),
+                answer.getUser().getProfileImage(),
                 answer.getTitle(),
                 answer.getContent(),
                 answer.getCategory(),
@@ -82,6 +85,9 @@ public class AnswerConverter {
             .map(answer -> new ChildAnswerPreviewDTO(
                 answer.getAnswerId(),
                 answer.getUser().getUserId(),
+                answer.getUser().getNickname(),
+                answer.getUser().getRole(),
+                answer.getUser().getProfileImage(),
                 answer.getTitle(),
                 answer.getContent(),
                 answer.getCategory(),
@@ -101,5 +107,7 @@ public class AnswerConverter {
                 .updatedAt(answer.getUpdatedAt())
                 .build();
     }
+
+
 
 }

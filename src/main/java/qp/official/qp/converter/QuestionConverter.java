@@ -3,6 +3,9 @@ package qp.official.qp.converter;
 import org.springframework.data.domain.Page;
 import qp.official.qp.domain.Hashtag;
 import qp.official.qp.domain.Question;
+import qp.official.qp.domain.User;
+import qp.official.qp.domain.mapping.UserQuestionAlarm;
+import qp.official.qp.web.dto.UserQuestionAlarmResponseDTO;
 import qp.official.qp.web.dto.QuestionRequestDTO;
 import qp.official.qp.web.dto.QuestionResponseDTO;
 import qp.official.qp.web.dto.QuestionResponseDTO.QuestionUpdateResultDTO;
@@ -17,6 +20,7 @@ public class QuestionConverter {
         return Question.builder()
                 .title(request.getTitle())
                 .content(request.getContent())
+                .childStatus(request.getChildStatus())
                 .build();
     }
     public static QuestionResponseDTO.CreateResultDTO toCreateResultDTO(Question question) {
@@ -37,6 +41,7 @@ public class QuestionConverter {
                 .questionId(question.getQuestionId())
                 .title(question.getTitle())
                 .content(question.getContent())
+                .childStatus(question.getChildStatus())
                 .hashtags(HashtagConverter.toHashtagResultDTOList(hashtagList))
                 .createdAt(question.getCreatedAt())
                 .updatedAt(question.getUpdatedAt())
@@ -57,6 +62,7 @@ public class QuestionConverter {
                 .hit(question.getHit())
                 .answerCount(question.getAnswers().size())
                 .expertCount(expertCount)
+                .childStatus(question.getChildStatus())
                 .createdAt(question.getCreatedAt())
                 .updatedAt(question.getUpdatedAt())
                 .hashtags(HashtagConverter.toHashtagResultDTOList(hashtagList))
@@ -88,5 +94,31 @@ public class QuestionConverter {
                 .content(question.getContent())
                 .updatedAt(question.getUpdatedAt())
                 .build();
+    }
+
+    public static UserQuestionAlarm toUserQuestionAlarm(Question question, User user){
+        return UserQuestionAlarm.builder()
+            .question(question)
+            .user(user)
+            .build();
+    }
+
+    public static UserQuestionAlarmResponseDTO.UserQuestionAlarmListResultDTO toAlarmListResultDTO(Long questionId, List<UserQuestionAlarm> userQuestionAlarms) {
+        List<UserQuestionAlarmResponseDTO.UserQuestionAlarmDTO> alarmDTOs = userQuestionAlarms.stream()
+            .map(QuestionConverter::toUserQuestionAlarmDTO)
+            .collect(Collectors.toList());
+
+        return UserQuestionAlarmResponseDTO.UserQuestionAlarmListResultDTO.builder()
+            .questionId(questionId)
+            .questionAlarms(alarmDTOs)
+            .totalElements(userQuestionAlarms.size())
+            .build();
+    }
+
+    public static UserQuestionAlarmResponseDTO.UserQuestionAlarmDTO toUserQuestionAlarmDTO(UserQuestionAlarm userQuestionAlarm) {
+        return UserQuestionAlarmResponseDTO.UserQuestionAlarmDTO.builder()
+            .userId(userQuestionAlarm.getUser().getUserId())
+            .createdAt(userQuestionAlarm.getCreatedAt())
+            .build();
     }
 }

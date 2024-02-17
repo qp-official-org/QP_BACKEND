@@ -1,6 +1,7 @@
 package qp.official.qp.web.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -10,9 +11,11 @@ import qp.official.qp.apiPayload.ApiResponse;
 import qp.official.qp.apiPayload.code.status.SuccessStatus;
 import qp.official.qp.converter.QuestionConverter;
 import qp.official.qp.domain.Question;
+import qp.official.qp.domain.mapping.UserQuestionAlarm;
 import qp.official.qp.service.QuestionService.QuestionCommandService;
 import qp.official.qp.service.QuestionService.QuestionQueryService;
 import qp.official.qp.service.TokenService.TokenService;
+import qp.official.qp.validation.annotation.ExistAnswer;
 import qp.official.qp.validation.annotation.ExistQuestion;
 import qp.official.qp.validation.annotation.ExistUser;
 import qp.official.qp.web.dto.QuestionRequestDTO;
@@ -23,6 +26,8 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import java.util.List;
 import java.util.Optional;
+import qp.official.qp.web.dto.UserQuestionAlarmResponseDTO.UserQuestionAlarmDTO;
+import qp.official.qp.web.dto.UserQuestionAlarmResponseDTO.UserQuestionAlarmListResultDTO;
 
 @RestController
 @RequiredArgsConstructor
@@ -136,5 +141,55 @@ public class QuestionController {
                 )
         );
     }
+
+
+    @GetMapping("/{questionId}/alarms")
+    @Operation(
+        summary = "특정 질문에 대한 답변 알림 조회 API"
+        , description = "`path variable`로 알림에 대한 정보를 조회 하려는 `questionId`을 입력 하세요. \n." +
+        " `response`로 해당 질문에 알림을 설정한 유저의 `userId`와 알람 설정 시간을 받습니다."
+        , security = @SecurityRequirement(name = "accessToken")
+    )
+    public ApiResponse<UserQuestionAlarmListResultDTO> getQuestionAlarms(
+        @Parameter(
+            description = "알람 정보를 얻고 싶은 질문의 `questionId`를 `path variable`로 받습니다."
+        )
+        @PathVariable @ExistQuestion Long questionId
+    ){
+        List<UserQuestionAlarm> userQuestionAlarms = questionQueryService.getUserQuestionAlarms(questionId);
+        return ApiResponse.onSuccess(
+            SuccessStatus.Question_OK,
+            QuestionConverter.toAlarmListResultDTO(questionId, userQuestionAlarms)
+        );
+    }
+    @PostMapping("/{questionId}/alarms/user/{userId}")
+    @Operation(
+        summary = "특정 질문에 대한 답변 알림 설정 API"
+        , description = "# Header에 accessToken 필요. \n"
+        + "`path variable`로 알림을 설정 하려는 `questionId`와 `userId`을 입력 하세요. \n"
+        + "유저가 특정 질문에 대해 알림을 설정 하는 API 입니다."
+        , security = @SecurityRequirement(name = "accessToken")
+    )
+    public ApiResponse<UserQuestionAlarmDTO> setQuestionAlarms(
+        @Parameter(
+            description = "알람 정보를 설정할 `questionId`를 `path variable`로 받습니다."
+        )
+        @PathVariable @ExistQuestion Long questionId,
+        @Parameter(
+            description = "알람 정보를 설정할 `userId`를 `path variable`로 받습니다."
+        )
+        @PathVariable @ExistUser Long userId
+    ){
+
+        // accessToken으로 유효한 유저인지 인가
+        tokenService.isValidToken(userId);
+
+        UserQuestionAlarm userQuestionAlarm = questionCommandService.saveQuestionAlarm(questionId, userId);
+        return ApiResponse.onSuccess(
+            SuccessStatus.Question_OK,
+            QuestionConverter.toUserQuestionAlarmDTO(userQuestionAlarm)
+        );
+    }
+
 
 }

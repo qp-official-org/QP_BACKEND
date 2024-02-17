@@ -31,6 +31,10 @@ public class User extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
+    @Setter
+    @Transient // DB에 저장되지 않는 필드
+    Boolean isNew;
+
     @Column(nullable = false, length = 20)
     private String nickname;
 
@@ -85,13 +89,7 @@ public class User extends BaseEntity {
                 .toLocalDateTime();
     }
 
-    public void addAnswer(Answer answer) {
-        this.answerList.add(answer);
-        answer.setUser(this);
-    }
-  
     public void updateStatus(UserStatus status) {
         this.status = status;
     }
-
 }

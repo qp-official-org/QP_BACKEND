@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import qp.official.qp.domain.enums.ChildStatus;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -26,6 +27,7 @@ public class QuestionResponseDTO {
         Long questionId;
         String title;
         String content;
+        ChildStatus childStatus;
         List<HashtagResponseDTO.HashtagReturnDTO> hashtags;
         LocalDateTime createdAt;
         LocalDateTime updatedAt;
@@ -53,6 +55,7 @@ public class QuestionResponseDTO {
         Long hit;
         Integer answerCount;
         Integer expertCount;
+        ChildStatus childStatus;
         LocalDateTime createdAt;
         LocalDateTime updatedAt;
         List<HashtagResponseDTO.HashtagReturnDTO> hashtags;

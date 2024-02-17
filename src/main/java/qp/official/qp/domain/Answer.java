@@ -1,7 +1,9 @@
 package qp.official.qp.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -57,32 +59,56 @@ public class Answer extends BaseEntity {
     private Answer parent;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "parent", cascade = CascadeType.ALL)
-    private List<Answer> children;
+    private List<Answer> children = new ArrayList<>();
 
+    public void setParent(Answer parent) {
+        // 기존에 이미 등록되어 있던 관계를 제거
+        if (this.parent != null) {
+            this.parent.getChildren().remove(this);
+        }
 
-    public void setParent(Answer parent){
         this.parent = parent;
-    }
-    public void setChildren(Answer children){
-        this.children.add(children);
+
+        if (parent == null) {
+            return;
+        }
+
+        // 양방향 관계 설정
+        parent.getChildren().add(this);
     }
 
-    public void setQuestion(Question question){
-        this.question = question;}
+    public void setQuestion(Question question) {
+        // 기존에 이미 등록되어 있던 관계를 제거
+        if (this.question != null) {
+            this.question.getAnswers().remove(this);
+        }
+
+        this.question = question;
+
+        // 양방향 관계 설정
+        if (question != null) {
+            question.getAnswers().add(this);
+        }
+    }
 
     // user와 양방향 매핑하기
-    public void setUser(User user){
+    public void setUser(User user) {
+        // 기존에 이미 등록되어 있던 관계를 제거
+        if (this.user != null) {
+            this.user.getAnswerList().remove(this);
+        }
+
         this.user = user;
+
+        // 양방향 관계 설정
+        if (user != null) {
+            user.getAnswerList().add(this);
+        }
     }
-
-
-    public void addAnswerLike(AnswerLikes answerLikes){this.answerLikesList.add(answerLikes);}
-    public void deleteAnswerLike(AnswerLikes answerLikes){this.answerLikesList.remove(answerLikes);}
 
 
     public void update(AnswerRequestDTO.AnswerUpdateDTO request) {
         this.title = request.getTitle();
         this.content = request.getContent();
     }
-
 }

@@ -26,7 +26,7 @@ import java.io.IOException;
 @CrossOrigin
 @RequestMapping("/users")
 @Slf4j
-public class UserRestController {
+public class UserController {
 
     private final UserService userService;
     private final TokenService tokenService;
@@ -34,7 +34,7 @@ public class UserRestController {
 
     @GetMapping("/sign_up")
     @Operation(summary = "회원 가입 API", description = "회원 가입을 위해 parameter로 accessToken을 입력하세요.")
-    public ApiResponse<UserResponseDTO.UserSignUpResultDTO> getKakaoCode(
+    public ApiResponse<UserResponseDTO.UserSignUpResultDTO> getKaKaoCode(
             @RequestParam String accessToken
     ) throws IOException, ParseException {
         User newUser = userService.signUp(accessToken);
@@ -50,7 +50,8 @@ public class UserRestController {
     @GetMapping("/{userId}")
     @Operation(
             summary = "유저 정보 조회 API"
-            , description = "Header에 accessToken 필요. path variable로 조회할 userId를 입력하세요."
+            , description = "# Header에 accessToken 필요. path variable로 조회할 userId를 입력하세요. \n" +
+            "## 유저의 ROLE 은 USER, ADMIN, CHILD, EXPERT 가 있습니다."
             , security = @SecurityRequirement(name = "accessToken")
     )
     public ApiResponse<UserResponseDTO.GetUserInfoDTO> getUserInfo(
@@ -124,14 +125,19 @@ public class UserRestController {
     }
 
     @Operation(summary = "테스트 유저 생성", description =
-            "# Test User를 생성합니다. 다른 기능을 테스트 할때 이용 하세요"
+            "# Test User를 생성합니다. 다른 기능을 테스트 할때 이용 하세요 \n" +
+                    "새로운 유저의 token, refreshToken도 같이 반환합니다."
             , security = {@SecurityRequirement(name = "accessToken"), @SecurityRequirement(name = "refreshToken")}
     )
     @PostMapping("/test")
-    public ApiResponse<UserResponseDTO.JoinResultDTO> createTestUser() {
+    public ApiResponse<UserResponseDTO.UserSignUpResultDTO> createTestUser() {
+        User newTestUser = userService.createTestUser();
         return ApiResponse.onSuccess(
                 SuccessStatus.User_OK,
-                UserConverter.createTestUser(userService.createTestUser())
+                UserConverter.toUserSignUpResultDTO(
+                        tokenService.createToken(newTestUser.getUserId()),
+                        newTestUser
+                )
         );
     }
 
