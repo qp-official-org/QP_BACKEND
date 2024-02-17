@@ -1,7 +1,9 @@
 package qp.official.qp.service.QuestionService;
 
+import java.util.ArrayList;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -71,7 +73,7 @@ public class QuestionQueryServiceImpl implements QuestionQueryService {
 
 
     @Override
-    public Page<Question> getMyQuestions(Long userId, int page, int size) {
+    public Page<Question> findUsersQuestions(Long userId, int page, int size) {
         PageRequest request = PageRequest.of(page, size);
         User user = userRepository.findById(userId).get();
 
@@ -82,4 +84,22 @@ public class QuestionQueryServiceImpl implements QuestionQueryService {
         return questionRepository.findByUserOrderByCreatedAtDescQuestionIdDesc(user, request);
     }
 
+    @Override
+    public Page<Question> findAlarmedQuestions(Long userId, int page, int size) {
+        PageRequest request = PageRequest.of(page, size);
+
+        User user = userRepository.findById(userId).get();
+
+        if (!userQuestionAlarmRepository.existsByUser(user)){
+            throw new QuestionHandler(ErrorStatus.QUESTION_ALARM_NOT_FOUND_BY_USER);
+        }
+
+        Page<UserQuestionAlarm> alarms = userQuestionAlarmRepository.findByUserOrderByCreatedAtDesc(user, request);
+
+        List<Question> questions = alarms.getContent().stream()
+            .map(UserQuestionAlarm::getQuestion)
+            .collect(Collectors.toList());
+
+        return new PageImpl<>(new ArrayList<>(questions), request, alarms.getTotalElements());
+    }
 }
