@@ -74,13 +74,15 @@ public class UserServiceImpl implements UserService {
     public User createTestUser() {
 
         User newUser = User.builder()
-                .email("Test_Email")
+                .email(LocalDateTime.now() + "@test.com")
                 .point(0L)
                 .lastLogin(LocalDateTime.now())
                 .profileImage("https://www.notion.so/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2Fe29b9403-b3ec-44bc-8253-1cf1ad90d216%2Fb6d5f75a-3365-4d41-b12c-01cdf95b2985%2FUntitled.png?table=block&id=ea6c2693-588c-4707-b478-fac2c4cab6b9&spaceId=e29b9403-b3ec-44bc-8253-1cf1ad90d216&width=2000&userId=2d84c7f9-2777-4bd6-aa0b-c963f16a6468&cache=v2")
                 .role(Role.USER)
+                .isNew(true)
                 .nickname("testNickName")
                 .gender(Gender.DEFAULT)
+                .status(UserStatus.ACTIVE)
                 .build();
 
         return userRepository.save(newUser);
