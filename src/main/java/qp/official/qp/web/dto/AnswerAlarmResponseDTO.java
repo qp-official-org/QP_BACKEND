@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import qp.official.qp.domain.enums.AnswerLikeStatus;
+import qp.official.qp.domain.mapping.AnswerAlarm;
 
 public class AnswerAlarmResponseDTO {
 
@@ -17,7 +17,7 @@ public class AnswerAlarmResponseDTO {
     public static class AnswerAlarmListResultDTO{
         Long answerId;
         List<AnswerAlarmDTO> answerAlarms;
-        Long totalElements;
+        Integer totalElements;
     }
 
     @Builder
@@ -28,4 +28,5 @@ public class AnswerAlarmResponseDTO {
         Long userId;
         LocalDateTime createdAt;
     }
+
 }

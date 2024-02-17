@@ -1,5 +1,6 @@
 package qp.official.qp.web.controller;
 
+import java.util.List;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
@@ -16,6 +17,7 @@ import qp.official.qp.converter.AnswerConverter;
 import qp.official.qp.converter.AnswerLikesConverter;
 import qp.official.qp.domain.Answer;
 import qp.official.qp.domain.enums.AnswerLikeStatus;
+import qp.official.qp.domain.mapping.AnswerAlarm;
 import qp.official.qp.service.AnswerService.AnswerCommandService;
 import qp.official.qp.service.AnswerService.AnswerQueryService;
 import qp.official.qp.service.TokenService.TokenService;
@@ -166,14 +168,21 @@ public class AnswerController {
     @GetMapping("/alarms/{answerId}")
     @Operation(
         summary = "답변 알림 조회 API"
-        , description = "# Header에 accessToken 필요. path variable로 알림에 대한 정보를 조회 하려는 answerId을 입력 하세요. \n." +
-        " ### 특정 원하는 답변에 대해 알림을 설정한 유저 정보를 제공 하는 API 입니다. "
+        , description = "# Header에 accessToken 필요. `path variable`로 알림에 대한 정보를 조회 하려는 `answerId`을 입력 하세요. \n." +
+        " ### 원하는 답변에 대해 알림을 설정한 유저 정보를 제공 하는 API 입니다."
         , security = @SecurityRequirement(name = "accessToken")
     )
     public ApiResponse<AnswerAlarmResponseDTO.AnswerAlarmListResultDTO> getAnswerAlarms(
-        @PathVariable Long answerId
+        @Parameter(
+            description = "알람 정보를 얻고 싶은 답변의 `answerId`를 `path variable`로 받습니다."
+        )
+        @PathVariable @ExistAnswer Long answerId
     ){
-        return null;
+        List<AnswerAlarm> answerAlarms = answerQueryService.getAnswerAlarms(answerId);
+        return ApiResponse.onSuccess(
+            SuccessStatus.Answer_OK,
+            AnswerConverter.toAlarmListResultDTO(answerId, answerAlarms)
+        );
     }
 
 }

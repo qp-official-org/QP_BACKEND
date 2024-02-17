@@ -16,6 +16,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import qp.official.qp.domain.Answer;
 import qp.official.qp.domain.User;
+import qp.official.qp.domain.common.BaseEntity;
 
 @Entity
 @Getter
@@ -24,14 +25,14 @@ import qp.official.qp.domain.User;
 @DynamicInsert
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class AnswerAlarm {
+public class AnswerAlarm extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long answerAlarmId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "question_id")
+    @JoinColumn(name = "answer_id")
     private Answer answer;
 
     @ManyToOne(fetch = FetchType.LAZY)

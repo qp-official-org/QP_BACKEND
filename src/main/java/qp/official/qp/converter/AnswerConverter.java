@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import qp.official.qp.domain.Answer;
 import qp.official.qp.domain.User;
 import qp.official.qp.domain.mapping.AnswerAlarm;
+import qp.official.qp.web.dto.AnswerAlarmResponseDTO;
 import qp.official.qp.web.dto.AnswerRequestDTO;
 import qp.official.qp.web.dto.AnswerResponseDTO;
 import java.time.LocalDateTime;
@@ -110,6 +111,25 @@ public class AnswerConverter {
         return AnswerAlarm.builder()
             .answer(answer)
             .user(user)
+            .build();
+    }
+
+    public static AnswerAlarmResponseDTO.AnswerAlarmListResultDTO toAlarmListResultDTO(Long answerId, List<AnswerAlarm> answerAlarms) {
+        List<AnswerAlarmResponseDTO.AnswerAlarmDTO> alarmDTOs = answerAlarms.stream()
+            .map(AnswerConverter::toAnswerAlarmDTO)
+            .collect(Collectors.toList());
+
+        return AnswerAlarmResponseDTO.AnswerAlarmListResultDTO.builder()
+            .answerId(answerId)
+            .answerAlarms(alarmDTOs)
+            .totalElements(answerAlarms.size())
+            .build();
+    }
+
+    private static AnswerAlarmResponseDTO.AnswerAlarmDTO toAnswerAlarmDTO(AnswerAlarm answerAlarm) {
+        return AnswerAlarmResponseDTO.AnswerAlarmDTO.builder()
+            .userId(answerAlarm.getUser().getUserId())
+            .createdAt(answerAlarm.getCreatedAt())
             .build();
     }
 
