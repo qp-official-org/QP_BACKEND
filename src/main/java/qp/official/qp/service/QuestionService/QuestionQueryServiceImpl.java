@@ -63,7 +63,7 @@ public class QuestionQueryServiceImpl implements QuestionQueryService {
         if (!userQuestionAlarmRepository.existsByQuestion(findQuestion)){
             throw new QuestionHandler(ErrorStatus.QUESTION_ALARM_NOT_FOUND);
         }
-        return userQuestionAlarmRepository.findByQuestion(findQuestion);
+        return userQuestionAlarmRepository.findByQuestionOrderByCreatedAt(findQuestion);
     }
 
 }

@@ -143,11 +143,11 @@ public class QuestionController {
     }
 
 
-    @GetMapping("/alarms/{questionId}")
+    @GetMapping("/{questionId}/alarms")
     @Operation(
         summary = "특정 질문에 대한 답변 알림 조회 API"
-        , description = "# Header에 accessToken 필요. `path variable`로 알림에 대한 정보를 조회 하려는 `questionId`을 입력 하세요. \n." +
-        " ### 원하는 질문에 대해 알림을 설정한 유저 정보를 제공 하는 API 입니다."
+        , description = "`path variable`로 알림에 대한 정보를 조회 하려는 `questionId`을 입력 하세요. \n." +
+        " `response`로 해당 질문에 알림을 설정한 유저의 `userId`와 알람 설정 시간을 받습니다."
         , security = @SecurityRequirement(name = "accessToken")
     )
     public ApiResponse<UserQuestionAlarmListResultDTO> getQuestionAlarms(
@@ -162,11 +162,12 @@ public class QuestionController {
             QuestionConverter.toAlarmListResultDTO(questionId, userQuestionAlarms)
         );
     }
-    @PostMapping("/alarms/{questionId}/user/{userId}")
+    @PostMapping("/{questionId}/alarms/user/{userId}")
     @Operation(
         summary = "특정 질문에 대한 답변 알림 설정 API"
-        , description = "# Header에 accessToken 필요. `path variable`로 알림에 대한 정보를 설정 하려는 `questionId`을 입력 하세요. \n." +
-        " ### 알림 설정을 원하는 유저가 특정 질문에 대해 알림을 설정 하는 API 입니다."
+        , description = "# Header에 accessToken 필요. \n"
+        + "`path variable`로 알림을 설정 하려는 `questionId`와 `userId`을 입력 하세요. \n"
+        + "유저가 특정 질문에 대해 알림을 설정 하는 API 입니다."
         , security = @SecurityRequirement(name = "accessToken")
     )
     public ApiResponse<UserQuestionAlarmDTO> setQuestionAlarms(
@@ -179,6 +180,10 @@ public class QuestionController {
         )
         @PathVariable @ExistUser Long userId
     ){
+
+        // accessToken으로 유효한 유저인지 인가
+        tokenService.isValidToken(userId);
+
         UserQuestionAlarm userQuestionAlarm = questionCommandService.saveQuestionAlarm(questionId, userId);
         return ApiResponse.onSuccess(
             SuccessStatus.Question_OK,
