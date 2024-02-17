@@ -22,6 +22,7 @@ import qp.official.qp.service.TokenService.TokenService;
 import qp.official.qp.validation.annotation.ExistAnswer;
 import qp.official.qp.validation.annotation.ExistQuestion;
 import qp.official.qp.validation.annotation.ExistUser;
+import qp.official.qp.web.dto.AnswerAlarmResponseDTO;
 import qp.official.qp.web.dto.AnswerLikeResponseDTO;
 import qp.official.qp.web.dto.AnswerRequestDTO;
 import qp.official.qp.web.dto.AnswerResponseDTO;
@@ -161,4 +162,18 @@ public class AnswerController {
                 SuccessStatus.AnswerLike_OK,
                 AnswerLikesConverter.toAnswerLikesResultDTO(answerLikeStatus));
     }
+
+    @GetMapping("/alarms/{answerId}")
+    @Operation(
+        summary = "답변 알림 조회 API"
+        , description = "# Header에 accessToken 필요. path variable로 알림에 대한 정보를 조회 하려는 answerId을 입력 하세요. \n." +
+        " ### 특정 원하는 답변에 대해 알림을 설정한 유저 정보를 제공 하는 API 입니다. "
+        , security = @SecurityRequirement(name = "accessToken")
+    )
+    public ApiResponse<AnswerAlarmResponseDTO.AnswerAlarmListResultDTO> getAnswerAlarms(
+        @PathVariable Long answerId
+    ){
+        return null;
+    }
+
 }

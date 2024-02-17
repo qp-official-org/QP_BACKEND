@@ -62,9 +62,6 @@ public class Answer extends BaseEntity {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "parent", cascade = CascadeType.ALL)
     private List<Answer> children = new ArrayList<>();
 
-    @OneToMany(mappedBy = "answer", cascade = CascadeType.ALL)
-    private List<AnswerAlarm> alarms = new ArrayList<>();
-
     public void setParent(Answer parent) {
         // 기존에 이미 등록되어 있던 관계를 제거
         if (this.parent != null) {

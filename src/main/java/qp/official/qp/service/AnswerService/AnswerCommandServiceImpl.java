@@ -12,7 +12,9 @@ import qp.official.qp.domain.Question;
 import qp.official.qp.domain.User;
 import qp.official.qp.domain.enums.AnswerLikeStatus;
 import qp.official.qp.domain.enums.Category;
+import qp.official.qp.domain.mapping.AnswerAlarm;
 import qp.official.qp.domain.mapping.AnswerLikes;
+import qp.official.qp.repository.AnswerAlarmRepository;
 import qp.official.qp.repository.AnswerLikesRepository;
 import qp.official.qp.repository.AnswerRepository;
 import qp.official.qp.repository.QuestionRepository;
@@ -33,6 +35,7 @@ public class AnswerCommandServiceImpl implements AnswerCommandService {
     private final QuestionRepository questionRepository;
     private final UserRepository userRepository;
     private final AnswerLikesRepository answerLikesRepository;
+    private final AnswerAlarmRepository answerAlarmRepository;
 
     @Override
     public Answer createAnswer(AnswerCreateDTO request, Long questionId) {
@@ -46,14 +49,20 @@ public class AnswerCommandServiceImpl implements AnswerCommandService {
             answer.setParent(parent);
         }
         User user = userRepository.findById(request.getUserId()).get();
-
         Answer savedAnswer = answerRepository.save(answer);
+
+        saveAnswerAlarm(savedAnswer, user);
 
         // 연관관계 설정
         savedAnswer.setQuestion(question);
         savedAnswer.setUser(user);
 
         return savedAnswer;
+    }
+
+    private void saveAnswerAlarm(Answer savedAnswer, User user) {
+        AnswerAlarm answerAlarm = AnswerConverter.toAnswerAlarm(savedAnswer, user);
+        answerAlarmRepository.save(answerAlarm);
     }
 
     @Override

@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import qp.official.qp.domain.Answer;
+import qp.official.qp.domain.User;
 
 @Entity
 @Getter
@@ -29,9 +30,11 @@ public class AnswerAlarm {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long answerAlarmId;
 
-    private Boolean isAlarmed;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "question_id")
     private Answer answer;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 }

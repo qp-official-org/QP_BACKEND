@@ -2,6 +2,8 @@ package qp.official.qp.converter;
 
 import org.springframework.data.domain.Page;
 import qp.official.qp.domain.Answer;
+import qp.official.qp.domain.User;
+import qp.official.qp.domain.mapping.AnswerAlarm;
 import qp.official.qp.web.dto.AnswerRequestDTO;
 import qp.official.qp.web.dto.AnswerResponseDTO;
 import java.time.LocalDateTime;
@@ -102,6 +104,13 @@ public class AnswerConverter {
                 .content(answer.getContent())
                 .updatedAt(answer.getUpdatedAt())
                 .build();
+    }
+
+    public static AnswerAlarm toAnswerAlarm(Answer answer, User user){
+        return AnswerAlarm.builder()
+            .answer(answer)
+            .user(user)
+            .build();
     }
 
 }
