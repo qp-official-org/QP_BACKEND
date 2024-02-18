@@ -12,4 +12,5 @@ public interface UserService {
     User signUp(String code) throws IOException, ParseException;
     User autoSignIn(Long userId);
     User deleteUser(Long userId);
+    User updateUserPoint(Long userId, UserRequestDTO.UpdateUserPointRequestDTO requestDTO);
 }

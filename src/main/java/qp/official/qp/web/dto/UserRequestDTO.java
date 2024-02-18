@@ -3,7 +3,7 @@ package qp.official.qp.web.dto;
 import lombok.*;
 import qp.official.qp.validation.annotation.ExistUser;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 
 
 public class UserRequestDTO {
@@ -31,5 +31,13 @@ public class UserRequestDTO {
         private Long userId;
     }
 
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class UpdateUserPointRequestDTO {
+        @NotNull
+        private Long point;
+    }
 
 }

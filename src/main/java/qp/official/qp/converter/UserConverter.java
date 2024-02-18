@@ -78,4 +78,10 @@ public class UserConverter {
     }
 
 
+    public static UserResponseDTO.UpdateUserPointDTO toUpdateUserPointDTO(User user) {
+        return UserResponseDTO.UpdateUserPointDTO.builder()
+                .userId(user.getUserId())
+                .point(user.getPoint())
+                .build();
+    }
 }

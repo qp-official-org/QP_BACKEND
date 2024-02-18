@@ -18,6 +18,7 @@ import qp.official.qp.web.dto.TokenDTO.TokenResponseDTO;
 import qp.official.qp.web.dto.UserRequestDTO;
 import qp.official.qp.web.dto.UserResponseDTO;
 
+import javax.validation.Valid;
 import java.io.IOException;
 
 @RestController
@@ -141,5 +142,24 @@ public class UserController {
         );
     }
 
+    @PatchMapping("/point/{userId}")
+    @Operation(
+            summary = "유저 point 충전 또는 차감 API"
+            , description = "Header에 accessToken 필요. path variable로 userId를 입력하고, Request body에 충전 또는 차감할 point를 입력하세요. \n" +
+                            "Response의 point는 회원이 보유한 총 point입니다."
+            , security = @SecurityRequirement(name = "accessToken")
+    )
+    public ApiResponse<UserResponseDTO.UpdateUserPointDTO> UpdateUserPoint(
+            @PathVariable @ExistUser Long userId,
+            @Valid @RequestBody UserRequestDTO.UpdateUserPointRequestDTO requestDTO) {
+        // accessToken으로 유효한 유저인지 인가
+        tokenService.isValidToken(userId);
+
+        User user = userService.updateUserPoint(userId, requestDTO);
+        return ApiResponse.onSuccess(
+                SuccessStatus.User_OK,
+                UserConverter.toUpdateUserPointDTO(user)
+        );
+    }
 
 }

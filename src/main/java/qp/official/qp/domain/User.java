@@ -4,6 +4,7 @@ import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.data.annotation.LastModifiedDate;
 import qp.official.qp.domain.common.BaseEntity;
 import qp.official.qp.domain.enums.Gender;
 import qp.official.qp.domain.enums.Role;
@@ -91,5 +92,9 @@ public class User extends BaseEntity {
 
     public void updateStatus(UserStatus status) {
         this.status = status;
+    }
+
+    public void updatePoint(Long point) {
+        this.point += point;
     }
 }
