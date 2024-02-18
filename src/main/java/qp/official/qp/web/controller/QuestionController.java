@@ -194,6 +194,7 @@ public class QuestionController {
     @Operation(
         summary = "특정 유저가 알림 설정한 전체 질문 조회 API"
         , description = "# Header에 accessToken 필요. \n"
+        + "특정 유저가 알림을 설정한 모든 질문을 조회 하는 API입니다. "
         + "`path variable`로 조회 하려는 `userId`을 입력 하세요. \n"
         + "특정 유저가 알림을 설정한 질문을 조회 하는 API 입니다."
         , security = @SecurityRequirement(name = "accessToken")
@@ -223,6 +224,7 @@ public class QuestionController {
     @Operation(
         summary = "특정 유저가 작성한 모든 질문 조회 API"
         , description = "# Header에 accessToken 필요. \n"
+        + "특정 유저가 작성한 모든 질문을 조회 하는 API입니다. "
         + "`path variable`로 질문을 조회 하려는 `userId`을 입력 하세요. \n"
         , security = @SecurityRequirement(name = "accessToken")
     )
