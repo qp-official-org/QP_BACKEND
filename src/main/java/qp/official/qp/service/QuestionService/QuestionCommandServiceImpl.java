@@ -9,6 +9,7 @@ import qp.official.qp.converter.QuestionConverter;
 import qp.official.qp.domain.Hashtag;
 import qp.official.qp.domain.Question;
 import qp.official.qp.domain.User;
+import qp.official.qp.domain.enums.ChildStatus;
 import qp.official.qp.domain.mapping.UserQuestionAlarm;
 import qp.official.qp.repository.HashtagRepository;
 import qp.official.qp.repository.QuestionHashTagRepository;
@@ -17,6 +18,7 @@ import qp.official.qp.repository.UserQuestionAlarmRepository;
 import qp.official.qp.repository.UserRepository;
 import qp.official.qp.web.dto.QuestionRequestDTO;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -52,6 +54,36 @@ public class QuestionCommandServiceImpl implements QuestionCommandService {
 
         // Question 저장
         return questionRepository.save(newQuestion);
+    }
+
+    @Override
+    public void createDummyQuestion(Long userId) {
+        for (int i = 0; i < 100; i++){
+            String title = "title" + i;
+            String content = "content" + i;
+            ArrayList<Long> hashtagIds = new ArrayList<>();
+            ArrayList<Hashtag> hashtags = new ArrayList<>();
+
+            int hashtagSize = 2;
+            for (int j = 1; j <= hashtagSize; j++) {
+                Hashtag newHashTag = Hashtag.builder()
+                        .hashtagId(((long) j))
+                        .hashtag("hashtag" + j)
+                        .questionHashTagList(new ArrayList<>())
+                        .build();
+                hashtags.add(newHashTag);
+            }
+
+            QuestionRequestDTO.CreateDTO newQuestion = QuestionRequestDTO.CreateDTO.builder()
+                    .userId(userId)
+                    .title(title)
+                    .content(content)
+                    .childStatus(ChildStatus.INACTIVE)
+                    .hashtag(hashtagIds)
+                    .build();
+            createQuestion(newQuestion);
+        }
+
     }
 
     @Override
