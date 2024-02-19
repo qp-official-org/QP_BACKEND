@@ -62,7 +62,8 @@ public class QuestionController {
 
     // 특정 질문 조회
     @GetMapping("/{questionId}")
-    @Operation(summary = "특정 질문 조회 API",description = "path variable로 조회 할 questionId를 입력하세요.")
+    @Operation(summary = "특정 질문 조회 API",description = "# path variable로 조회 할 questionId를 입력하세요. \n" +
+            "childStatus `ACTIVE`, `INACTIVE` 두가지로 나뉩니다. \n")
     public ApiResponse<QuestionResponseDTO.QuestionDTO> findQuestion(
             @PathVariable @ExistQuestion Long questionId
     ) {
@@ -78,7 +79,8 @@ public class QuestionController {
 
     // 전체 질문 페이징 조회 (검색 가능)
     @GetMapping
-    @Operation(summary = "전체 질문 조회 API",description = "RequestParam으로 페이징 조회를 위한 page와 size를 입력하세요. 검색을 원할 경우 search를 입력하세요.")
+    @Operation(summary = "전체 질문 조회 API",description = "# RequestParam으로 페이징 조회를 위한 page와 size를 입력하세요. 검색을 원할 경우 search를 입력하세요. \n " +
+            "childStatus는 `ACTIVE`, `INACTIVE` 두가지로 나뉩니다. \n")
     public ApiResponse<QuestionResponseDTO.QuestionPreviewListDTO> findQuestionByPaging(
             @RequestParam @Min(0) Integer page,
             @RequestParam @Min(1) @Max(10) Integer size,
