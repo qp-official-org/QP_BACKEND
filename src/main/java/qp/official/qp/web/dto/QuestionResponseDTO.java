@@ -83,6 +83,26 @@ public class QuestionResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
+    public static class QuestionAdjacentDTO {
+        Boolean hasLater;
+        Boolean hasOlder;
+        QuestionAdjacentPreviewDTO laterQuestion;
+        QuestionAdjacentPreviewDTO olderQuestion;
+
+        @Builder
+        @Getter
+        @NoArgsConstructor
+        @AllArgsConstructor
+        public static class QuestionAdjacentPreviewDTO {
+            Long questionId;
+            String title;
+        }
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class QuestionUserListDTO {
         UserResponseDTO.UserPreviewInQuestionDTO user;
         List<QuestionUserDTO> questions;

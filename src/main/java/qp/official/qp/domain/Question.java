@@ -95,4 +95,13 @@ public class Question extends BaseEntity {
         this.user.getQuestionList().remove(this);
         this.getQuestionHashTagList().forEach(questionHashTag -> questionHashTag.getHashtag().getQuestionHashTagList().remove(questionHashTag));
     }
+
+    @Builder
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class QuestionAdjacent{
+        Question laterQuestion;
+        Question olderQuestion;
+    }
 }
