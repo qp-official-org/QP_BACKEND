@@ -60,10 +60,15 @@ public class QuestionQueryServiceImpl implements QuestionQueryService {
     @Override
     public List<UserQuestionAlarm> getUserQuestionAlarms(Long questionId) {
         Question findQuestion = questionRepository.findById(questionId).get();
-        if (!userQuestionAlarmRepository.existsByQuestion(findQuestion)){
+        if (!userQuestionAlarmRepository.existsByQuestion(findQuestion)) {
             throw new QuestionHandler(ErrorStatus.QUESTION_ALARM_NOT_FOUND);
         }
         return userQuestionAlarmRepository.findByQuestionOrderByCreatedAt(findQuestion);
+    }
+
+    @Override
+    public Integer countExpertCountByQuestion(Question question) {
+        return answerRepository.countByQuestionAndUserRole(question, Role.EXPERT);
     }
 
 }
