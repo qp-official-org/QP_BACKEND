@@ -1,22 +1,27 @@
 package qp.official.qp.service.QuestionService;
 
+import java.util.ArrayList;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import qp.official.qp.apiPayload.code.status.ErrorStatus;
 import qp.official.qp.apiPayload.exception.handler.QuestionHandler;
 import qp.official.qp.domain.Question;
+import qp.official.qp.domain.User;
 import qp.official.qp.domain.enums.Role;
 import qp.official.qp.domain.mapping.UserQuestionAlarm;
 import qp.official.qp.repository.AnswerRepository;
 import qp.official.qp.repository.QuestionRepository;
+import qp.official.qp.repository.UserQuestionAlarmRepository;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import qp.official.qp.repository.UserQuestionAlarmRepository;
+import qp.official.qp.repository.UserRepository;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +29,7 @@ import qp.official.qp.repository.UserQuestionAlarmRepository;
 public class QuestionQueryServiceImpl implements QuestionQueryService {
     private final QuestionRepository questionRepository;
     private final AnswerRepository answerRepository;
+    private final UserRepository userRepository;
     private final UserQuestionAlarmRepository userQuestionAlarmRepository;
 
     @Override
@@ -60,10 +66,54 @@ public class QuestionQueryServiceImpl implements QuestionQueryService {
     @Override
     public List<UserQuestionAlarm> getUserQuestionAlarms(Long questionId) {
         Question findQuestion = questionRepository.findById(questionId).get();
-        if (!userQuestionAlarmRepository.existsByQuestion(findQuestion)){
+        if (!userQuestionAlarmRepository.existsByQuestion(findQuestion)) {
             throw new QuestionHandler(ErrorStatus.QUESTION_ALARM_NOT_FOUND);
         }
         return userQuestionAlarmRepository.findByQuestionOrderByCreatedAt(findQuestion);
+    }
+
+    @Override
+    public Page<Question> findUsersQuestions(Long userId, int page, int size) {
+        PageRequest request = PageRequest.of(page, size);
+        User user = userRepository.findById(userId).get();
+
+        if (!questionRepository.existsByUser(user)){
+            throw new QuestionHandler(ErrorStatus.QUESTION_NOT_EXIST_BY_USER);
+        }
+
+        return questionRepository.findByUserOrderByCreatedAtDescQuestionIdDesc(user, request);
+    }
+
+    @Override
+    public Page<Question> findAlarmedQuestions(Long userId, int page, int size) {
+        PageRequest request = PageRequest.of(page, size);
+
+        User user = userRepository.findById(userId).get();
+
+        if (!userQuestionAlarmRepository.existsByUser(user)){
+            throw new QuestionHandler(ErrorStatus.QUESTION_ALARM_NOT_FOUND_BY_USER);
+        }
+
+        Page<UserQuestionAlarm> alarms = userQuestionAlarmRepository.findByUserOrderByCreatedAtDesc(user, request);
+
+        List<Question> questions = alarms.getContent().stream()
+            .map(UserQuestionAlarm::getQuestion)
+            .collect(Collectors.toList());
+
+        return new PageImpl<>(new ArrayList<>(questions), request, alarms.getTotalElements());
+    }
+  
+    @Override
+    public Integer countExpertCountByQuestion(Question question) {
+        return answerRepository.countByQuestionAndUserRole(question, Role.EXPERT);
+    }
+
+    @Override
+    public Question.QuestionAdjacent findAdjacentQuestions(Long questionId) {
+        return Question.QuestionAdjacent.builder()
+                .olderQuestion(questionRepository.findTopByQuestionIdLessThanOrderByCreatedAtDescQuestionIdDesc(questionId).orElse(null))
+                .laterQuestion(questionRepository.findTopByQuestionIdGreaterThanOrderByCreatedAtAscQuestionIdAsc(questionId).orElse(null))
+                .build();
     }
 
 }
