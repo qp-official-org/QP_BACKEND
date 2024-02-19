@@ -162,4 +162,12 @@ public class UserServiceImpl implements UserService {
 
         return user;
     }
+
+    @Override
+    @Transactional
+    public User changeUserRole(Long userId, Role role) {
+        User user = userRepository.findById(userId).get();
+        user.updateRole(role);
+        return user;
+    }
 }

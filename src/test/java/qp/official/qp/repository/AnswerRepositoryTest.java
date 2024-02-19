@@ -77,11 +77,9 @@ public class AnswerRepositoryTest {
         questionRepository.save(testQuestion);
 
         //ParentAnswer
-        String parentAnswerTitle = "testParentAnswerTitle";
         String parentAnswerContent = "testParnetAnswerContent";
         Category parentAnswerCategory = Category.PARENT;
         testParentAnswer = Answer.builder()
-                .title(parentAnswerTitle)
                 .content(parentAnswerContent)
                 .category(parentAnswerCategory)
                 .children(new ArrayList<>())
@@ -106,7 +104,6 @@ public class AnswerRepositoryTest {
         // then------------------------------------------------------------------------------------------
         //Answer
         assertThat(saveAnswer).isNotNull();
-        assertThat(saveAnswer.getTitle().equals(testParentAnswer.getTitle()));
         assertThat(saveAnswer.getContent().equals(testParentAnswer.getContent()));
         assertThat(saveAnswer.getUser().equals(testParentAnswer.getUser()));
         assertThat(saveAnswer.getUser().equals(testParentAnswer.getQuestion()));
@@ -126,7 +123,6 @@ public class AnswerRepositoryTest {
         // then------------------------------------------------------------------------------------------
         //Answer
         assertEquals(1, allAnswer.size());
-        assertEquals(testParentAnswer.getTitle(), allAnswer.stream().findAny().get().getTitle());
         assertEquals(testParentAnswer.getContent(), allAnswer.stream().findAny().get().getContent());
         assertEquals(newUser, allAnswer.stream().findAny().get().getUser());
         assertEquals(testQuestion, allAnswer.stream().findAny().get().getQuestion());
@@ -138,11 +134,9 @@ public class AnswerRepositoryTest {
         // given-----------------------------------------------------------------------------------------
         //Question
         answerRepository.save(testParentAnswer);
-        String parentAnswerTitle2 = "testParentAnswerTitle2";
         String parentAnswerContent2 = "testParnetAnswerContent2";
         Category parentAnswerCategory = Category.PARENT;
         Answer testParentAnswer2 = Answer.builder()
-                .title(parentAnswerTitle2)
                 .content(parentAnswerContent2)
                 .category(parentAnswerCategory)
                 .children(new ArrayList<>())
@@ -175,11 +169,9 @@ public class AnswerRepositoryTest {
         // given-----------------------------------------------------------------------------------------
         answerRepository.save(testParentAnswer);
         //ChildAnswer
-        String childnswerTitle = "testChildAnswerTitle";
         String childAnswerContent = "testChildAnswerContent";
         Category childAnswerCategory = Category.CHILD;
         Answer testChildAnswer = Answer.builder()
-                .title(childnswerTitle)
                 .content(childAnswerContent)
                 .category(childAnswerCategory)
                 .children(new ArrayList<>())
@@ -194,7 +186,6 @@ public class AnswerRepositoryTest {
         String childAnswerContent2 = "testChildAnswerContent2";
         Category childAnswerCategory2 = Category.CHILD;
         Answer testChildAnswer2 = Answer.builder()
-                .title(childnswerTitle2)
                 .content(childAnswerContent2)
                 .category(childAnswerCategory2)
                 .children(new ArrayList<>())
@@ -232,10 +223,8 @@ public class AnswerRepositoryTest {
 
         // when------------------------------------------------------------------------------------------
         // testParentAnswer 수정
-        String updateTitle = "updateTestTitle";
         String updateContent = "updateTestContent";
         AnswerRequestDTO.AnswerUpdateDTO request = AnswerRequestDTO.AnswerUpdateDTO.builder() // UpdateDTO에 builder annotation생성
-                .title(updateTitle)
                 .content(updateContent)
                 .build();
 
@@ -245,7 +234,6 @@ public class AnswerRepositoryTest {
         //Answer
         List<Answer> allAnswer = answerRepository.findAll();
         assertEquals(1, allAnswer.size());
-        assertEquals(updateTitle, allAnswer.stream().findAny().get().getTitle());
         assertEquals(updateContent, allAnswer.stream().findAny().get().getContent());
     }
 
@@ -255,11 +243,9 @@ public class AnswerRepositoryTest {
         // given-----------------------------------------------------------------------------------------
         // static testParentAnswer 사용
         //ChildAnswer
-        String childnswerTitle = "testChildAnswerTitle";
         String childAnswerContent = "testChildAnswerContent";
         Category childAnswerCategory = Category.CHILD;
         Answer testChildAnswer = Answer.builder()
-                .title(childnswerTitle)
                 .content(childAnswerContent)
                 .category(childAnswerCategory)
                 .children(new ArrayList<>())

@@ -25,6 +25,7 @@ public class UserConverter {
     public static UserResponseDTO.UpdateUserInfoDTO toUserUpdateDTO(User user) {
         return UserResponseDTO.UpdateUserInfoDTO.builder()
                 .userId(user.getUserId())
+                .role(user.getRole())
                 .nickname(user.getNickname())
                 .profileImage(user.getProfileImage())
                 .updatedAt(user.getUpdatedAt())
@@ -50,7 +51,16 @@ public class UserConverter {
     public static UserResponseDTO.UserPreviewInQuestionDTO toUserPreviewWithQuestionDTO(User user) {
         return UserResponseDTO.UserPreviewInQuestionDTO.builder()
                 .userId(user.getUserId())
-                .ROLE(user.getRole())
+                .role(user.getRole())
+                .profileImage(user.getProfileImage())
+                .build();
+    }
+
+    public static UserResponseDTO.UserPreviewInAnswerDTO toUserPreviewWithAnswerDTO(User user) {
+        return UserResponseDTO.UserPreviewInAnswerDTO.builder()
+                .userId(user.getUserId())
+                .nickname(user.getNickname())
+                .role(user.getRole())
                 .profileImage(user.getProfileImage())
                 .build();
     }
