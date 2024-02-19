@@ -98,4 +98,35 @@ public class QuestionResponseDTO {
             String title;
         }
     }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class QuestionUserListDTO {
+        UserResponseDTO.UserPreviewInQuestionDTO user;
+        List<QuestionUserDTO> questions;
+        Integer listSize;
+        Integer totalPage;
+        Long totalElements;
+        boolean isFirst;
+        boolean isLast;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class QuestionUserDTO {
+        Long questionId;
+        String title;
+        Long hit;
+        Integer answerCount;
+        Integer expertCount;
+        ChildStatus childStatus;
+        LocalDateTime createdAt;
+        LocalDateTime updatedAt;
+        List<HashtagResponseDTO.HashtagReturnDTO> hashtags;
+    }
+
 }

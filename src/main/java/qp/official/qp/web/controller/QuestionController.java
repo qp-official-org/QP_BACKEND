@@ -208,6 +208,61 @@ public class QuestionController {
             QuestionConverter.toUserQuestionAlarmDTO(userQuestionAlarm)
         );
     }
+    @GetMapping("/alarms/user/{userId}")
+    @Operation(
+        summary = "특정 유저가 알림 설정한 전체 질문 조회 API"
+        , description = "# Header에 accessToken 필요. \n"
+        + "특정 유저가 알림을 설정한 모든 질문을 조회 하는 API입니다. "
+        + "`path variable`로 조회 하려는 `userId`을 입력 하세요. \n"
+        + "특정 유저가 알림을 설정한 질문을 조회 하는 API 입니다."
+        , security = @SecurityRequirement(name = "accessToken")
+    )
+    public ApiResponse<QuestionResponseDTO.QuestionPreviewListDTO> getMyAlarmedQuestions(
+        @Parameter(
+            description = "특정 사용자가 설정한 알림에 관한 모든 질문 정보를 얻기 위해, `Path Variable`로 해당 사용자의 userId를 받습니다."
+        )
+        @PathVariable @ExistUser Long userId,
+        @RequestParam @Min(0) Integer page,
+        @RequestParam @Min(1) @Max(10) Integer size
+    ){
+        // accessToken으로 유효한 유저인지 인가
+        tokenService.isValidToken(userId);
 
+        Page<Question> questions = questionQueryService.findAlarmedQuestions(userId, page, size);
 
+        List<Integer> expertCount = questionQueryService.findExpertCountByQuestion(questions);
+
+        return ApiResponse.onSuccess(
+            SuccessStatus.Question_OK,
+            QuestionConverter.toQuestionPreviewDTOList(questions, expertCount)
+        );
+    }
+
+    @GetMapping("/user/{userId}")
+    @Operation(
+        summary = "특정 유저가 작성한 모든 질문 조회 API"
+        , description = "# Header에 accessToken 필요. \n"
+        + "특정 유저가 작성한 모든 질문을 조회 하는 API입니다. "
+        + "`path variable`로 질문을 조회 하려는 `userId`을 입력 하세요. \n"
+        , security = @SecurityRequirement(name = "accessToken")
+    )
+    public ApiResponse<QuestionResponseDTO.QuestionPreviewListDTO> getMyQuestion(
+        @Parameter(
+            description = "특정 사용자가 작성한 전체 질문을 조회 하기 위해, `Path Variable`로 해당 사용자의 `userId`를  받습니다."
+        )
+        @PathVariable @ExistUser Long userId,
+        @RequestParam @Min(0) Integer page,
+        @RequestParam @Min(1) @Max(10) Integer size
+    ){
+        tokenService.isValidToken(userId);
+
+        Page<Question> questions = questionQueryService.findUsersQuestions(userId, page, size);
+
+        List<Integer> expertCount = questionQueryService.findExpertCountByQuestion(questions);
+
+        return ApiResponse.onSuccess(
+            SuccessStatus.Question_OK,
+            QuestionConverter.toQuestionPreviewDTOList(questions, expertCount)
+        );
+    }
 }
