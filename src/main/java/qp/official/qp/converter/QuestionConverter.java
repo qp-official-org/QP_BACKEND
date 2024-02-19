@@ -5,6 +5,8 @@ import qp.official.qp.domain.Hashtag;
 import qp.official.qp.domain.Question;
 import qp.official.qp.domain.User;
 import qp.official.qp.domain.mapping.UserQuestionAlarm;
+import qp.official.qp.web.dto.HashtagResponseDTO;
+import qp.official.qp.web.dto.QuestionResponseDTO.QuestionPreviewDTO;
 import qp.official.qp.web.dto.UserQuestionAlarmResponseDTO;
 import qp.official.qp.web.dto.QuestionRequestDTO;
 import qp.official.qp.web.dto.QuestionResponseDTO;
@@ -13,6 +15,7 @@ import qp.official.qp.web.dto.QuestionResponseDTO.QuestionUpdateResultDTO;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import qp.official.qp.web.dto.UserResponseDTO;
 
 public class QuestionConverter {
 
@@ -124,5 +127,24 @@ public class QuestionConverter {
             .userId(userQuestionAlarm.getUser().getUserId())
             .createdAt(userQuestionAlarm.getCreatedAt())
             .build();
+    }
+
+    public static QuestionResponseDTO.QuestionAdjacentDTO.QuestionAdjacentPreviewDTO toQuestionAdjacentPreviewDTO(Question question) {
+
+        if (question == null) return null;
+
+        return QuestionResponseDTO.QuestionAdjacentDTO.QuestionAdjacentPreviewDTO.builder()
+                .questionId(question.getQuestionId())
+                .title(question.getTitle())
+                .build();
+    }
+
+    public static QuestionResponseDTO.QuestionAdjacentDTO toQuestionAdjacentDTO(Question.QuestionAdjacent adjacent) {
+        return QuestionResponseDTO.QuestionAdjacentDTO.builder()
+                .hasOlder(adjacent.getOlderQuestion() != null)
+                .hasLater(adjacent.getLaterQuestion() != null)
+                .olderQuestion(toQuestionAdjacentPreviewDTO(adjacent.getOlderQuestion()))
+                .laterQuestion(toQuestionAdjacentPreviewDTO(adjacent.getLaterQuestion()))
+                .build();
     }
 }
