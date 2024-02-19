@@ -57,7 +57,8 @@ public class QuestionCommandServiceImpl implements QuestionCommandService {
     }
 
     @Override
-    public void createDummyQuestion(Long userId) {
+    public void createDummyQuestion() {
+        Long userId = 1L;
         for (int i = 0; i < 100; i++){
             String title = "title" + i;
             String content = "content" + i;
