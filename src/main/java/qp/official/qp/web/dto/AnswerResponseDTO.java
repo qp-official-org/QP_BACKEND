@@ -39,16 +39,13 @@ public class AnswerResponseDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class ParentAnswerPreviewDTO {
+        UserResponseDTO.UserPreviewInAnswerDTO user;
         Long answerId;
-        Long userId;
-        String nickname;
-        Role role;
-        String profileImage;
-        String title;
         String content;
         Category category;
         Long answerGroup;
         Integer likeCount;
+        Integer childAnswerCount;
     }
 
     @Builder
@@ -69,12 +66,8 @@ public class AnswerResponseDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class ChildAnswerPreviewDTO {
+        UserResponseDTO.UserPreviewInAnswerDTO user;
         Long answerId;
-        Long userId;
-        String nickname;
-        Role role;
-        String profileImage;
-        String title;
         String content;
         Category category;
         Long answerGroup;
@@ -87,7 +80,6 @@ public class AnswerResponseDTO {
     @AllArgsConstructor
     public static class UpdateResultDTO {
         Long answerId;
-        String title;
         String content;
         Long likeCount;
         LocalDateTime updatedAt;

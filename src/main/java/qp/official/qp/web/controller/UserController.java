@@ -11,6 +11,7 @@ import qp.official.qp.apiPayload.ApiResponse;
 import qp.official.qp.apiPayload.code.status.SuccessStatus;
 import qp.official.qp.converter.UserConverter;
 import qp.official.qp.domain.User;
+import qp.official.qp.domain.enums.Role;
 import qp.official.qp.service.TokenService.TokenService;
 import qp.official.qp.service.UserService.UserService;
 import qp.official.qp.validation.annotation.ExistUser;
@@ -18,6 +19,7 @@ import qp.official.qp.web.dto.TokenDTO.TokenResponseDTO;
 import qp.official.qp.web.dto.UserRequestDTO;
 import qp.official.qp.web.dto.UserResponseDTO;
 
+import javax.validation.Valid;
 import java.io.IOException;
 
 @RestController
@@ -124,7 +126,7 @@ public class UserController {
         );
     }
 
-    @Operation(summary = "테스트 유저 생성", description =
+    @Operation(summary = "(개발용) 테스트 유저 생성", description =
             "# Test User를 생성합니다. 다른 기능을 테스트 할때 이용 하세요 \n" +
                     "새로운 유저의 token, refreshToken도 같이 반환합니다."
             , security = {@SecurityRequirement(name = "accessToken"), @SecurityRequirement(name = "refreshToken")}
@@ -141,5 +143,38 @@ public class UserController {
         );
     }
 
+    @Operation(summary = "(개발용) 계정 Role 변경", description = "특정 유저의 Role을 전환합니다.")
+    @PostMapping("/{userId}")
+    public ApiResponse<UserResponseDTO.UpdateUserInfoDTO> changeUserRole(
+            @PathVariable @ExistUser Long userId,
+            @RequestParam Role role
+    ) {
+        return ApiResponse.onSuccess(
+                SuccessStatus.User_OK,
+                UserConverter.toUserUpdateDTO(
+                        userService.changeUserRole(userId, role)
+                )
+        );
+    }
+
+    @PatchMapping("/point/{userId}")
+    @Operation(
+            summary = "유저 point 충전 또는 차감 API"
+            , description = "Header에 accessToken 필요. path variable로 userId를 입력하고, Request body에 충전 또는 차감할 point를 입력하세요. \n" +
+            "Response의 point는 회원이 보유한 총 point입니다."
+            , security = @SecurityRequirement(name = "accessToken")
+    )
+    public ApiResponse<UserResponseDTO.UpdateUserPointDTO> UpdateUserPoint(
+            @PathVariable @ExistUser Long userId,
+            @Valid @RequestBody UserRequestDTO.UpdateUserPointRequestDTO requestDTO) {
+        // accessToken으로 유효한 유저인지 인가
+        tokenService.isValidToken(userId);
+
+        User user = userService.updateUserPoint(userId, requestDTO);
+        return ApiResponse.onSuccess(
+                SuccessStatus.User_OK,
+                UserConverter.toUpdateUserPointDTO(user)
+        );
+    }
 
 }

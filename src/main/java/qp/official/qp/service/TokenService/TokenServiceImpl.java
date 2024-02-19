@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import qp.official.qp.apiPayload.code.status.ErrorStatus;
-import qp.official.qp.apiPayload.exception.GeneralException;
 import qp.official.qp.apiPayload.exception.handler.TokenHandler;
 import qp.official.qp.converter.TokenConverter;
 import qp.official.qp.domain.User;

@@ -21,6 +21,8 @@ public enum ErrorStatus implements BaseErrorCode {
     NAME_NOT_EXIST(HttpStatus.BAD_REQUEST, "USER_1002", "이름입력은 필수 입니다."),
     USER_ALREADY_EXISTS(HttpStatus.CONFLICT, "USER_1003", "이미 존재하는 유저입니다."),
     USER_ID_NULL(HttpStatus.BAD_REQUEST, "USER_1004", "사용자 아이디는 필수 입니다."),
+    USER_POINT_ZERO(HttpStatus.BAD_REQUEST, "USER_1005", "요청 포인트는 0이 아니어야 합니다."),
+    USER_TOTALPOINT_NEGATIVE(HttpStatus.BAD_REQUEST, "USER_1006", "보유 포인트가 부족합니다."),
 
 
     // 질문 관려 에러 2000
@@ -28,6 +30,8 @@ public enum ErrorStatus implements BaseErrorCode {
     QUESTION_ID_NULL(HttpStatus.BAD_REQUEST, "USER_2002", "질문 아이디는 필수 입니다."),
     QUESTION_ALARM_NOT_FOUND(HttpStatus.NOT_FOUND, "QUESTION_2003", "해당 질문의 알람 정보가 존재 하지 않습니다."),
     QUESTION_ALARM_ALREADY_EXISTS(HttpStatus.CONFLICT, "QUESTION_2004", "해당 질문에 대한 알람 설정이 이미 존재 하는 유저 입니다."),
+    QUESTION_ALARM_NOT_FOUND_BY_USER(HttpStatus.NOT_FOUND, "QUESTION_2005", "해당 유저가 설정한 알람은 존재 하지 않습니다."),
+    QUESTION_NOT_EXIST_BY_USER(HttpStatus.NOT_FOUND, "QUESTION_2006", "해당 유저가 작성한 질문은 존재 하지 않습니다."),
 
     // 답변 관련 에러 3000
     ANSWER_NOT_FOUND(HttpStatus.NOT_FOUND, "ANSWER_3001", "찾고있는 답변이 없습니다."),
@@ -56,7 +60,13 @@ public enum ErrorStatus implements BaseErrorCode {
     TOKEN_EXPIRED(HttpStatus.BAD_REQUEST, "TOKEN_8001","토큰이 만료되었습니다."),
     TOKEN_NOT_MATCH(HttpStatus.BAD_REQUEST, "TOKEN_8002", "로그인한 사용자와 토큰의 사용자가 일치하지 않습니다."),
     TOKEN_NOT_EXIST(HttpStatus.BAD_REQUEST, "TOKEN_8003", "토큰입력은 필수 입니다."),
-    TOKEN_NOT_INCORRECT(HttpStatus.BAD_REQUEST, "TOKEN_8004", "입력 하신 토큰이 유효 하지 않습니다.");
+    TOKEN_NOT_INCORRECT(HttpStatus.BAD_REQUEST, "TOKEN_8004", "입력 하신 토큰이 유효 하지 않습니다."),
+
+    // 전문가 인증 관련 에러 9000
+    ADMIN_UNAUTHORIZED(HttpStatus.BAD_REQUEST, "EXPERT_9002","관리자 권한이 없습니다."),
+    EXPERT_EXIST(HttpStatus.BAD_REQUEST, "EXPERT_9003","이미 등록된 전문가 입니다."),
+    EXPERT_UNAUTHORIZED(HttpStatus.BAD_REQUEST, "EXPERT_9004","전문가 인증 대상이 아닙니다."),
+    AUTHCODE_NOT_MATCH(HttpStatus.BAD_REQUEST, "EXPERT_9005","인증코드가 올바르지 않습니다.");
 
     private final HttpStatus httpStatus;
     private final String code;
