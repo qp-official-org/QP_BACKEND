@@ -95,6 +95,17 @@ public class UserResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
+    public static class UserPreviewInAnswerDTO {
+        Long userId;
+        String nickname;
+        String profileImage;
+        Role ROLE;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class UpdateUserPointDTO {
         Long userId;
         Long point;

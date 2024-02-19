@@ -28,9 +28,6 @@ public class Answer extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long answerId;
 
-    @Column(nullable = false, length = 50)
-    private String title;
-
     @Column(columnDefinition = "TEXT")
     private String content;
 
@@ -108,7 +105,6 @@ public class Answer extends BaseEntity {
 
 
     public void update(AnswerRequestDTO.AnswerUpdateDTO request) {
-        this.title = request.getTitle();
         this.content = request.getContent();
     }
 }

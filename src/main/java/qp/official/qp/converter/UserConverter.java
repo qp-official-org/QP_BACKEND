@@ -55,6 +55,15 @@ public class UserConverter {
                 .build();
     }
 
+    public static UserResponseDTO.UserPreviewInAnswerDTO toUserPreviewWithAnswerDTO(User user) {
+        return UserResponseDTO.UserPreviewInAnswerDTO.builder()
+                .userId(user.getUserId())
+                .nickname(user.getNickname())
+                .ROLE(user.getRole())
+                .profileImage(user.getProfileImage())
+                .build();
+    }
+
     public static UserResponseDTO.UserSignUpResultDTO toUserSignUpResultDTO(TokenResponseDTO response, User user) {
         return UserResponseDTO.UserSignUpResultDTO.builder()
                 .userId(user.getUserId())
