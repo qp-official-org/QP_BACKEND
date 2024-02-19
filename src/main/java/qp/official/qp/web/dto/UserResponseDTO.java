@@ -90,4 +90,13 @@ public class UserResponseDTO {
         String profileImage;
         Role ROLE;
     }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class UpdateUserPointDTO {
+        Long userId;
+        Long point;
+    }
 }
