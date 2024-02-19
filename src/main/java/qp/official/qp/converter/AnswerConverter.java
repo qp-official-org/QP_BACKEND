@@ -16,7 +16,6 @@ public class AnswerConverter {
 
     public static Answer toAnswer(AnswerRequestDTO.AnswerCreateDTO request){
         return Answer.builder()
-                .title(request.getTitle())
                 .content(request.getContent())
                 .category(request.getCategory())
                 .answerGroup(request.getAnswerGroup())
@@ -52,16 +51,13 @@ public class AnswerConverter {
         List<ParentAnswerPreviewDTO> parentAnswerPreviewDTOList = parentAnswerList.getContent()
             .stream()
             .map(answer -> new ParentAnswerPreviewDTO(
+                UserConverter.toUserPreviewWithAnswerDTO(answer.getUser()),
                 answer.getAnswerId(),
-                answer.getUser().getUserId(),
-                answer.getUser().getNickname(),
-                answer.getUser().getRole(),
-                answer.getUser().getProfileImage(),
-                answer.getTitle(),
                 answer.getContent(),
                 answer.getCategory(),
                 answer.getAnswerGroup(),
-                answer.getAnswerLikesList().size()
+                answer.getAnswerLikesList().size(),
+                answer.getChildren().size()
             ))
             .collect(Collectors.toList());
         return parentAnswerPreviewDTOList;
@@ -83,12 +79,8 @@ public class AnswerConverter {
     private static List<ChildAnswerPreviewDTO> getChildAnswerPreviewDTOS(Page<Answer> childAnswerList) {
         List<ChildAnswerPreviewDTO> childAnswerDTOList = childAnswerList.getContent().stream()
             .map(answer -> new ChildAnswerPreviewDTO(
+                UserConverter.toUserPreviewWithAnswerDTO(answer.getUser()),
                 answer.getAnswerId(),
-                answer.getUser().getUserId(),
-                answer.getUser().getNickname(),
-                answer.getUser().getRole(),
-                answer.getUser().getProfileImage(),
-                answer.getTitle(),
                 answer.getContent(),
                 answer.getCategory(),
                 answer.getAnswerGroup(),
@@ -102,7 +94,6 @@ public class AnswerConverter {
     public static AnswerResponseDTO.UpdateResultDTO toUpdateResultDTO(Answer answer) {
         return AnswerResponseDTO.UpdateResultDTO.builder()
                 .answerId(answer.getAnswerId())
-                .title(answer.getTitle())
                 .content(answer.getContent())
                 .updatedAt(answer.getUpdatedAt())
                 .build();
