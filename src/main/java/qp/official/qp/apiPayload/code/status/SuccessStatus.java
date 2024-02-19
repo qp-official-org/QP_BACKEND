@@ -29,7 +29,11 @@ public enum SuccessStatus implements BaseCode {
     Hashtag_OK(HttpStatus.OK, "HASHTAG_6000", "성공입니다."),
 
     // 답변 좋아요 관련 응답
-    AnswerLike_OK(HttpStatus.OK, "ANSWERLIKE_7000", "성공입니다.");
+    AnswerLike_OK(HttpStatus.OK, "ANSWERLIKE_7000", "성공입니다."),
+
+    // 전문가 관련 응답
+    Expert_OK(HttpStatus.OK, "EXPERT_9000", "인증코드가 발급되었습니다."),
+    EXPERT_AUTHORIZED(HttpStatus.OK, "EXPERT_9001", "전문가 인증이 완료되었습니다.");
 
     private final HttpStatus httpStatus;
     private final String code;
