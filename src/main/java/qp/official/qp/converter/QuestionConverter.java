@@ -30,7 +30,7 @@ public class QuestionConverter {
                 .build();
     }
 
-    public static QuestionResponseDTO.QuestionDTO toQuestionDTO(Question question) {
+    public static QuestionResponseDTO.QuestionDTO toQuestionDTO(Question question, int expertCount) {
 
         // Get Hashtags
         List<Hashtag> hashtagList = QuestionHashtagConverter.toHashtagList(
@@ -41,6 +41,9 @@ public class QuestionConverter {
                 .questionId(question.getQuestionId())
                 .title(question.getTitle())
                 .content(question.getContent())
+                .hit(question.getHit())
+                .answerCount(question.getAnswers().size())
+                .expertCount(expertCount)
                 .childStatus(question.getChildStatus())
                 .hashtags(HashtagConverter.toHashtagResultDTOList(hashtagList))
                 .createdAt(question.getCreatedAt())

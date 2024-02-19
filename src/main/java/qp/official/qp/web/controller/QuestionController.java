@@ -66,10 +66,12 @@ public class QuestionController {
     public ApiResponse<QuestionResponseDTO.QuestionDTO> findQuestion(
             @PathVariable @ExistQuestion Long questionId
     ) {
+        Question findQuestion = questionQueryService.findById(questionId);
         return ApiResponse.onSuccess(
                 SuccessStatus.Question_OK,
                 QuestionConverter.toQuestionDTO(
-                        questionQueryService.findById(questionId)
+                        findQuestion,
+                        questionQueryService.countExpertCountByQuestion(findQuestion)
                 )
         );
     }

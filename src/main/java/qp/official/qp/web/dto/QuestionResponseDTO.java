@@ -27,6 +27,9 @@ public class QuestionResponseDTO {
         Long questionId;
         String title;
         String content;
+        Long hit;
+        Integer answerCount;
+        Integer expertCount;
         ChildStatus childStatus;
         List<HashtagResponseDTO.HashtagReturnDTO> hashtags;
         LocalDateTime createdAt;
