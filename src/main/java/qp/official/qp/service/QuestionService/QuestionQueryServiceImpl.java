@@ -12,11 +12,11 @@ import qp.official.qp.domain.enums.Role;
 import qp.official.qp.domain.mapping.UserQuestionAlarm;
 import qp.official.qp.repository.AnswerRepository;
 import qp.official.qp.repository.QuestionRepository;
+import qp.official.qp.repository.UserQuestionAlarmRepository;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import qp.official.qp.repository.UserQuestionAlarmRepository;
 
 @Service
 @RequiredArgsConstructor
@@ -69,6 +69,14 @@ public class QuestionQueryServiceImpl implements QuestionQueryService {
     @Override
     public Integer countExpertCountByQuestion(Question question) {
         return answerRepository.countByQuestionAndUserRole(question, Role.EXPERT);
+    }
+
+    @Override
+    public Question.QuestionAdjacent findAdjacentQuestions(Long questionId) {
+        return Question.QuestionAdjacent.builder()
+                .olderQuestion(questionRepository.findTopByQuestionIdLessThanOrderByCreatedAtDescQuestionIdDesc(questionId).orElse(null))
+                .laterQuestion(questionRepository.findTopByQuestionIdGreaterThanOrderByCreatedAtAscQuestionIdAsc(questionId).orElse(null))
+                .build();
     }
 
 }

@@ -78,4 +78,24 @@ public class QuestionResponseDTO {
         boolean isFirst;
         boolean isLast;
     }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class QuestionAdjacentDTO {
+        Boolean hasLater;
+        Boolean hasOlder;
+        QuestionAdjacentPreviewDTO laterQuestion;
+        QuestionAdjacentPreviewDTO olderQuestion;
+
+        @Builder
+        @Getter
+        @NoArgsConstructor
+        @AllArgsConstructor
+        public static class QuestionAdjacentPreviewDTO {
+            Long questionId;
+            String title;
+        }
+    }
 }

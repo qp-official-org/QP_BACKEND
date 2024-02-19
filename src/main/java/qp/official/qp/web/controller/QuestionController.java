@@ -77,6 +77,20 @@ public class QuestionController {
         );
     }
 
+    // 특정 질문의 이전, 다음 질문 조회하는 API
+    @GetMapping("/{questionId}/adjacent")
+    @Operation(summary = "특정 질문 의 주변 Question 조회 API",description = "# path variable로 조회 할 questionId를 입력하세요.")
+    public ApiResponse<QuestionResponseDTO.QuestionAdjacentDTO> findAdjacentQuestions(
+            @PathVariable @ExistQuestion Long questionId
+    ) {
+        return ApiResponse.onSuccess(
+                SuccessStatus.Question_OK,
+                QuestionConverter.toQuestionAdjacentDTO(
+                        questionQueryService.findAdjacentQuestions(questionId)
+                )
+        );
+    }
+
     // 전체 질문 페이징 조회 (검색 가능)
     @GetMapping
     @Operation(summary = "전체 질문 조회 API",description = "# RequestParam으로 페이징 조회를 위한 page와 size를 입력하세요. 검색을 원할 경우 search를 입력하세요. \n " +
