@@ -63,13 +63,11 @@ public class QuestionController {
     @PostMapping("/dummyQuestion")
     @Operation(
             summary = "질문 작성(더미 데이터) API"
-            , description = "Header에 accessToken 필요. 로그인 된 Id로 총 100개의 질문이 생성됩니다. 어린이 여부는 'INACTICE'로 설정 됩니다."
+            , description = "총 100개의 질문이 생성됩니다. 어린이 여부는 'INACTICE'로 설정 됩니다."
             , security = @SecurityRequirement(name = "accessToken")
     )
-    public void createDummyQuestion(Long userId) {
-        // accessToken으로 유효한 유저인지 인가
-        tokenService.isValidToken(userId);
-        questionCommandService.createDummyQuestion(userId);
+    public void createDummyQuestion() {
+        questionCommandService.createDummyQuestion();
     }
 
     // 특정 질문 조회
