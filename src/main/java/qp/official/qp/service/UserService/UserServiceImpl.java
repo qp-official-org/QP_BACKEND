@@ -148,4 +148,18 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
+    @Override
+    @Transactional
+    public User updateUserPoint(Long userId, UserRequestDTO.UpdateUserPointRequestDTO requestDTO) {
+        User user = userRepository.findById(userId).get();
+        if(requestDTO.getPoint() == 0){
+            throw new UserHandler(ErrorStatus.USER_POINT_ZERO);
+        }
+        if(user.getPoint() + requestDTO.getPoint() < 0){
+            throw new UserHandler(ErrorStatus.USER_TOTALPOINT_NEGATIVE);
+        }
+        user.updatePoint(requestDTO.getPoint());
+
+        return user;
+    }
 }

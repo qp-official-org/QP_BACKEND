@@ -14,4 +14,6 @@ public interface QuestionQueryService {
 
     List<Integer> findExpertCountByQuestion(Page<Question> questions);
     List<UserQuestionAlarm> getUserQuestionAlarms(Long questionId);
+
+    Integer countExpertCountByQuestion(Question question);
 }
