@@ -20,8 +20,6 @@ public class AnswerRequestDTO {
         @ExistUser
         Long userId;
         @NotBlank
-        String title;
-        @NotBlank
         String content;
         @NotNull(message = "카테고리는 'PARENT', 'CHILD' 중 하나여야 합니다.")
         Category category;
@@ -35,8 +33,6 @@ public class AnswerRequestDTO {
     public static class AnswerUpdateDTO {
         @ExistUser
         Long userId;
-        @NotBlank
-        String title;
         @NotBlank
         String content;
     }

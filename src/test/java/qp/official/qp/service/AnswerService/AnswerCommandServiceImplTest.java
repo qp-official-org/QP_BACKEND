@@ -51,7 +51,6 @@ class AnswerCommandServiceImplTest {
         String questionTitle = "questionTestTitle";
 
         // 답변 정보
-        String title = "testTitle";
         String content = "testContent";
         Category category = Category.PARENT;
 
@@ -60,7 +59,6 @@ class AnswerCommandServiceImplTest {
         // 예상 되는 답변 객체 생성
         Answer expectAnswer = Answer.builder()
             .answerId(answerId)
-            .title(title)
             .content(content)
             .category(category)
             .children(new ArrayList<>())
@@ -98,7 +96,6 @@ class AnswerCommandServiceImplTest {
         // when
         AnswerRequestDTO.AnswerCreateDTO request = AnswerRequestDTO.AnswerCreateDTO.builder()
             .userId(userId)
-            .title(title)
             .content(content)
             .category(category)
             .build();
@@ -115,7 +112,6 @@ class AnswerCommandServiceImplTest {
         for (int i = 0; i < childAnswerSize; i++){
             AnswerRequestDTO.AnswerCreateDTO childRequest = AnswerRequestDTO.AnswerCreateDTO.builder()
                 .userId(userId)
-                .title("testTitle" + i)
                 .content("testContent" + i)
                 .category(child)
                 .answerGroup(answerId)
@@ -127,7 +123,6 @@ class AnswerCommandServiceImplTest {
 
         // 검증
         assertEquals(answerId, answer.getAnswerId());
-        assertEquals(title, answer.getTitle());
         assertEquals(content, answer.getContent());
         assertEquals(category, answer.getCategory());
 
@@ -155,13 +150,13 @@ class AnswerCommandServiceImplTest {
         Long userId = 1L;
 
         // 답변 정보
-        String title = "testTitle";
+        String content = "testContent";
         Long answerId = 1L;
 
         // 예상 답변 객체 생성
         Answer expectAnswer = Answer.builder()
             .answerId(answerId)
-            .title(title)
+            .content(content)
             .build();
 
         // 테스트 사용자 객체 생성
@@ -210,13 +205,13 @@ class AnswerCommandServiceImplTest {
         Long userId = 1L;
 
         // 답변 정보
-        String title = "testTitle";
+        String content = "testContent";
         Long answerId = 1L;
 
         // 예상 답변 객체 생성
         Answer expectAnswer = Answer.builder()
             .answerId(answerId)
-            .title(title)
+            .content(content)
             .build();
 
         // 테스트 사용자 객체 생성
@@ -250,13 +245,13 @@ class AnswerCommandServiceImplTest {
         // given
 
         // 답변 정보
-        String title = "testTitle";
+        String content = "testContent";
         Long answerId = 1L;
 
         // 예상 답변 객체 생성
         Answer expectAnswer = Answer.builder()
             .answerId(answerId)
-            .title(title)
+            .content(content)
             .build();
 
         // answerRepository.findById
@@ -278,24 +273,20 @@ class AnswerCommandServiceImplTest {
         Long userId = 1L;
 
         // 업데이트 전 답변 정보
-        String originalTitle = "Original Title";
         String originalContent = "Original Content";
 
         // 업데이트 요청 정보
-        String updatedTitle = "Updated Title";
         String updatedContent = "Updated Content";
 
         // 기존 답변 객체 생성
         Answer originalAnswer = Answer.builder()
             .answerId(answerId)
-            .title(originalTitle)
             .content(originalContent)
             .build();
 
         // 답변 업데이트 DTO 생성
         AnswerRequestDTO.AnswerUpdateDTO request = AnswerRequestDTO.AnswerUpdateDTO.builder()
             .userId(userId)
-            .title(updatedTitle)
             .content(updatedContent)
             .build();
 
@@ -309,7 +300,6 @@ class AnswerCommandServiceImplTest {
         // then
         // answer 업데이트 확인
         assertEquals(answerId, updatedAnswer.getAnswerId());
-        assertEquals(updatedTitle, updatedAnswer.getTitle());
         assertEquals(updatedContent, updatedAnswer.getContent());
     }
 }

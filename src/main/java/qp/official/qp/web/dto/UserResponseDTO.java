@@ -89,7 +89,18 @@ public class UserResponseDTO {
     public static class UserPreviewInQuestionDTO {
         Long userId;
         String profileImage;
-        Role ROLE;
+        Role role;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class UserPreviewInAnswerDTO {
+        Long userId;
+        String nickname;
+        String profileImage;
+        Role role;
     }
 
     @Builder
