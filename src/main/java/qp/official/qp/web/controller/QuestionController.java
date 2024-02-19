@@ -60,16 +60,6 @@ public class QuestionController {
         );
     }
 
-    @PostMapping("/dummyQuestion")
-    @Operation(
-            summary = "질문 작성(더미 데이터) API"
-            , description = "총 100개의 질문이 생성됩니다. 어린이 여부는 'INACTICE'로 설정 됩니다."
-            , security = @SecurityRequirement(name = "accessToken")
-    )
-    public void createDummyQuestion() {
-        questionCommandService.createDummyQuestion();
-    }
-
     // 특정 질문 조회
     @GetMapping("/{questionId}")
     @Operation(summary = "특정 질문 조회 API",description = "# path variable로 조회 할 questionId를 입력하세요. \n" +
