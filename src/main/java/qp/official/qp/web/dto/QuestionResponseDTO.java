@@ -25,8 +25,12 @@ public class QuestionResponseDTO {
     @AllArgsConstructor
     public static class QuestionDTO {
         Long questionId;
+        UserResponseDTO.UserPreviewInQuestionDTO user;
         String title;
         String content;
+        Long hit;
+        Integer answerCount;
+        Integer expertCount;
         ChildStatus childStatus;
         List<HashtagResponseDTO.HashtagReturnDTO> hashtags;
         LocalDateTime createdAt;
