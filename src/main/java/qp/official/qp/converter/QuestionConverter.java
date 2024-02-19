@@ -39,6 +39,7 @@ public class QuestionConverter {
 
         return QuestionResponseDTO.QuestionDTO.builder()
                 .questionId(question.getQuestionId())
+                .user(UserConverter.toUserPreviewWithQuestionDTO(question.getUser()))
                 .title(question.getTitle())
                 .content(question.getContent())
                 .hit(question.getHit())

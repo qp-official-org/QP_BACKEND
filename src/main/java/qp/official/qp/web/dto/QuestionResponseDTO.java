@@ -25,6 +25,7 @@ public class QuestionResponseDTO {
     @AllArgsConstructor
     public static class QuestionDTO {
         Long questionId;
+        UserResponseDTO.UserPreviewInQuestionDTO user;
         String title;
         String content;
         Long hit;
