@@ -9,6 +9,7 @@ import qp.official.qp.converter.QuestionConverter;
 import qp.official.qp.domain.Hashtag;
 import qp.official.qp.domain.Question;
 import qp.official.qp.domain.User;
+import qp.official.qp.domain.enums.ChildStatus;
 import qp.official.qp.domain.mapping.UserQuestionAlarm;
 import qp.official.qp.repository.HashtagRepository;
 import qp.official.qp.repository.QuestionHashTagRepository;
@@ -17,6 +18,7 @@ import qp.official.qp.repository.UserQuestionAlarmRepository;
 import qp.official.qp.repository.UserRepository;
 import qp.official.qp.web.dto.QuestionRequestDTO;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
