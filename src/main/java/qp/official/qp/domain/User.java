@@ -97,4 +97,8 @@ public class User extends BaseEntity {
     public void updatePoint(Long point) {
         this.point += point;
     }
+
+    public void updateRole(Role role) {
+        this.role = role;
+    }
 }

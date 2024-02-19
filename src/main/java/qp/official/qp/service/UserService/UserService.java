@@ -2,6 +2,7 @@ package qp.official.qp.service.UserService;
 
 import org.json.simple.parser.ParseException;
 import qp.official.qp.domain.User;
+import qp.official.qp.domain.enums.Role;
 import qp.official.qp.web.dto.UserRequestDTO;
 import java.io.IOException;
 public interface UserService {
@@ -13,4 +14,6 @@ public interface UserService {
     User autoSignIn(Long userId);
     User deleteUser(Long userId);
     User updateUserPoint(Long userId, UserRequestDTO.UpdateUserPointRequestDTO requestDTO);
+
+    User changeUserRole(Long userId, Role role);
 }

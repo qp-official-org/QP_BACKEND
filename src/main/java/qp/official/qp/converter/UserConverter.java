@@ -25,6 +25,7 @@ public class UserConverter {
     public static UserResponseDTO.UpdateUserInfoDTO toUserUpdateDTO(User user) {
         return UserResponseDTO.UpdateUserInfoDTO.builder()
                 .userId(user.getUserId())
+                .role(user.getRole())
                 .nickname(user.getNickname())
                 .profileImage(user.getProfileImage())
                 .updatedAt(user.getUpdatedAt())

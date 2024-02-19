@@ -50,6 +50,7 @@ public class UserResponseDTO {
     @AllArgsConstructor
     public static class UpdateUserInfoDTO {
         Long userId;
+        Role role;
         String nickname;
         String profileImage;
         LocalDateTime updatedAt;
