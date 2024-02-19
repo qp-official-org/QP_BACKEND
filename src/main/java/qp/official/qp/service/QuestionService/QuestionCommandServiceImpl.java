@@ -57,37 +57,6 @@ public class QuestionCommandServiceImpl implements QuestionCommandService {
     }
 
     @Override
-    public void createDummyQuestion() {
-        Long userId = 1L;
-        for (int i = 0; i < 100; i++){
-            String title = "title" + i;
-            String content = "content" + i;
-            ArrayList<Long> hashtagIds = new ArrayList<>();
-            ArrayList<Hashtag> hashtags = new ArrayList<>();
-
-            int hashtagSize = 2;
-            for (int j = 1; j <= hashtagSize; j++) {
-                Hashtag newHashTag = Hashtag.builder()
-                        .hashtagId(((long) j))
-                        .hashtag("hashtag" + j)
-                        .questionHashTagList(new ArrayList<>())
-                        .build();
-                hashtags.add(newHashTag);
-            }
-
-            QuestionRequestDTO.CreateDTO newQuestion = QuestionRequestDTO.CreateDTO.builder()
-                    .userId(userId)
-                    .title(title)
-                    .content(content)
-                    .childStatus(ChildStatus.INACTIVE)
-                    .hashtag(hashtagIds)
-                    .build();
-            createQuestion(newQuestion);
-        }
-
-    }
-
-    @Override
     public Question updateQuestion(Long questionId, QuestionRequestDTO.UpdateDTO request) {
         // FindById Question
         Question updateQuestion = questionRepository.findById(questionId).get();
