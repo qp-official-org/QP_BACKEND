@@ -18,7 +18,5 @@ public interface QuestionQueryService {
     Page<Question> findAlarmedQuestions(Long userId, int page, int size);
     Integer countExpertCountByQuestion(Question question);
 
-    Integer countExpertCountByQuestion(Question question);
-
     Question.QuestionAdjacent findAdjacentQuestions(Long questionId);
 }
