@@ -60,7 +60,13 @@ public enum ErrorStatus implements BaseErrorCode {
     TOKEN_EXPIRED(HttpStatus.BAD_REQUEST, "TOKEN_8001","토큰이 만료되었습니다."),
     TOKEN_NOT_MATCH(HttpStatus.BAD_REQUEST, "TOKEN_8002", "로그인한 사용자와 토큰의 사용자가 일치하지 않습니다."),
     TOKEN_NOT_EXIST(HttpStatus.BAD_REQUEST, "TOKEN_8003", "토큰입력은 필수 입니다."),
-    TOKEN_NOT_INCORRECT(HttpStatus.BAD_REQUEST, "TOKEN_8004", "입력 하신 토큰이 유효 하지 않습니다.");
+    TOKEN_NOT_INCORRECT(HttpStatus.BAD_REQUEST, "TOKEN_8004", "입력 하신 토큰이 유효 하지 않습니다."),
+
+    // 전문가 인증 관련 에러 9000
+    ADMIN_UNAUTHORIZED(HttpStatus.BAD_REQUEST, "EXPERT_9002","관리자 권한이 없습니다."),
+    EXPERT_EXIST(HttpStatus.BAD_REQUEST, "EXPERT_9003","이미 등록된 전문가 입니다."),
+    EXPERT_UNAUTHORIZED(HttpStatus.BAD_REQUEST, "EXPERT_9004","전문가 인증 대상이 아닙니다."),
+    AUTHCODE_NOT_MATCH(HttpStatus.BAD_REQUEST, "EXPERT_9005","인증코드가 올바르지 않습니다.");
 
     private final HttpStatus httpStatus;
     private final String code;
