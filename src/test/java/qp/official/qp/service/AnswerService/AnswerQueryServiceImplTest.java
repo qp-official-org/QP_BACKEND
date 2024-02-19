@@ -53,7 +53,7 @@ class AnswerQueryServiceImplTest {
         for (int i = 1; i <= expectedAnswerListSize; i++) {
             expectedAnswerList.add(Answer.builder()
                 .answerId((long) i)
-                .title("Test" + i)
+                .content("Test" + i)
                 .build());
         }
 
@@ -92,11 +92,12 @@ class AnswerQueryServiceImplTest {
         int size = 10;
 
         String questionTitle = "test";
+        String answerContent = "testAnswerContent";
 
-        // 질문 객체 생성
+        // 부모답변 객체 생성
         Answer parentAnswer = Answer.builder()
             .answerId(parentAnswerId)
-            .title(questionTitle)
+            .content(answerContent)
             .children(new ArrayList<>())
             .build();
 
@@ -108,7 +109,7 @@ class AnswerQueryServiceImplTest {
         for (int i = 1; i <= expectedChildAnswerListSize; i++) {
             parentAnswerList.add(Answer.builder()
                 .answerId((long) i)
-                .title("Test" + i)
+                .content("Test" + i)
                 .category(Category.CHILD)
                 .parent(parentAnswer)
                 .answerGroup(parentAnswerId)

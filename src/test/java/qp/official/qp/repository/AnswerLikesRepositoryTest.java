@@ -33,7 +33,7 @@ class AnswerLikesRepositoryTest {
 
     void setUp(){
         answer = Answer.builder()
-            .title("testTitle")
+            .content("testContent")
             .build();
 
         answerRepository.save(answer);
