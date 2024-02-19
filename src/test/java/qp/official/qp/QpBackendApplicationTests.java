@@ -39,7 +39,6 @@ class QpBackendApplicationTests {
 //    public void createDummyQuestion() {
 //        User testUser = userService.createTestUser();
 //
-//        System.out.println(testUser.getUserId());
 //        for (int i = 0; i < 100; i++){
 //            String title = "title" + i;
 //            String content = "content" + i;
@@ -65,10 +64,12 @@ class QpBackendApplicationTests {
 //                    .build();
 //            Question question = questionCommandService.createQuestion(newQuestion);
 //
+//            String testAnswerTitle = "testAnswerTitle"+i;
+//            String testAnswerContent = "testAnswerContent"+i;
 //            AnswerRequestDTO.AnswerCreateDTO newAnswer = AnswerRequestDTO.AnswerCreateDTO.builder()
 //                    .userId(testUser.getUserId())
-//                    .title("testTitle")
-//                    .content("testContent")
+//                    .title(testAnswerTitle)
+//                    .content(testAnswerContent)
 //                    .category(Category.PARENT)
 //                    .build();
 //
