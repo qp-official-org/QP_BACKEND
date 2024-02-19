@@ -50,7 +50,7 @@ public class UserConverter {
     public static UserResponseDTO.UserPreviewInQuestionDTO toUserPreviewWithQuestionDTO(User user) {
         return UserResponseDTO.UserPreviewInQuestionDTO.builder()
                 .userId(user.getUserId())
-                .ROLE(user.getRole())
+                .role(user.getRole())
                 .profileImage(user.getProfileImage())
                 .build();
     }
@@ -59,7 +59,7 @@ public class UserConverter {
         return UserResponseDTO.UserPreviewInAnswerDTO.builder()
                 .userId(user.getUserId())
                 .nickname(user.getNickname())
-                .ROLE(user.getRole())
+                .role(user.getRole())
                 .profileImage(user.getProfileImage())
                 .build();
     }

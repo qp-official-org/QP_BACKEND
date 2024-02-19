@@ -88,7 +88,7 @@ public class UserResponseDTO {
     public static class UserPreviewInQuestionDTO {
         Long userId;
         String profileImage;
-        Role ROLE;
+        Role role;
     }
 
     @Builder
@@ -99,7 +99,7 @@ public class UserResponseDTO {
         Long userId;
         String nickname;
         String profileImage;
-        Role ROLE;
+        Role role;
     }
 
     @Builder
