@@ -160,6 +160,7 @@ class QuestionCommandServiceTest {
         // when
         // 질문 정보
         Long questionId = 1L;
+        Long userId = 2L;
         String title = "testTitle";
         String content = "testContent";
 
@@ -175,7 +176,7 @@ class QuestionCommandServiceTest {
         when(questionRepository.findById(questionId)).thenReturn(Optional.of(expectQuestion));
 
         //질문 삭제
-        questionCommandService.deleteQuestion(questionId, 0L);
+        questionCommandService.deleteQuestion(questionId, userId);
 
         //verify
         verify(questionRepository).delete(expectQuestion);
