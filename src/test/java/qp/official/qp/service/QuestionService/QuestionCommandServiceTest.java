@@ -175,7 +175,7 @@ class QuestionCommandServiceTest {
         when(questionRepository.findById(questionId)).thenReturn(Optional.of(expectQuestion));
 
         //질문 삭제
-        questionCommandService.deleteQuestion(questionId);
+        questionCommandService.deleteQuestion(questionId, 0L);
 
         //verify
         verify(questionRepository).delete(expectQuestion);

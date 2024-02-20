@@ -32,6 +32,7 @@ public enum ErrorStatus implements BaseErrorCode {
     QUESTION_ALARM_ALREADY_EXISTS(HttpStatus.CONFLICT, "QUESTION_2004", "해당 질문에 대한 알람 설정이 이미 존재 하는 유저 입니다."),
     QUESTION_ALARM_NOT_FOUND_BY_USER(HttpStatus.NOT_FOUND, "QUESTION_2005", "해당 유저가 설정한 알람은 존재 하지 않습니다."),
     QUESTION_NOT_EXIST_BY_USER(HttpStatus.NOT_FOUND, "QUESTION_2006", "해당 유저가 작성한 질문은 존재 하지 않습니다."),
+    QUESTION_NOT_MATCH_BY_USER(HttpStatus.BAD_REQUEST, "QUESTION_2007", "질문을 작성한 유저 본인만 삭제할 수 있습니다."),
 
     // 답변 관련 에러 3000
     ANSWER_NOT_FOUND(HttpStatus.NOT_FOUND, "ANSWER_3001", "찾고있는 답변이 없습니다."),

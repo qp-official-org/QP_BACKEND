@@ -9,7 +9,7 @@ public interface QuestionCommandService {
 
     Question updateQuestion(Long questionId, QuestionRequestDTO.UpdateDTO request);
 
-    void deleteQuestion(Long questionId);
+    void deleteQuestion(Long questionId, Long userId);
 
     UserQuestionAlarm saveQuestionAlarm(Long questionId, Long userId);
 }

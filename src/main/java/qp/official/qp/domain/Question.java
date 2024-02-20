@@ -7,6 +7,7 @@ import qp.official.qp.domain.common.BaseEntity;
 import qp.official.qp.domain.enums.ChildStatus;
 import qp.official.qp.domain.enums.Role;
 import qp.official.qp.domain.mapping.QuestionHashTag;
+import qp.official.qp.domain.mapping.UserQuestionAlarm;
 import qp.official.qp.web.dto.QuestionRequestDTO;
 
 import javax.persistence.*;
@@ -51,6 +52,10 @@ public class Question extends BaseEntity {
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
     @Builder.Default
     private List<Answer> answers = new ArrayList<>();
+
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
+    @Builder.Default
+    private List<UserQuestionAlarm> alarms = new ArrayList<>();
 
     public Question addHit() {
         this.hit++;
