@@ -164,10 +164,13 @@ class QuestionCommandServiceTest {
         String title = "testTitle";
         String content = "testContent";
 
+        User testUser = User.builder().userId(userId).build();
+
         //예상 질문 객체 생성
         // given
         Question expectQuestion = Question.builder()
                 .questionId(questionId)
+                .user(testUser)
                 .title(title)
                 .content(content)
                 .questionHashTagList(new ArrayList<>())
