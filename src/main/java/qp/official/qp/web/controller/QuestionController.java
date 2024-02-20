@@ -129,7 +129,7 @@ public class QuestionController {
         // accessToken으로 유효한 유저인지 인가
         tokenService.isValidToken(userId);
 
-        questionCommandService.deleteQuestion(questionId);
+        questionCommandService.deleteQuestion(questionId,userId);
         return ApiResponse.onSuccess(
                 SuccessStatus.Question_OK,
                 null

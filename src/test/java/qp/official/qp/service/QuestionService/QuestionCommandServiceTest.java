@@ -160,13 +160,17 @@ class QuestionCommandServiceTest {
         // when
         // 질문 정보
         Long questionId = 1L;
+        Long userId = 2L;
         String title = "testTitle";
         String content = "testContent";
+
+        User testUser = User.builder().userId(userId).build();
 
         //예상 질문 객체 생성
         // given
         Question expectQuestion = Question.builder()
                 .questionId(questionId)
+                .user(testUser)
                 .title(title)
                 .content(content)
                 .questionHashTagList(new ArrayList<>())
@@ -175,7 +179,7 @@ class QuestionCommandServiceTest {
         when(questionRepository.findById(questionId)).thenReturn(Optional.of(expectQuestion));
 
         //질문 삭제
-        questionCommandService.deleteQuestion(questionId);
+        questionCommandService.deleteQuestion(questionId, userId);
 
         //verify
         verify(questionRepository).delete(expectQuestion);

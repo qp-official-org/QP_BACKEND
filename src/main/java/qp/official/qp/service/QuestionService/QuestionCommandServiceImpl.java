@@ -66,8 +66,11 @@ public class QuestionCommandServiceImpl implements QuestionCommandService {
     }
 
     @Override
-    public void deleteQuestion(Long questionId) {
+    public void deleteQuestion(Long questionId, Long userId) {
         Question deleteQuestion = questionRepository.findById(questionId).get();
+        if (!deleteQuestion.getUser().getUserId().equals(userId)){
+            throw new QuestionHandler(ErrorStatus.QUESTION_NOT_MATCH_BY_USER);
+        }
         questionRepository.delete(deleteQuestion);
     }
 
